@@ -24,9 +24,28 @@ body {
 }
 
 main{
+  padding: 20px;
   background: #E5E5E5;
 }
 
+header{
+
+  padding: 20px;
+}
+
+.header__content{
+  display: flex;
+}
+
+.header__logo{
+  margin-right: 40px;
+}
+
+.header__input{
+  margin: 3px;
+  width: 60%;
+  border-radius: 0%;
+}
 .main__title{
   font-family: 'Open Sans';
 font-style: normal;
