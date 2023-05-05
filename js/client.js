@@ -29,7 +29,10 @@ let serverData = await serverGetClients()
 // назначаем проверку если serverData не пустой, тогда массив listClients будет равен массиву serverData
 
 if(serverData){
-  listClients = serverData
+  serverData.forEach(function (elem){
+    listClients.push(new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt))
+  })
+
 }
 
  // задаем функцию добавления нового клиента на сервер
@@ -47,7 +50,17 @@ if(serverData){
   return data
  }
 
+// и функцию удаления клиента с сервера по id
 
+async function serverDeleteClient(id){
+
+  let response = await fetch (SERVER_URL + '/api/clients' + id,{
+    method:"DELETE",
+   })
+
+  let data = await response.json()
+  return data
+}
 
 
 
