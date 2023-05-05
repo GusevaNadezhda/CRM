@@ -1,6 +1,10 @@
 
 // export default
 
+// создадим массив куда будем добавлять наших клиетов
+
+let listClients = []
+
  // данные клиента мы получаем от сервера, запишем его в константу (при смене сервера также удобно будет поменять его только в одном месте)
  const SERVER_URL = 'http://localhost:3000'
 
@@ -8,15 +12,24 @@
 //  функция получения массива клиентов с сервера
 
 async function serverGetClients(){
-  // делаем добавление на сервер
   let response = await fetch (SERVER_URL + '/api/clients',{
     method:"GET",
     headers: {'Content-Type': 'aplication/json'},
    })
 
-  //  получаем ответ от сервера
+  //  получаем ответ в виде массива от сервера
   let data = await response.json()
   return data
+}
+
+// полученный массив запишем в переменную
+
+let serverData = await serverGetClients()
+
+// назначаем проверку если serverData не пустой, тогда массив listClients будет равен массиву serverData
+
+if(serverData){
+  listClients = serverData
 }
 
  // задаем функцию добавления нового клиента на сервер
