@@ -54,3 +54,9 @@ async function renderClientsTable() {
     $studentList.append(getNewStudent(student, onDelete))
   }
 }
+
+// событие добавления нового клиента
+
+document.querySelector("#btn-add-client").addEventListener('click', function(){
+  document.querySelector("#modal-add-client").classList.add('open')
+})
