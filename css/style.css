@@ -18,8 +18,22 @@ img {
   object-fit: cover;
 }
 
+/* цвета */
+
+:root {
+  --black: #333333;
+  --txt_grey: #B0B0B0;
+  --grey: #C8C5D1;
+  --firm: #9873FF;
+  --red: #F06A4D;
+  --orange: #E6B127;
+  --green: #34C759;
+  --gap: 32px;
+}
+
+
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', 'Roboto', sans-serif;
   font-weight: 400;
 }
 
@@ -32,6 +46,8 @@ header {
 
   padding: 20px;
 }
+
+
 
 .header__content {
   display: flex;
@@ -53,7 +69,7 @@ header {
   font-weight: 700;
   font-size: 24px;
   line-height: 33px;
-  color: #333333;
+  color: var(--black);
 }
 
 .table__heard--descr {
@@ -64,7 +80,7 @@ header {
   line-height: 16px;
   display: flex;
   align-items: center;
-  color: #B0B0B0;
+  color: var(--txt_grey);
 }
 
 .main__button {
@@ -74,7 +90,7 @@ header {
   padding: 26.5px;
   width: 216px;
   height: 44px;
-  border: 1px solid #9873FF;
+  border: 1px solid var(--firm);
 }
 
 .main__button::before {
@@ -94,7 +110,7 @@ header {
   font-size: 14px;
   line-height: 19px;
   text-align: center;
-  color: #9873FF;
+  color: var(--firm);
 }
 
 /* модальное окно */
@@ -117,16 +133,46 @@ header {
 }
 
 .modal-newclient {
-
+  position: relative;
   max-width: 450px;
-  max-height: 400px;
-  padding: 24px 30px;
+  min-height: 400px;
+  /* padding: 24px 30px; */
   margin: 30px 15px;
   z-index: 1;
   background: #FFFFFF;
   box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.15);
   transform: scale(0);
   transition: transform .8s;
+}
+
+.modal__btn-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background-color: transparent;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.modal__btn-close:focus {
+  outline: none;
+}
+
+.modal__btn-close svg path {
+  transition: fill .5s;
+}
+
+.modal__btn-close:focus svg path {
+  fill: var(--firm);
+}
+
+.modal__btn-close:hover svg path {
+  fill: var(--firm);
+}
+
+.modal__btn-close:active svg path {
+  fill: var(--black)
 }
 
 .modal-add.open {
@@ -136,5 +182,169 @@ header {
 
 .modal-add.open .modal-newclient {
   transform: scale(1);
+}
 
+.modal__title {
+  margin: 24px 30px;
+  margin-bottom: 0;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: var(--black);
+}
+
+.modal__form-fio {
+  margin: 0 30px;
+}
+
+.modal__input {
+  width: 100%;
+  font-weight: 600;
+font-size: 14px;
+line-height: 19px;
+color: var(--black);
+  border: none;
+  border-bottom: 1px solid var(--grey);
+}
+
+.modal__input:focus{
+  outline: none;
+}
+#error{
+  border-bottom: 1px solid var(--red);
+}
+
+
+.modal__placeholder {
+  z-index: 100;
+  left: 10px;
+  cursor: text;
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  width: 100%;
+  display: inline;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 14px;
+  color: var(--txt_grey);
+  transition: top .5s font-size .5s line-height .5s;
+}
+
+.modal__field input:invalid+.modal__placeholder {
+  top: 1px;
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.modal__field {
+  margin: 0;
+  margin-top: var(--gap);
+  position: relative;
+  width: 100%;
+  /* overflow: hidden; */
+}
+
+.modal__placeholder span {
+  color: var(--firm);
+}
+
+
+/* .modal__input::placeholder {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--txt_grey);
+} */
+
+.modal__contact {
+  display: flex;
+  justify-content: center;
+  margin: 25px 0;
+  padding: 8px;
+  background: rgba(200, 197, 209, 0.3);
+  transition: cursor .5s
+}
+
+.modal__contact:focus{
+  cursor: pointer;
+}
+
+.modal__contact:hover{
+  cursor: pointer;
+}
+
+.modal__contact:active .modal__contact-text{
+  color: var(--firm);
+}
+
+.modal__contact:active .modal__contact-text::before{
+  background-image: url(/CRM/img/add_circle_active.svg);
+  }
+
+
+
+.modal__contact-text {
+  position: relative;
+  margin-left: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--black);
+  z-index: 3;
+  transition: color .5s;
+}
+
+.modal__contact-text::before{
+    content: "";
+    position: relative;
+    left: 0px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    padding-right: 18px;
+    background-image: url(/CRM/img/add_circle_outline.svg);
+    background-repeat: no-repeat;
+    transition: background-image .5s;
+}
+
+.modal__btn-save {
+  margin: 0 150px;
+  padding: 12.5px 35px;
+  background: var(--firm);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  text-align: center;
+  color: #FFFFFF;
+  border: 1px solid var(--firm);
+  transition: background .5s border .5s cursor .5s;
+}
+
+.modal__btn-save:focus{
+  background: #B89EFF;
+  border: 1px solid #9873FF;
+  outline: none;
+}
+
+.modal__btn-save:hover{
+  background: #B89EFF;
+  border: 1px solid #9873FF;
+  cursor: pointer;
+}
+
+.modal__btn-save:active{
+  background: #8052FF;
+  border: 1px solid #9873FF;
+  cursor: pointer;
+}
+
+
+.modal__link {
+  margin: 0 200px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration-line: underline;
+  color: var(--black);
 }
