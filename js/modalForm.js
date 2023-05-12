@@ -53,6 +53,30 @@ function createFormNewClient() {
   // $addClientFORM.append($addContactDIV)
   // $addClientFORM.append($saveClientBTN)
 
+  document.querySelector(".modal__link").addEventListener('click', function () {
+    document.querySelector("#modal-add-client").classList.remove('open')
+  })
+  // document.querySelector("#modal-add-client").addEventListener('click', function(){
+  //   document.querySelector("#modal-add-client").classList.remove('open')
+  // })
 }
 
 createFormNewClient()
+
+function createFormChangeClient(client) {
+  createFormNewClient()
+  const modalPlaceholder = document.querySelectorAll(".modal__placeholder")
+  const modalInput = document.querySelectorAll(".modal__input")
+
+  switch (modalInput.id) {
+    case "surname":
+      this.value = client.surname
+      break
+      case "name":
+      this.value = client.name
+      break
+      case "lastName":
+      this.value = client.lastName
+      break
+  }
+}

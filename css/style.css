@@ -178,6 +178,7 @@ header {
 .modal-add.open {
   visibility: visible;
   opacity: 1;
+
 }
 
 .modal-add.open .modal-newclient {
