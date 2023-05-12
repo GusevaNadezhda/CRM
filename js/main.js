@@ -60,3 +60,11 @@ async function renderClientsTable() {
 document.querySelector("#btn-add-client").addEventListener('click', function(){
   document.querySelector("#modal-add-client").classList.add('open')
 })
+
+document.querySelector("#modal-close").addEventListener('click', function(){
+  document.querySelector("#modal-add-client").classList.remove('open')
+})
+
+document.querySelector(".modal__link").addEventListener('click', function(){
+  document.querySelector("#modal-add-client").classList.remove('open')
+})
