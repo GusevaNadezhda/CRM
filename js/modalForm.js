@@ -6,13 +6,13 @@ function createFormNewClient() {
   const $newClientTITLE = document.querySelector(".modal__title")
   // const $addClientFORM = document.querySelector('.modal__form')
   // const $addContactDIV = document.createElement('div')
-  const $saveClientBTN = document.querySelector('.mmodal__btn-save')
+  const $saveClientBTN = document.querySelector('.modal__btn-save')
   const $cancelA = document.querySelector('.modal__link')
 
 
 
   $newClientTITLE.textContent = "Новый клиент"
-  $newClientTITLE.classList.add("modal__title")
+  // $newClientTITLE.classList.add("modal__title")
 
   // for (let i = 1; i < 4; i++) {
   //   const $addClientINPUT = document.createElement('input');
@@ -44,6 +44,15 @@ function createFormNewClient() {
   // $saveClientBTN.type = "submit"
   // $saveClientBTN.classList.add("save-btn")
 
+ $saveClientBTN
+  const modalError = document.createElement('div')
+  modalError.classList.add("modal__error")
+  modalError.textContent = ""
+  // $saveClientBTN.prepend(modalError)
+  $saveClientBTN.insertAdjacentElement('beforeBegin', modalError)
+
+  // родитель.insertBefore(элемент, перед кем вставить)
+
   $cancelA.textContent = "Отмена"
   // $cancelA.classList.add("modal__link")
 
@@ -64,8 +73,12 @@ function createFormNewClient() {
 createFormNewClient()
 
 function createFormChangeClient(client) {
-  createFormNewClient()
-  const modalPlaceholder = document.querySelectorAll(".modal__placeholder")
+  const $changeClientTITLE = document.querySelector(".modal__title")
+const $idClientP = document.createElement('p')
+
+  $changeClientTITLE.textContent = "Изменить данные"
+  $idClientP.textContent = client.id
+
   const modalInput = document.querySelectorAll(".modal__input")
 
   switch (modalInput.id) {
@@ -79,4 +92,48 @@ function createFormChangeClient(client) {
       this.value = client.lastName
       break
   }
+
+  // const modalContact = document.querySelector(".modal__contact")
+  // modalContact.addEventListener('click', function(){
+  //   const modalContactAdd = document.querySelector('.modal__contact-add')
+  //   createAddContact()
+  //   modalContact.append(modalContactAdd)
+  // })
+
 }
+
+
+
+
+// let testClient = {
+//   // ID клиента, заполняется сервером автоматически, после создания нельзя изменить
+//   id: '1234567890',
+//   // дата и время создания клиента, заполняется сервером автоматически, после создания нельзя изменить
+//   createdAt: '2021-02-03T13:07:29.554Z',
+//   // дата и время изменения клиента, заполняется сервером автоматически при изменении клиента
+//   updatedAt: '2021-02-03T13:07:29.554Z',
+//   // * обязательное поле, имя клиента
+//   name: 'Василий',
+//   // * обязательное поле, фамилия клиента
+//   surname: 'Пупкин',
+//   // необязательное поле, отчество клиента
+//   lastName: 'Васильевич',
+//   // контакты - необязательное поле, массив контактов
+//   // каждый объект в массиве (если он передан) должен содержать непустые свойства type и value
+//   contacts: [
+//     {
+//       type: 'Телефон',
+//       value: '+71234567890'
+//     },
+//     {
+//       type: 'Email',
+//       value: 'abc@xyz.com'
+//     },
+//     {
+//       type: 'Facebook',
+//       value: 'https://facebook.com/vasiliy-pupkin-the-best'
+//     }
+//   ]
+// }
+
+// createFormChangeClient(testClient)

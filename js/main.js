@@ -65,6 +65,10 @@ document.querySelector("#modal-close").addEventListener('click', function(){
   document.querySelector("#modal-add-client").classList.remove('open')
 })
 
-document.querySelector(".modal__link").addEventListener('click', function(){
-  document.querySelector("#modal-add-client").classList.remove('open')
+// добавление контакта при нажатии на кнопку "Добавить контакт"
+
+const modalContactText = document.querySelector(".modal__contact-text")
+modalContactText.addEventListener('click',function(){
+  if(modalContactText.id != 'grey') createAddContact()
+
 })

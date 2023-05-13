@@ -18,6 +18,37 @@ img {
   object-fit: cover;
 }
 
+/* шрифт */
+@font-face {
+	font-family: 'Open Sans';
+	src: url('fonts/OpenSans-Bold.eot');
+	src: local('Open Sans Bold'), local('OpenSans-Bold'),
+  url(/CRM/fonts/OpenSansBold.woff2) format('woff2'),
+		url(/CRM/fonts/OpenSansBold.woff) format('woff');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Open Sans';
+	src: url('fonts/OpenSans-Regular.eot');
+	src: local('Open Sans Regular'), local('OpenSans-Regular'),
+  url(/CRM/fonts/OpenSansRegular.woff2) format('woff2'),
+		url(/CRM/fonts/OpenSansRegular.woff) format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Open Sans';
+	src: url('fonts/OpenSans-SemiBold.eot');
+	src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'),
+  url(/CRM/fonts/OpenSansSemiBold.woff2) format('woff2'),
+		url(/CRM/fonts/OpenSansSemiBold.woff) format('woff');
+	font-weight: 600;
+	font-style: normal;
+}
+
 /* цвета */
 
 :root {
@@ -260,7 +291,8 @@ color: var(--black);
 
 .modal__contact {
   display: flex;
-  justify-content: center;
+  flex-direction: column-reverse;
+ align-items: center;
   margin: 25px 0;
   padding: 8px;
   background: rgba(200, 197, 209, 0.3);
@@ -275,24 +307,20 @@ color: var(--black);
   cursor: pointer;
 }
 
-.modal__contact:active .modal__contact-text{
-  color: var(--firm);
-}
 
-.modal__contact:active .modal__contact-text::before{
-  background-image: url(/CRM/img/add_circle_active.svg);
-  }
+
+
 
 
 
 .modal__contact-text {
   position: relative;
-  margin-left: 4px;
+  max-width: 150px;
+  text-align: center;
   font-weight: 600;
   font-size: 14px;
   line-height: 19px;
   color: var(--black);
-  z-index: 3;
   transition: color .5s;
 }
 
@@ -308,6 +336,29 @@ color: var(--black);
     background-repeat: no-repeat;
     transition: background-image .5s;
 }
+.modal__contact-text:active {
+  color: var(--firm);
+}
+
+.modal__contact-text:active .modal__contact-text::before{
+  background-image: url(/CRM/img/add_circle_active.svg);
+  }
+
+  .modal__contact-text#grey::before{
+    opacity: 0;
+    }
+
+
+    .modal__error{
+      padding: 8px;
+      font-weight: 400;
+font-size: 10px;
+line-height: 14px;
+text-align: center;
+color: var(--red);
+    }
+
+
 
 .modal__btn-save {
   margin: 0 150px;
@@ -348,4 +399,85 @@ color: var(--black);
   line-height: 16px;
   text-decoration-line: underline;
   color: var(--black);
+}
+
+/* Контакты */
+
+/* селект и импут */
+
+.modal__contact-add{
+  padding: 25px 30px;
+  display: flex;
+  width: 390px;
+}
+
+
+.modal__contact-enter{
+  width: 70%;
+  border-radius: 0%;
+    border: 1px solid var(--grey);
+}
+
+.modal__contact-enter:focus{
+  outline: none;
+}
+
+.modal__contact-enter::placeholder{
+  padding-left: 12px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--txt_grey);
+}
+
+.modal__contact-select{
+  width: 100%;
+  appearance: none;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  min-height: 37px;
+  background: #E7E5EB;
+  border: 1px solid var(--grey);
+  border-right: none;
+
+  font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+color: var(--black);
+}
+
+.modal__contact-content{
+  position: relative;
+  width: 42%;
+}
+
+.modal__contact-content::after{
+  content: '';
+  display: block;
+  position: absolute;
+  top: 17px;
+  right: 1rem;
+  z-index: 1;
+  height: 12px;
+  width: 12px;
+  background-image: url(/CRM/img/arrow_back_ios.svg);
+}
+
+/* добавляем кнопку */
+
+.modal__contact-button{
+  width: 10%;
+  background: #E7E5EB;
+  background-image: url(/CRM/img/cancel.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid #C8C5D1;
+  transition: background-image .5s border .5s  ;
+}
+
+.modal__contact-button:active{
+  background-image: url(/CRM/img/cancelred.svg);
+  border: 1px solid var(--red);
+  outline: none;
 }
