@@ -39,3 +39,6 @@ function getNewClient(Client) {
 
   return $clientTR
 }
+getNewClient()
+
+window.getNewClient()
