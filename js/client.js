@@ -24,7 +24,7 @@ class Client {
   }
 
   get fio() {
-    return this.surname + ' ' + this.name + ' ' + this.lastname
+    return this.surname + ' ' + this.name + ' ' + this.lastName
   }
 
   // // дата и время создания клиента, заполняется сервером автоматически, после создания нельзя изменить
@@ -79,6 +79,10 @@ function getNewClient(Client) {
   $changeBTN.textContent = 'Изменить'
   $deleteBTN.textContent = 'Удалить'
 
+  $idTD.classList.add('table__body-id')
+  $fioTD.classList.add('table__body-fio')
+  $createdAtTD.classList.add('table__body-createdat')
+  $updatedAtTD.classList.add('table__body-updatedat')
   $changeBTN.classList.add('btn-change')
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
