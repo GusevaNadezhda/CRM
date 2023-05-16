@@ -55,7 +55,13 @@ line-height: 33px;
 color: #333333;
 }
 
+<<<<<<< Updated upstream
 .table__heard--descr{
+=======
+/* таблица */
+
+.table__heard--descr {
+>>>>>>> Stashed changes
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
@@ -66,7 +72,66 @@ color: #333333;
   color: #B0B0B0;
 }
 
+<<<<<<< Updated upstream
 .main__button{
+=======
+.table tr{
+  padding: 12px 10px;
+}
+.table tr{
+  padding: 10px;
+}
+.table__body-id{
+  font-weight: 400;
+font-size: 12px;
+line-height: 16px;
+color: var(--txt_grey);
+}
+
+.table__body-fio{
+  font-weight: 400;
+font-size: 14px;
+line-height: 19px;
+color: var(--black);
+}
+
+.btn-change{
+  display: flex;
+  margin-right: 30px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: #333333;
+}
+
+.btn-change::before{
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-image: url(/CRM/img/edit.svg);
+}
+
+.btn-delete{
+  display: flex;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: #333333;
+}
+.btn-delete::before{
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  background-image: url(/CRM/img/cancelred.svg);
+}
+
+
+
+/* кнопка внизу */
+.main__button {
+>>>>>>> Stashed changes
   display: flex;
   margin: 0 auto;
   align-items: center;
