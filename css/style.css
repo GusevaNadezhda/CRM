@@ -20,33 +20,33 @@ img {
 
 /* шрифт */
 @font-face {
-	font-family: 'Open Sans';
-	src: url('fonts/OpenSans-Bold.eot');
-	src: local('Open Sans Bold'), local('OpenSans-Bold'),
-  url(/CRM/fonts/OpenSansBold.woff2) format('woff2'),
-		url(/CRM/fonts/OpenSansBold.woff) format('woff');
-	font-weight: bold;
-	font-style: normal;
+  font-family: 'Open Sans';
+  src: url('fonts/OpenSans-Bold.eot');
+  src: local('Open Sans Bold'), local('OpenSans-Bold'),
+    url(/CRM/fonts/OpenSansBold.woff2) format('woff2'),
+    url(/CRM/fonts/OpenSansBold.woff) format('woff');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
-	font-family: 'Open Sans';
-	src: url('fonts/OpenSans-Regular.eot');
-	src: local('Open Sans Regular'), local('OpenSans-Regular'),
-  url(/CRM/fonts/OpenSansRegular.woff2) format('woff2'),
-		url(/CRM/fonts/OpenSansRegular.woff) format('woff');
-	font-weight: normal;
-	font-style: normal;
+  font-family: 'Open Sans';
+  src: url('fonts/OpenSans-Regular.eot');
+  src: local('Open Sans Regular'), local('OpenSans-Regular'),
+    url(/CRM/fonts/OpenSansRegular.woff2) format('woff2'),
+    url(/CRM/fonts/OpenSansRegular.woff) format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-	font-family: 'Open Sans';
-	src: url('fonts/OpenSans-SemiBold.eot');
-	src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'),
-  url(/CRM/fonts/OpenSansSemiBold.woff2) format('woff2'),
-		url(/CRM/fonts/OpenSansSemiBold.woff) format('woff');
-	font-weight: 600;
-	font-style: normal;
+  font-family: 'Open Sans';
+  src: url('fonts/OpenSans-SemiBold.eot');
+  src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'),
+    url(/CRM/fonts/OpenSansSemiBold.woff2) format('woff2'),
+    url(/CRM/fonts/OpenSansSemiBold.woff) format('woff');
+  font-weight: 600;
+  font-style: normal;
 }
 
 /* цвета */
@@ -59,6 +59,7 @@ img {
   --red: #F06A4D;
   --orange: #E6B127;
   --green: #34C759;
+  --white: #FFFFFF;
   --gap: 32px;
 }
 
@@ -66,6 +67,9 @@ img {
 body {
   font-family: 'Open Sans', 'Roboto', sans-serif;
   font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  background: #F5F5F5;
 }
 
 main {
@@ -78,6 +82,9 @@ header {
   padding: 20px;
 }
 
+tbody {
+  background: white;
+}
 
 
 .header__content {
@@ -114,36 +121,64 @@ header {
   color: var(--txt_grey);
 }
 
-.table tr{
+.table tr {
   padding: 12px 10px;
 }
-.table tr{
+
+.table td {
   padding: 10px;
-}
-.table__body-id{
-  font-weight: 400;
-font-size: 12px;
-line-height: 16px;
-color: var(--txt_grey);
+  vertical-align: inherit;
+
 }
 
-.table__body-fio{
+.table__body-id {
   font-weight: 400;
-font-size: 14px;
-line-height: 19px;
-color: var(--black);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--txt_grey);
 }
 
-.btn-change{
+.table__body-fio {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--black);
+}
+
+.table__body-createdat {
+  display: flex;
+}
+
+/* .table__body-updatedat{
+  display: flex;
+} */
+
+.table__body-date {
+  margin-right: 10px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--black);
+}
+
+.table__body-time {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--txt_grey);
+}
+
+.btn-change {
   display: flex;
   margin-right: 30px;
   font-weight: 400;
   font-size: 14px;
   line-height: 19px;
   color: #333333;
+  cursor: pointer;
 }
 
-.btn-change::before{
+.btn-change::before {
   content: '';
   width: 16px;
   height: 16px;
@@ -151,19 +186,93 @@ color: var(--black);
   background-image: url(/CRM/img/edit.svg);
 }
 
-.btn-delete{
+.btn-delete {
   display: flex;
   font-weight: 400;
   font-size: 14px;
   line-height: 19px;
   color: #333333;
+  cursor: pointer;
 }
-.btn-delete::before{
+
+.btn-delete::before {
   content: '';
   width: 16px;
   height: 16px;
   background-repeat: no-repeat;
   background-image: url(/CRM/img/cancelred.svg);
+}
+
+/* модальное окно "Удалить" */
+.modal__delete-element {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 450px;
+  min-height: 215px;
+  padding: 22px 90px;
+  margin: 30px 15px;
+  z-index: 1;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.15);
+  transform: scale(0);
+  transition: transform .8s;
+}
+
+.modal-add.open .modal__delete-element {
+  transform: scale(1);
+}
+
+.modal__delete-title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 25px;
+  color: var(--black);
+}
+
+.modal__delete-text {
+  margin-top: 11px;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--black);
+}
+
+.modal__delete-btn {
+  padding: 12.5px 35px;
+  background: var(--firm);
+  color: var(--white);
+  border: none;
+  margin-bottom: 5px;
+  transition: background .5s border .5s cursor .5s;
+}
+
+.modal__delete-btn:focus {
+  background: #B89EFF;
+  border: 1px solid #9873FF;
+  outline: none;
+}
+
+.modal__delete-btn:hover {
+  background: #B89EFF;
+  border: 1px solid #9873FF;
+  cursor: pointer;
+}
+
+.modal__delete-btn:active {
+  background: #8052FF;
+  border: 1px solid #9873FF;
+  cursor: pointer;
+}
+
+.modal__delete-cencel {
+  font-size: 12px;
+  line-height: 16px;
+  text-decoration-line: underline;
+  color: var(--black);
 }
 
 
@@ -234,12 +343,17 @@ color: var(--black);
 
 .modal__btn-close {
   position: absolute;
+  width: 29px;
+  height: 29px;
   top: 10px;
   right: 10px;
   border: none;
   background-color: transparent;
   padding: 5px;
   cursor: pointer;
+  background-image: url(/CRM/img/Frame\ 339.svg);
+  background-repeat: no-repeat;
+
 }
 
 .modal__btn-close:focus {
@@ -288,17 +402,18 @@ color: var(--black);
 .modal__input {
   width: 100%;
   font-weight: 600;
-font-size: 14px;
-line-height: 19px;
-color: var(--black);
+  font-size: 14px;
+  line-height: 19px;
+  color: var(--black);
   border: none;
   border-bottom: 1px solid var(--grey);
 }
 
-.modal__input:focus{
+.modal__input:focus {
   outline: none;
 }
-#error{
+
+#error {
   border-bottom: 1px solid var(--red);
 }
 
@@ -348,18 +463,18 @@ color: var(--black);
 .modal__contact {
   display: flex;
   flex-direction: column-reverse;
- align-items: center;
+  align-items: center;
   margin: 25px 0;
   padding: 8px;
   background: rgba(200, 197, 209, 0.3);
   transition: cursor .5s
 }
 
-.modal__contact:focus{
+.modal__contact:focus {
   cursor: pointer;
 }
 
-.modal__contact:hover{
+.modal__contact:hover {
   cursor: pointer;
 }
 
@@ -380,39 +495,40 @@ color: var(--black);
   transition: color .5s;
 }
 
-.modal__contact-text::before{
-    content: "";
-    position: relative;
-    left: 0px;
-    top: 2px;
-    width: 16px;
-    height: 16px;
-    padding-right: 18px;
-    background-image: url(/CRM/img/add_circle_outline.svg);
-    background-repeat: no-repeat;
-    transition: background-image .5s;
+.modal__contact-text::before {
+  content: "";
+  position: relative;
+  left: 0px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  padding-right: 18px;
+  background-image: url(/CRM/img/add_circle_outline.svg);
+  background-repeat: no-repeat;
+  transition: background-image .5s;
 }
+
 .modal__contact-text:active {
   color: var(--firm);
 }
 
-.modal__contact-text:active .modal__contact-text::before{
+.modal__contact-text:active .modal__contact-text::before {
   background-image: url(/CRM/img/add_circle_active.svg);
-  }
+}
 
-  .modal__contact-text#grey::before{
-    opacity: 0;
-    }
+.modal__contact-text#grey::before {
+  opacity: 0;
+}
 
 
-    .modal__error{
-      padding: 8px;
-      font-weight: 400;
-font-size: 10px;
-line-height: 14px;
-text-align: center;
-color: var(--red);
-    }
+.modal__error {
+  padding: 8px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+  color: var(--red);
+}
 
 
 
@@ -429,19 +545,19 @@ color: var(--red);
   transition: background .5s border .5s cursor .5s;
 }
 
-.modal__btn-save:focus{
+.modal__btn-save:focus {
   background: #B89EFF;
   border: 1px solid #9873FF;
   outline: none;
 }
 
-.modal__btn-save:hover{
+.modal__btn-save:hover {
   background: #B89EFF;
   border: 1px solid #9873FF;
   cursor: pointer;
 }
 
-.modal__btn-save:active{
+.modal__btn-save:active {
   background: #8052FF;
   border: 1px solid #9873FF;
   cursor: pointer;
@@ -461,24 +577,24 @@ color: var(--red);
 
 /* селект и импут */
 
-.modal__contact-add{
+.modal__contact-add {
   padding: 25px 30px;
   display: flex;
   width: 390px;
 }
 
 
-.modal__contact-enter{
+.modal__contact-enter {
   width: 70%;
   border-radius: 0%;
-    border: 1px solid var(--grey);
+  border: 1px solid var(--grey);
 }
 
-.modal__contact-enter:focus{
+.modal__contact-enter:focus {
   outline: none;
 }
 
-.modal__contact-enter::placeholder{
+.modal__contact-enter::placeholder {
   padding-left: 12px;
   font-weight: 400;
   font-size: 14px;
@@ -486,7 +602,7 @@ color: var(--red);
   color: var(--txt_grey);
 }
 
-.modal__contact-select{
+.modal__contact-select {
   width: 100%;
   appearance: none;
   font-family: inherit;
@@ -498,17 +614,17 @@ color: var(--red);
   border-right: none;
 
   font-weight: 400;
-font-size: 12px;
-line-height: 16px;
-color: var(--black);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--black);
 }
 
-.modal__contact-content{
+.modal__contact-content {
   position: relative;
   width: 42%;
 }
 
-.modal__contact-content::after{
+.modal__contact-content::after {
   content: '';
   display: block;
   position: absolute;
@@ -522,17 +638,17 @@ color: var(--black);
 
 /* добавляем кнопку */
 
-.modal__contact-button{
+.modal__contact-button {
   width: 10%;
   background: #E7E5EB;
   background-image: url(/CRM/img/cancel.svg);
   background-position: center;
   background-repeat: no-repeat;
   border: 1px solid #C8C5D1;
-  transition: background-image .5s border .5s  ;
+  transition: background-image .5s border .5s;
 }
 
-.modal__contact-button:active{
+.modal__contact-button:active {
   background-image: url(/CRM/img/cancelred.svg);
   border: 1px solid var(--red);
   outline: none;

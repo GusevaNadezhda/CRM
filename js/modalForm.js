@@ -12,6 +12,7 @@ function createFormNewClient() {
 
 
   $newClientTITLE.textContent = "Новый клиент"
+  $newClientTITLE.id = "new-client"
   // $newClientTITLE.classList.add("modal__title")
 
   // for (let i = 1; i < 4; i++) {
@@ -92,14 +93,6 @@ const $idClientP = document.createElement('p')
       this.value = client.lastName
       break
   }
-
-  // const modalContact = document.querySelector(".modal__contact")
-  // modalContact.addEventListener('click', function(){
-  //   const modalContactAdd = document.querySelector('.modal__contact-add')
-  //   createAddContact()
-  //   modalContact.append(modalContactAdd)
-  // })
-
 }
 
 
