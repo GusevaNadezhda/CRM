@@ -103,9 +103,45 @@ console.log(response)
 
 serverGetClients()
 
+async function serverChangeClient(client) {
+  let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
+    method: "PATCH",
+    body: JSON.stringify({
+      name: document.querySelector("#name").value.trim(),
+  surname:    document.querySelector("#surname").value.trim(),
+  lastName: document.querySelector("#lastName").value.trim(),
+  contacts: [
+    {
+      type: 'Телефон',
+      value: '+71234567890'
+    },
+    {
+      type: 'Email',
+      value: 'abc@xyz.com'
+    },
+    {
+      type: 'Facebook',
+      value: 'https://facebook.com/vasiliy-pupkin-the-best'
+    }
+  ]
+    }),
+    headers: { 'Content-Type': 'aplication/json' },
+  })
+
+  //  получаем ответ в виде массива от сервера
+  let data = await response.json()
+  // console.log(data)
+  return data
+}
+
+
 const modalBtnSave = document.querySelector(".modal__btn-save")
 
 modalBtnSave.addEventListener('click', serverAddClient)
+
+// modalBtnSave.addEventListener('click', serverAddClient)
+
+
 // serverAddClient()
 // await serverGetClients()
 // await serverAddClient()
@@ -153,3 +189,8 @@ let testClient = {
   // ]
 }
 
+//  функция изменения клиента и отправка измененных данных на сервер
+
+
+
+// serverChangeClient()

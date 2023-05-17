@@ -59,6 +59,7 @@ async function renderClientsTable() {
 
 document.querySelector("#btn-add-client").addEventListener('click', function(){
   document.querySelector("#modal-add-client").classList.add('open')
+  createFormNewClient()
 })
 
 document.querySelector("#modal-close").addEventListener('click', function(){
@@ -70,5 +71,39 @@ document.querySelector("#modal-close").addEventListener('click', function(){
 const modalContactText = document.querySelector(".modal__contact-text")
 modalContactText.addEventListener('click',function(){
   if(modalContactText.id != 'grey') createAddContact()
-
 })
+
+
+function createFormNewClient() {
+
+  const $newClientTITLE = document.querySelector(".modal__title")
+  const $saveClientBTN = document.querySelector('.modal__btn-save')
+  const $cancelA = document.querySelector('.modal__link')
+
+  const modalInput = document.querySelectorAll(".modal__input")
+
+  modalInput.forEach(elem =>
+        elem.value = "")
+
+  $newClientTITLE.textContent = "Новый клиент"
+  $newClientTITLE.id = "new-client"
+
+ $saveClientBTN
+  const modalError = document.createElement('div')
+  modalError.classList.add("modal__error")
+  modalError.textContent = ""
+  $saveClientBTN.insertAdjacentElement('beforeBegin', modalError)
+
+  $cancelA.textContent = "Отмена"
+
+
+  document.querySelector(".modal__link").addEventListener('click', function () {
+    document.querySelector("#modal-add-client").classList.remove('open')
+  })
+}
+
+
+
+
+
+

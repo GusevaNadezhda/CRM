@@ -7,6 +7,8 @@ function getNewClient(Client) {
   const $fioTD = document.createElement('td');
   const $createdAtTD = document.createElement('td');
   const $updatedAtTD = document.createElement('td');
+  const $updateDataDIV = document.createElement('div');
+  const $updateTimeDIV = document.createElement('div');
   const $contactTD = document.createElement('td');
   const $actionTD = document.createElement('td');
   const $actionBTN = document.createElement('div');
@@ -17,15 +19,23 @@ function getNewClient(Client) {
   $idTD.textContent = Client.id
   $fioTD.textContent = Client.fio
   $createdAtTD.textContent = Client.createdAt
-  $updatedAtTD.textContent = Client.updatedAt
+  // $updatedAtTD.textContent = Client.updatedAt
+  $updateDataDIV.textContent = Client.updatedAt
+  $updateTimeDIV.textContent = Client.updatedAt
   $contactTD.textContent = Client.contact
   $actionTD.textContent = Client.action
   $changeBTN.textContent = 'Изменить'
   $deleteBTN.textContent = 'Удалить'
 
+  $idTD.classList.add('table__body-id')
+  $fioTD.classList.add('table__body-fio')
+  $createdAtTD.classList.add('table__body-createdat')
+  $updatedAtTD.classList.add('table__body-updatedat')
   $changeBTN.classList.add('btn-change')
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
+
+
 
   $clientTR.append($idTD)
   $clientTR.append($fioTD)
@@ -33,12 +43,14 @@ function getNewClient(Client) {
   $clientTR.append($updatedAtTD)
   $clientTR.append($contactTD)
   $clientTR.append($actionTD)
+  $updatedAtTD.append($updateDataDIV)
+  $updatedAtTD.append($updateTimeDIV)
   $actionTD.append($actionBTN)
   $actionBTN.append($changeBTN)
   $actionBTN.append($deleteBTN)
 
   return $clientTR
 }
-getNewClient()
+
 
 window.getNewClient()
