@@ -387,12 +387,22 @@ tbody {
 }
 
 .modal__title {
+  display: flex;
+  align-items: baseline;
   margin: 24px 30px;
   margin-bottom: 0;
   font-weight: 700;
   font-size: 18px;
   line-height: 25px;
   color: var(--black);
+}
+
+.modal__title-id{
+  margin-left: 9px;
+font-weight: 400;
+  font-size: 12px;
+line-height: 16px;
+color: var(--txt_grey);
 }
 
 .modal__form-fio {
@@ -446,6 +456,10 @@ tbody {
   position: relative;
   width: 100%;
   /* overflow: hidden; */
+}
+
+.modal__field:first-child{
+  margin-top: 0;
 }
 
 .modal__placeholder span {
