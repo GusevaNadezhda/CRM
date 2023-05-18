@@ -73,27 +73,27 @@ function createFormNewClient() {
 
 createFormNewClient()
 
-function createFormChangeClient(client) {
-  const $changeClientTITLE = document.querySelector(".modal__title")
-const $idClientP = document.createElement('p')
+// function createFormChangeClient(client) {
+//   const $changeClientTITLE = document.querySelector(".modal__title")
+// const $idClientP = document.createElement('p')
 
-  $changeClientTITLE.textContent = "Изменить данные"
-  $idClientP.textContent = client.id
+//   $changeClientTITLE.textContent = "Изменить данные"
+//   $idClientP.textContent = client.id
 
-  const modalInput = document.querySelectorAll(".modal__input")
+//   const modalInput = document.querySelectorAll(".modal__input")
 
-  switch (modalInput.id) {
-    case "surname":
-      this.value = client.surname
-      break
-      case "name":
-      this.value = client.name
-      break
-      case "lastName":
-      this.value = client.lastName
-      break
-  }
-}
+//   switch (modalInput.id) {
+//     case "surname":
+//       this.value = client.surname
+//       break
+//       case "name":
+//       this.value = client.name
+//       break
+//       case "lastName":
+//       this.value = client.lastName
+//       break
+//   }
+// }
 
 
 

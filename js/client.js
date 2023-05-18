@@ -108,37 +108,37 @@ function getNewClient(Client) {
   // метод нажатие на кнопку удалить
   // const onDelete = {
   //   onDelete({ Client, element }) {
-      // закрытие текущего модального окна
-//       document.querySelector("#modal-add-client").classList.remove('open');
+  // закрытие текущего модального окна
+  //       document.querySelector("#modal-add-client").classList.remove('open');
 
-//       const $modalDeleteElement = document.createElement('div')
-//       const $modalDeleteTITLE = document.createElement('title')
-//       const $modalDeleteTEXT = document.createElement('p')
-//       const $modalDeleteBTN = document.createElement('button')
-//       const $modalDeleteCencel = document.createElement('p')
+  //       const $modalDeleteElement = document.createElement('div')
+  //       const $modalDeleteTITLE = document.createElement('title')
+  //       const $modalDeleteTEXT = document.createElement('p')
+  //       const $modalDeleteBTN = document.createElement('button')
+  //       const $modalDeleteCencel = document.createElement('p')
 
-//       $modalDeleteTITLE.textContent = "Удалить клиента"
-//       $modalDeleteTEXT.textContent ="Вы действительно хотите удалить данного клиента?"
-//       $modalDeleteBTN.textContent = "Удалить"
-//       $modalDeleteCencel.textContent = "Отмена"
+  //       $modalDeleteTITLE.textContent = "Удалить клиента"
+  //       $modalDeleteTEXT.textContent ="Вы действительно хотите удалить данного клиента?"
+  //       $modalDeleteBTN.textContent = "Удалить"
+  //       $modalDeleteCencel.textContent = "Отмена"
 
-//       $modalDeleteBTN.addEventListener('click', function(){
-//         element.remove();
-//         fetch(`http://localhost:3000/api/clients/${Client.id}`, {
-//           method: 'DELETE',
-//         });
-//       })
+  //       $modalDeleteBTN.addEventListener('click', function(){
+  //         element.remove();
+  //         fetch(`http://localhost:3000/api/clients/${Client.id}`, {
+  //           method: 'DELETE',
+  //         });
+  //       })
 
-//       $modalDeleteCencel.addEventListener('click', function(){
-//  document.querySelector("#modal-add-client").classList.add('open')}
-// )
+  //       $modalDeleteCencel.addEventListener('click', function(){
+  //  document.querySelector("#modal-add-client").classList.add('open')}
+  // )
 
-// document.querySelector('.main').append($modalDeleteElement)
-// $modalDeleteElement.append($modalDeleteTITLE)
-// $modalDeleteElement.append($modalDeleteTEXT)
-// $modalDeleteElement.append($modalDeleteBTN)
-// $modalDeleteElement.append($modalDeleteCencel)
-// }}
+  // document.querySelector('.main').append($modalDeleteElement)
+  // $modalDeleteElement.append($modalDeleteTITLE)
+  // $modalDeleteElement.append($modalDeleteTEXT)
+  // $modalDeleteElement.append($modalDeleteBTN)
+  // $modalDeleteElement.append($modalDeleteCencel)
+  // }}
 
   $deleteBTN.addEventListener('click', function (e) {
     e.preventDefault;
@@ -153,37 +153,39 @@ function getNewClient(Client) {
     const $modalDeleteCencel = document.createElement('p')
     const $modalDeleteClose = document.createElement('button')
 
-     $modalDeleteElement.classList.add("modal__delete-element")
-     $modalDeleteTITLE.classList.add("modal__delete-title")
-     $modalDeleteTEXT.classList.add("modal__delete-text")
-     $modalDeleteBTN.classList.add("modal__delete-btn")
-     $modalDeleteCencel.classList.add("modal__delete-cencel")
-     $modalDeleteClose.classList.add("modal__btn-close")
+    $modalDeleteElement.classList.add("modal__delete-element")
+    $modalDeleteTITLE.classList.add("modal__delete-title")
+    $modalDeleteTEXT.classList.add("modal__delete-text")
+    $modalDeleteBTN.classList.add("modal__delete-btn")
+    $modalDeleteCencel.classList.add("modal__delete-cencel")
+    $modalDeleteClose.classList.add("modal__btn-close")
 
     $modalDeleteTITLE.textContent = "Удалить клиента"
-    $modalDeleteTEXT.textContent ="Вы действительно хотите удалить данного клиента?"
+    $modalDeleteTEXT.textContent = "Вы действительно хотите удалить данного клиента?"
     $modalDeleteBTN.textContent = "Удалить"
     $modalDeleteCencel.textContent = "Отмена"
 
-    $modalDeleteBTN.addEventListener('click', function(){
-      element.remove();
+    $modalDeleteClose.addEventListener('click', function () {
+      document.querySelector("#modal-add-client").classList.remove('open')
+    })
+
+    $modalDeleteBTN.addEventListener('click', function () {
+      $clientTR.remove();
       fetch(`http://localhost:3000/api/clients/${Client.id}`, {
         method: 'DELETE',
       });
     })
 
-    $modalDeleteCencel.addEventListener('click', function(){
-document.querySelector("#modal-add-client").classList.add('open')
-})
-document.querySelector('.modal-add').removeChild(document.querySelector('.modal-newclient'))
-document.querySelector('.modal-add').append($modalDeleteElement)
-$modalDeleteElement.append($modalDeleteClose)
-$modalDeleteElement.append($modalDeleteTITLE)
-$modalDeleteElement.append($modalDeleteTEXT)
-$modalDeleteElement.append($modalDeleteBTN)
-$modalDeleteElement.append($modalDeleteCencel)
-
-
+    $modalDeleteCencel.addEventListener('click', function () {
+      document.querySelector("#modal-add-client").classList.add('open')
+    })
+    document.querySelector('.modal-add').removeChild(document.querySelector('.modal-newclient'))
+    document.querySelector('.modal-add').append($modalDeleteElement)
+    $modalDeleteElement.append($modalDeleteClose)
+    $modalDeleteElement.append($modalDeleteTITLE)
+    $modalDeleteElement.append($modalDeleteTEXT)
+    $modalDeleteElement.append($modalDeleteBTN)
+    $modalDeleteElement.append($modalDeleteCencel)
   });
 
 
@@ -209,38 +211,47 @@ $modalDeleteElement.append($modalDeleteCencel)
 
 function createFormChangeClient(client) {
   const $changeClientTITLE = document.querySelector(".modal__title")
-const $idClientP = document.createElement('p')
+  const $textClientP = document.createElement('p')
+  const $idClientP = document.createElement('p')
 
-  $changeClientTITLE.textContent = "Изменить данные"
+  $changeClientTITLE.textContent = ""
   $changeClientTITLE.id = "change-client"
 
+  $textClientP.textContent = "Изменить данные"
+
   $idClientP.classList.add('modal__title-id')
-  $idClientP.textContent = client.id
+  $idClientP.textContent = "ID: " + client.id
+
+
 
   const modalInput = document.querySelectorAll(".modal__input")
 
-modalInput.forEach(elem =>{
-  switch (elem.id) {
-    case "surname":
-      elem.value = client.surname
-      break
+  modalInput.forEach(elem => {
+    switch (elem.id) {
+      case "surname":
+        elem.value = client.surname
+        break
       case "name":
-      elem.value = client.name
-      break
+        elem.value = client.name
+        break
       case "lastName":
-      elem.value = client.lastName
-      break
-}})
+        elem.value = client.lastName
+        break
+    }
+  })
 
-const modalBtnSave = document.querySelector(".modal__btn-save")
+  const modalBtnSave = document.querySelector(".modal__btn-save")
 
-// modalBtnSave.addEventListener('click', serverChangeClient(client))
+  // modalBtnSave.addEventListener('click', serverChangeClient(client))
 
 
-modalBtnSave.addEventListener('click', function(){
-  alert("csefsdv")
-})
+  modalBtnSave.addEventListener('click', function () {
+    alert("csefsdv")
+  })
+
+  $changeClientTITLE.append($textClientP)
   $changeClientTITLE.append($idClientP)
+
 }
 
 
@@ -337,22 +348,22 @@ async function serverChangeClient(client) {
     method: "PATCH",
     body: JSON.stringify({
       name: document.querySelector("#name").value.trim(),
-  surname:    document.querySelector("#surname").value.trim(),
-  lastName: document.querySelector("#lastName").value.trim(),
-  contacts: [
-    {
-      type: 'Телефон',
-      value: '+71234567890'
-    },
-    {
-      type: 'Email',
-      value: 'abc@xyz.com'
-    },
-    {
-      type: 'Facebook',
-      value: 'https://facebook.com/vasiliy-pupkin-the-best'
-    }
-  ]
+      surname: document.querySelector("#surname").value.trim(),
+      lastName: document.querySelector("#lastName").value.trim(),
+      contacts: [
+        {
+          type: 'Телефон',
+          value: '+71234567890'
+        },
+        {
+          type: 'Email',
+          value: 'abc@xyz.com'
+        },
+        {
+          type: 'Facebook',
+          value: 'https://facebook.com/vasiliy-pupkin-the-best'
+        }
+      ]
     }),
     headers: { 'Content-Type': 'aplication/json' },
   })
