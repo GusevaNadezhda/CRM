@@ -64,7 +64,7 @@ class Client {
   // ]
 }
 
-function getNewClient(Client) {
+async function getNewClient(Client) {
   const $tbody = document.querySelector(".table__body")
   const $clientTR = document.createElement('tr');
   const $idTD = document.createElement('td');
@@ -81,13 +81,22 @@ function getNewClient(Client) {
   const $changeBTN = document.createElement('btn');
   const $deleteBTN = document.createElement('btn');
 
+  // const response = await fetch(SERVER_URL + '/api/clients/' + Client.id, {
+  //   method: "GET",
+  // })
+
+  // //  получаем ответ в виде массива от сервера
+  // const data = await response.json()
+
+  // console.log(data)
+
 
   $idTD.textContent = Client.id
   $fioTD.textContent = Client.fio
   $createDataDIV.textContent = Client.createdAt.date
   $createTimeDIV.textContent = Client.createdAt.time
-  $updateDataDIV.textContent = Client.createdAt.date
-  $updateTimeDIV.textContent = Client.createdAt.time
+  $updateDataDIV.textContent = Client.updatedAt.date
+  $updateTimeDIV.textContent = Client.updatedAt.time
   $contactTD.textContent = Client.contact
   $actionTD.textContent = Client.action
   $changeBTN.textContent = 'Изменить'
@@ -215,7 +224,7 @@ function getNewClient(Client) {
 }
 
 
-function createFormChangeClient(client) {
+async function createFormChangeClient(client) {
   const $changeClientTITLE = document.querySelector(".modal__title")
   const $textClientP = document.createElement('p')
   const $idClientP = document.createElement('p')
@@ -228,6 +237,15 @@ function createFormChangeClient(client) {
   $idClientP.classList.add('modal__title-id')
   $idClientP.textContent = "ID: " + client.id
 
+  const response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
+    method: "GET",
+  })
+
+  //  получаем ответ в виде массива от сервера
+  const data = await response.json()
+  console.log(data)
+  console.log(data.name)
+  console.log(data.surname)
 
 
   const modalInput = document.querySelectorAll(".modal__input")
@@ -235,13 +253,13 @@ function createFormChangeClient(client) {
   modalInput.forEach(elem => {
     switch (elem.id) {
       case "surname":
-        elem.value = client.surname
+        elem.value = data.surname
         break
       case "name":
-        elem.value = client.name
+        elem.value = data.name
         break
       case "lastName":
-        elem.value = client.lastName
+        elem.value = data.lastName
         break
     }
   })
@@ -253,7 +271,10 @@ function createFormChangeClient(client) {
 
   modalBtnSave.addEventListener('click', function () {
     alert("csefsdv")
+    serverChangeClient(data)
   })
+
+
 
   $changeClientTITLE.append($textClientP)
   $changeClientTITLE.append($idClientP)
@@ -350,6 +371,7 @@ if (serverData) {
 // }
 
 async function serverChangeClient(client) {
+  alert('изменение')
   let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
     method: "PATCH",
     body: JSON.stringify({
@@ -597,3 +619,5 @@ const contact = new Contact(select.value, input.value)
 
   return contactsArr
 }
+
+
