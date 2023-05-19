@@ -650,6 +650,38 @@ color: var(--txt_grey);
   background-image: url(/CRM/img/arrow_back_ios.svg);
 }
 
+/* иконки кнопок в таблице */
+.table__body-contacts{
+  display: flex;
+}
+.contacts-icon{
+
+  width: 16px;
+height: 16px;
+  background-repeat: no-repeat;
+}
+
+.contacts-icon:not(:last-child){
+  margin-right: 7px;
+}
+
+#tel{
+  background-image: url(/CRM/img/phone.svg);
+}
+
+#email{
+  background-image: url(/CRM/img/mail.svg);
+}
+
+#vk{
+  background-image: url(/CRM/img/vk\ \(1\).svg);
+}
+
+#fb{
+  background-image: url(/CRM/img/fb.svg);
+}
+
+
 /* добавляем кнопку */
 
 .modal__contact-button {

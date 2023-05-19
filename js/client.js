@@ -14,7 +14,7 @@ class Client {
   // }
 
   // * обязательное поле, имя клиента  и фамилия, отчество необязательно
-  constructor(id, surname, name, lastName, createdAt, updatedAt) {
+  constructor(id, surname, name, lastName, createdAt, updatedAt,contacts) {
 
     this.id = id
     this.surname = surname
@@ -23,6 +23,7 @@ class Client {
     // this.contacts = createAddContact()
     this.createdAt = changeDate(createdAt)
     this.updatedAt = changeDate(updatedAt)
+    this.contacts = contacts
 
     function changeDate(changeDate) {
       const changeDateArr = changeDate.split("T")
@@ -36,9 +37,9 @@ class Client {
   }
 
 
-  get contacts(){
-    return createAddContact()
-  }
+  // get contacts(){
+  //   return createAddContact()
+  // }
 
   get fio() {
     return this.surname + ' ' + this.name + ' ' + this.lastName
@@ -97,7 +98,7 @@ async function getNewClient(Client) {
   $createTimeDIV.textContent = Client.createdAt.time
   $updateDataDIV.textContent = Client.updatedAt.date
   $updateTimeDIV.textContent = Client.updatedAt.time
-  $contactTD.textContent = Client.contact
+  // $contactTD.textContent = Client.contacts
   $actionTD.textContent = Client.action
   $changeBTN.textContent = 'Изменить'
   $deleteBTN.textContent = 'Удалить'
@@ -110,6 +111,7 @@ async function getNewClient(Client) {
   $updatedAtTD.classList.add('table__body-updatedat')
   $updateDataDIV.classList.add('table__body-date')
   $updateTimeDIV.classList.add('table__body-time')
+  $contactTD.classList.add('table__body-contacts')
   $changeBTN.classList.add('btn-change')
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
@@ -119,6 +121,89 @@ async function getNewClient(Client) {
     document.querySelector("#modal-add-client").classList.add('open');
     createFormChangeClient(Client)
   })
+
+  // console.log( Client.contacts)
+  let count = 1;
+  Client.contacts.forEach(function(contact){
+
+
+    const $contactICON = document.createElement('div');
+    const $contactsGroup1 = document.createElement('div');
+    const $contactsGroup2 = document.createElement('div');
+    $contactICON.classList.add('contacts-icon')
+    $contactsGroup1.classList.add('contacts__icon-group1')
+    $contactsGroup2.classList.add('contacts__icon-group2')
+
+    switch (contact.type) {
+      case "Телефон":
+        $contactICON.id = 'tel'
+        break
+      case "Доп. телефон":
+        $contactICON.id = 'tel'
+        break
+      case "Email":
+        $contactICON.id = 'email'
+        break
+        case "Vk":
+          $contactICON.id = 'vk'
+        break
+        case "Facebook":
+          $contactICON.id = 'fb'
+        break
+    }
+count++
+
+if( Client.contacts.length > 3)
+
+    // if(Client.contacts[4]){
+
+    // }
+
+    // if(Client.contacts.length > 4){
+    //   $contactsGroup2.append($contactICON)
+    // }
+    console.log( contact )
+    console.log( Client.contacts)
+    console.log( Client.contacts.length)
+    console.log( $contactICON )
+
+
+    // $contactTD.append($contactsGroup)
+
+$contactTD.append($contactICON)
+// $contactTD.append($contactsGroup2)
+  })
+  console.log( count)
+  // let count = 1;
+  //   console.log( count)
+  //   let contactIcons = document.querySelectorAll('.contacts-icon')
+  //   console.log( contactIcons.length)
+
+
+  //   for(let i = 0; i < contactIcons.length; i++){
+
+  //     // $contactICON.dataset.i = i;
+  //     count ++
+      // if($contactICON.id == 4) $contactICON.classList.add('contacts-last-icon');
+      // $contactICON.dataset.i = i;
+      // $contactICON.dataset.count = count;
+      // $contactICON.textContent = "+" + count
+
+      // if(contact.length < 4){
+
+      //   $contactsGroup.append($contactICON)
+      // }
+      // if(contact.length > 4){
+
+      //   $contactICON.id = "hidden";
+      //   count++
+
+      //   $contactsGroup.append($contactICON)
+      // }
+      // document.querySelector('.contacts-last-icon').addEventListener('click', function(){
+      //   $contactICON.id = "vizible";
+      // })
+
 
   // метод нажатие на кнопку удалить
   // const onDelete = {
@@ -317,9 +402,9 @@ let serverData = await serverGetClients()
 
 if (serverData) {
   serverData.forEach(function (elem) {
-    const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt)
+    const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
+    // console.log(elem.contacts)
     listClients.push(client)
-    // console.log(client)
     getNewClient(client)
   })
 }
