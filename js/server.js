@@ -19,20 +19,8 @@ async function serverAddClient() {
       name: document.querySelector("#name").value.trim(),
   surname:    document.querySelector("#surname").value.trim(),
   lastName: document.querySelector("#lastName").value.trim(),
-  contacts: [
-    {
-      type: 'Телефон',
-      value: '+71234567890'
-    },
-    {
-      type: 'Email',
-      value: 'abc@xyz.com'
-    },
-    {
-      type: 'Facebook',
-      value: 'https://facebook.com/vasiliy-pupkin-the-best'
-    }
-  ]
+  contacts: JSON.stringify(createAddContact())
+
 
       // id: '1234567890',
   // createdAt: '2021-02-03T13:07:29.554Z',

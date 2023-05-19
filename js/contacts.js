@@ -1,3 +1,16 @@
+const contactsArr = [];
+
+console.log(contactsArr);
+
+class Contact {
+
+  constructor(type, value) {
+    this.type = type
+    this.value = value
+  }
+}
+
+
 // Создадим функцию которая будет добавлять в форму новые контакты
 
 function createAddContact() {
@@ -61,22 +74,31 @@ function createAddContact() {
     console.log(this.value);
     console.log(this.dataset.type);
 
-    if (this.value == "Доп. телефон" || this.value == "Телефон") modalContactEnter.type = "number"
+    if (this.value == "Доп. телефон" || this.value === "Телефон") modalContactEnter.type = "number"
     if (this.value == "Email") modalContactEnter.type = "email"
     if (this.value == "Vk" || this.value == "Facebook") modalContactEnter.type = "text"
   })
 
   const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
 
+
+
   // появление крестика после введения контакта в импут
 
 
-
   modalContactEnter.addEventListener('blur', function buttonCencelAdd() {
+
+    // const select = document.querySelector('select')
+    // const enter = document.querySelector('input')
+    // const contact = new Contact(select.value, enter.value)
+    // contactsArr.push(contact)
+
     const modalContactButton = document.createElement('button')
     modalContactButton.classList.add("modal__contact-button")
     modalContactAdd.append(modalContactButton)
     modalContactButton.addEventListener('click', () => modalContactAdd.remove())
+
+
 
 
 
@@ -87,90 +109,71 @@ function createAddContact() {
 
   // сделаем ограничение на количество контактов(не более 10)
 
-
-
-  console.log(modalContactAddArr.length)
-  console.log(modalContactAddArr)
-
   if (modalContactAddArr.length > 8) {
     document.querySelector(".modal__error").textContent = "Нельзя ввести более 10 контактов"
     modalContactText.innerHTML = " "
     modalContactText.id = "grey"
   }
 
-  // сохранение данных контакта в виде объекта {
-  //   //                              type: 'Телефон',
-  //   //                              value: '+71234567890'
-  //   //                                   }
+  // сохранение данных контакта в виде объекта
 
-  const contactsArr = [];
-    alert("jkhfjkhdfgj");
-
-    console.log(modalContactSelect.value);
-    console.log(modalContactEnter.value);
-    for (let i=0; i < modalContactAddArr.length; i++){
-      contactsArr.push({
-        type: modalContactSelect.value,
-        value: modalContactEnter.value,
-      })
-    };
-    console.log(contactsArr)
+    const contact = new Contact()
 
 
+  //   modalBtnSave.addEventListener('submit', async function(){
 
-  // function createContactsArr(){
-  //   const contactsArr = [];
-  //   alert("jkhfjkhdfgj");
-
-  //   console.log(modalContactSelect.value);
-  //   console.log(modalContactEnter.value);
-  //   for (let i=0; i < modalContactAddArr.length; i++){
-  //     contactsArr.push({
-  //       type: modalContactSelect.value,
-  //       value: modalContactEnter.value,
+  //     modalContactAddArr.forEach(function(elem){
+  //       let select= elem.querySelector('select')
+  // let input= elem.querySelector('input')
+  // const contact = new Contact(select.value, input.value)
+  //       contactsArr.push(contact)
+  //       console.log(elem)
+  //       console.log(select.value)
+  //       console.log(input.value)
   //     })
-  //   };
-  //   console.log(contactsArr)
-  //   return contactsArr
-  // }
-  // modalBtnSave.addEventListener('click', createContactsArr)
 
+  //     let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
+  //           method: "PATCH",
+  //           body: JSON.stringify({
+  //         contacts:  contactsArr
+  //           }),
+  //           headers: { 'Content-Type': 'aplication/json' },
+  //         })
+
+  //         //  получаем ответ в виде массива от сервера
+  //         let data = await response.json()
+  //         console.log(data)
+  //   })
+
+
+
+
+  //   document.querySelectorAll('.modal__title-id').addEventListener('click', function(){
+  //     modalContactAddArr.forEach(function(elem){
+  //       let select= elem.querySelector('select')
+  // let input= elem.querySelector('input')
+  // const contact = new Contact(select.value, input.value)
+  //       contactsArr.push(contact)
+  //       console.log(elem)
+  //       console.log(select.value)
+  //       console.log(input.value)
+  //     })
+  //   })
+
+
+
+  modalContactAddArr.forEach(function(elem){
+    let select= elem.querySelector('select')
+let input= elem.querySelector('input')
+const contact = new Contact(select.value, input.value)
+    contactsArr.push(contact)
+    console.log(elem)
+    console.log(select.value)
+    console.log(input.value)
+  })
 
 
   // присвоить каждому котакту тип контакта
-
-  // switch (modalContactAdd ) {
-  //   case 'option1':
-  //     modalOption.textContent = 'Телефон'
-  //     modalContactEnter.type = "number"
-  //     break
-
-  //   case 'option2':
-  //     modalOption.textContent = "Доп. телефон"
-  //     modalOption.value = "Доп. телефон"
-  //     modalContactEnter.type = "number"
-  //     break
-
-  //   case 'option3':
-  //     modalOption.textContent = "Email"
-  //     modalOption.value = "Email"
-  //     modalContactEnter.type = "email"
-  //     break
-
-  //   case 'option4':
-  //     modalOption.textContent = "Vk"
-  //     modalOption.value = "Vk"
-  //     modalContactEnter.type = "text"
-  //     break
-
-  //   case 'option5':
-  //     modalOption.textContent = "Facebook"
-  //     modalOption.value = "Facebook"
-  //     modalContactEnter.type = "text"
-  //     break
-  // }
-
-
 
 
   modalContact.append(modalContactAdd)
