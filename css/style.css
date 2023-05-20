@@ -86,6 +86,12 @@ tbody {
   background: white;
 }
 
+/* общие настройки */
+
+.hidden{
+  visibility: hidden;
+}
+
 
 .header__content {
   display: flex;
@@ -397,12 +403,12 @@ tbody {
   color: var(--black);
 }
 
-.modal__title-id{
+.modal__title-id {
   margin-left: 9px;
-font-weight: 400;
+  font-weight: 400;
   font-size: 12px;
-line-height: 16px;
-color: var(--txt_grey);
+  line-height: 16px;
+  color: var(--txt_grey);
 }
 
 .modal__form-fio {
@@ -458,7 +464,7 @@ color: var(--txt_grey);
   /* overflow: hidden; */
 }
 
-.modal__field:first-child{
+.modal__field:first-child {
   margin-top: 0;
 }
 
@@ -651,34 +657,61 @@ color: var(--txt_grey);
 }
 
 /* иконки кнопок в таблице */
-.table__body-contacts{
+.table__body-contacts {
+  display: flex;
+  flex-direction: column;
+}
+
+.contacts__icon-group1,
+.contacts__icon-group2 {
   display: flex;
 }
-.contacts-icon{
+
+.contacts__icon-group1 {
+  margin-bottom: 7px;
+}
+
+.contacts-icon {
 
   width: 16px;
-height: 16px;
+  height: 16px;
   background-repeat: no-repeat;
 }
 
-.contacts-icon:not(:last-child){
+.contacts-icon:not(:last-child) {
   margin-right: 7px;
 }
 
-#tel{
+.tel {
   background-image: url(/CRM/img/phone.svg);
 }
 
-#email{
+.email {
   background-image: url(/CRM/img/mail.svg);
 }
 
-#vk{
+.vk {
   background-image: url(/CRM/img/vk\ \(1\).svg);
 }
 
-#fb{
+.fb {
   background-image: url(/CRM/img/fb.svg);
+}
+
+.last-icon {
+  position: relative;
+  background-image: url(/CRM/img/lasticon.svg);
+}
+
+.contacts__icon-number {
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  font-weight: 600;
+  font-size: 8px;
+  line-height: 11px;
+  color: var(--black);
+  cursor: pointer;
 }
 
 
@@ -698,4 +731,9 @@ height: 16px;
   background-image: url(/CRM/img/cancelred.svg);
   border: 1px solid var(--red);
   outline: none;
+}
+
+
+.btn-group {
+  display: flex;
 }
