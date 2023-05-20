@@ -14,7 +14,7 @@ class Client {
   // }
 
   // * обязательное поле, имя клиента  и фамилия, отчество необязательно
-  constructor(id, surname, name, lastName, createdAt, updatedAt) {
+  constructor(id, surname, name, lastName, createdAt, updatedAt, contacts) {
 
     this.id = id
     this.surname = surname
@@ -23,6 +23,7 @@ class Client {
     // this.contacts = createAddContact()
     this.createdAt = changeDate(createdAt)
     this.updatedAt = changeDate(updatedAt)
+    this.contacts = contacts
 
     function changeDate(changeDate) {
       const changeDateArr = changeDate.split("T")
@@ -36,9 +37,9 @@ class Client {
   }
 
 
-  get contacts(){
-    return createAddContact()
-  }
+  // get contacts(){
+  //   return createAddContact()
+  // }
 
   get fio() {
     return this.surname + ' ' + this.name + ' ' + this.lastName
@@ -97,7 +98,7 @@ async function getNewClient(Client) {
   $createTimeDIV.textContent = Client.createdAt.time
   $updateDataDIV.textContent = Client.updatedAt.date
   $updateTimeDIV.textContent = Client.updatedAt.time
-  $contactTD.textContent = Client.contact
+  // $contactTD.textContent = Client.contacts
   $actionTD.textContent = Client.action
   $changeBTN.textContent = 'Изменить'
   $deleteBTN.textContent = 'Удалить'
@@ -110,6 +111,7 @@ async function getNewClient(Client) {
   $updatedAtTD.classList.add('table__body-updatedat')
   $updateDataDIV.classList.add('table__body-date')
   $updateTimeDIV.classList.add('table__body-time')
+  $contactTD.classList.add('table__body-contacts')
   $changeBTN.classList.add('btn-change')
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
@@ -120,40 +122,127 @@ async function getNewClient(Client) {
     createFormChangeClient(Client)
   })
 
-  // метод нажатие на кнопку удалить
-  // const onDelete = {
-  //   onDelete({ Client, element }) {
-  // закрытие текущего модального окна
-  //       document.querySelector("#modal-add-client").classList.remove('open');
+  // console.log( Client.contacts)
 
-  //       const $modalDeleteElement = document.createElement('div')
-  //       const $modalDeleteTITLE = document.createElement('title')
-  //       const $modalDeleteTEXT = document.createElement('p')
-  //       const $modalDeleteBTN = document.createElement('button')
-  //       const $modalDeleteCencel = document.createElement('p')
 
-  //       $modalDeleteTITLE.textContent = "Удалить клиента"
-  //       $modalDeleteTEXT.textContent ="Вы действительно хотите удалить данного клиента?"
-  //       $modalDeleteBTN.textContent = "Удалить"
-  //       $modalDeleteCencel.textContent = "Отмена"
+  let count = 1;
 
-  //       $modalDeleteBTN.addEventListener('click', function(){
-  //         element.remove();
-  //         fetch(`http://localhost:3000/api/clients/${Client.id}`, {
-  //           method: 'DELETE',
-  //         });
-  //       })
+  const $contactsGroup1 = document.createElement('div');
+  const $contactsGroup2 = document.createElement('div');
+  $contactsGroup1.classList.add('contacts__icon-group1')
+  $contactsGroup2.classList.add('contacts__icon-group2')
+  for (let i = 0; i < Client.contacts.length; i++) {
 
-  //       $modalDeleteCencel.addEventListener('click', function(){
-  //  document.querySelector("#modal-add-client").classList.add('open')}
-  // )
+    const $contactICON = document.createElement('div');
+    $contactICON.classList.add('contacts-icon')
 
-  // document.querySelector('.main').append($modalDeleteElement)
-  // $modalDeleteElement.append($modalDeleteTITLE)
-  // $modalDeleteElement.append($modalDeleteTEXT)
-  // $modalDeleteElement.append($modalDeleteBTN)
-  // $modalDeleteElement.append($modalDeleteCencel)
-  // }}
+    $contactICON.dataset.number = i+1
+
+    if (i < 5) {
+
+
+      $contactsGroup1.append($contactICON)
+    }
+
+    console.log
+    if( $contactICON.dataset.number == 5){
+      $contactICON.classList.add("last-icon")
+      const iconNamber = document.createElement('div')
+
+      iconNamber.classList.add("contacts__icon-number")
+
+      let count = Client.contacts.length - 4;
+      iconNamber.textContent = "+" + count;
+      $contactsGroup2.classList.add('hidden')
+
+      iconNamber.addEventListener('click', function(){
+        $contactICON.classList.remove("last-icon")
+        iconNamber.innerHTML = ""
+        $contactsGroup2.classList.remove('hidden')
+      })
+
+
+
+$contactICON.append(iconNamber)
+    }
+
+
+
+    if (i >= 5) {
+count++
+      $contactsGroup2.append($contactICON)
+    }
+    console.log(count)
+    console.log( Client.contacts[i].type)
+    console.log($contactICON)
+    switch (Client.contacts[i].type) {
+          case "Телефон":
+            $contactICON.classList.add('tel')
+            break
+          case "Доп. телефон":
+            $contactICON.classList.add('tel')
+            break
+          case "Email":
+            $contactICON.classList.add('email')
+            break
+          case "Vk":
+            $contactICON.classList.add('vk')
+            break
+          case "Facebook":
+            $contactICON.classList.add('fb')
+            break
+        }
+  }
+
+  $contactTD.append($contactsGroup1)
+  $contactTD.append($contactsGroup2)
+
+  // Client.contacts.forEach(function (contact) {
+
+
+  //   // const $contactICON = document.createElement('div');
+  //   // const $contactsGroup1 = document.createElement('div');
+  //   // const $contactsGroup2 = document.createElement('div');
+  //   // $contactICON.classList.add('contacts-icon')
+  //   // $contactsGroup1.classList.add('contacts__icon-group1')
+  //   // $contactsGroup2.classList.add('contacts__icon-group2')
+
+  //   // switch (contact.type) {
+  //   //   case "Телефон":
+  //   //     $contactICON.id = 'tel'
+  //   //     break
+  //   //   case "Доп. телефон":
+  //   //     $contactICON.id = 'tel'
+  //   //     break
+  //   //   case "Email":
+  //   //     $contactICON.id = 'email'
+  //   //     break
+  //   //   case "Vk":
+  //   //     $contactICON.id = 'vk'
+  //   //     break
+  //   //   case "Facebook":
+  //   //     $contactICON.id = 'fb'
+  //   //     break
+  //   // }
+  //   count++
+
+  //   if (Client.contacts.length > 3)
+
+  //     console.log(contact.id)
+  //   console.log(Client.contacts)
+  //   console.log(Client.contacts.length)
+  //   console.log($contactICON)
+  //   console.log($contactICON)
+
+
+
+  //   // $contactTD.append($contactsGroup)
+
+  //   // $contactTD.append($contactICON)
+  //   // $contactTD.append($contactsGroup2)
+  // })
+
+
 
   $deleteBTN.addEventListener('click', function (e) {
     e.preventDefault;
@@ -317,58 +406,13 @@ let serverData = await serverGetClients()
 
 if (serverData) {
   serverData.forEach(function (elem) {
-    const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt)
+    const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
+    // console.log(elem.contacts)
     listClients.push(client)
-    // console.log(client)
     getNewClient(client)
   })
 }
-// console.log(listClients)
-// задаем функцию добавления нового клиента на сервер
 
-// async function serverAddClient(client) {
-//   // делаем добавление на сервер
-//   let response = await fetch(SERVER_URL + '/api/clients', {
-//     method: "POST",
-//     headers: { 'Content-Type': 'aplication/json' },
-//     // body: JSON.stringify({
-//     //   id: client.id,
-//     //   createdAt: client.createdAt,
-//     //   updatedAt: client.updatedAt,
-//     //   name: client.name,
-//     //   surname: client.surname,
-//     //   lastName: client.lastName,
-//     //   // contacts: [
-//     //   //   {
-//     //   //     type: 'Телефон',
-//     //   //     value: '+71234567890'
-//     //   //   },
-//     //   //   {
-//     //   //     type: 'Email',
-//     //   //     value: 'abc@xyz.com'
-//     //   //   },
-//     //   //   {
-//     //   //     type: 'Facebook',
-//     //   //     value: 'https://facebook.com/vasiliy-pupkin-the-best'
-//     //   //   }
-//     //   // ]
-//     // })
-//     body: JSON.stringify({
-//       id: '1234567890',
-//       createdAt: '2021-02-03T13:07:29.554Z',
-//       updatedAt: '2021-02-03T13:07:29.554Z',
-//       name: 'Василий',
-//       surname: 'Пупкин',
-//       lastName: 'Васильевич',
-//     })
-
-//   })
-
-//   //  получаем ответ от сервера
-//   let data = await response.json()
-//   // console.log(data)
-//   return data
-// }
 
 async function serverChangeClient(client) {
   alert('изменение')
@@ -552,7 +596,7 @@ function createAddContact() {
 
   // сохранение данных контакта в виде объекта
 
-    const contact = new Contact()
+  const contact = new Contact()
 
 
   //   modalBtnSave.addEventListener('submit', async function(){
@@ -596,17 +640,17 @@ function createAddContact() {
   //   })
 
 
-  modalBtnSave.addEventListener('submit', function(){
-  modalContactAddArr.forEach(function(elem){
-    let select= elem.querySelector('select')
-let input= elem.querySelector('input')
-const contact = new Contact(select.value, input.value)
-    contactsArr.push(contact)
-    console.log(elem)
-    console.log(select.value)
-    console.log(input.value)
+  modalBtnSave.addEventListener('submit', function () {
+    modalContactAddArr.forEach(function (elem) {
+      let select = elem.querySelector('select')
+      let input = elem.querySelector('input')
+      const contact = new Contact(select.value, input.value)
+      contactsArr.push(contact)
+      console.log(elem)
+      console.log(select.value)
+      console.log(input.value)
+    })
   })
-})
 
 
   // присвоить каждому котакту тип контакта
