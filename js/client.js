@@ -122,10 +122,6 @@ async function getNewClient(Client) {
     createFormChangeClient(Client)
   })
 
-  // console.log( Client.contacts)
-
-
-  let count = 1;
 
   const $contactsGroup1 = document.createElement('div');
   const $contactsGroup2 = document.createElement('div');
@@ -137,10 +133,9 @@ async function getNewClient(Client) {
     $contactICON.classList.add('contacts-icon')
 
     $contactICON.dataset.number = i+1
+    $contactICON.dataset.tippyContent = Client.contacts[i].value
 
     if (i < 5) {
-
-
       $contactsGroup1.append($contactICON)
     }
 
@@ -161,18 +156,15 @@ async function getNewClient(Client) {
         $contactsGroup2.classList.remove('hidden')
       })
 
-
-
 $contactICON.append(iconNamber)
     }
 
 
 
     if (i >= 5) {
-count++
       $contactsGroup2.append($contactICON)
     }
-    console.log(count)
+
     console.log( Client.contacts[i].type)
     console.log($contactICON)
     switch (Client.contacts[i].type) {
@@ -573,8 +565,11 @@ function createAddContact() {
     // contactsArr.push(contact)
 
     const modalContactButton = document.createElement('button')
-    modalContactButton.classList.add("modal__contact-button")
-    modalContactAdd.append(modalContactButton)
+    modalContactButton.classList.add("modal__contact-button");
+    modalContactButton.dataset.tippyContent = "Удалить контакт"
+    modalContactButton.dataset.name = "Удалить контакт";
+    modalContactAdd.append(modalContactButton);
+
     modalContactButton.addEventListener('click', () => modalContactAdd.remove())
 
 
@@ -664,4 +659,6 @@ function createAddContact() {
   return contactsArr
 }
 
+// тултип
 
+tippy('[data-tippy-content]');

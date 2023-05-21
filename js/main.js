@@ -103,7 +103,9 @@ function createFormNewClient() {
 }
 
 
+// тултип
 
+tippy('[data-tippy-content]');
 
 
 

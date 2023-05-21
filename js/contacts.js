@@ -1,3 +1,5 @@
+
+
 const contactsArr = [];
 
 console.log(contactsArr);
@@ -11,9 +13,14 @@ class Contact {
 }
 
 
+
 // Создадим функцию которая будет добавлять в форму новые контакты
 
 function createAddContact() {
+  // тултип
+
+tippy('[data-tippy-content]');
+
   const modalContact = document.querySelector(".modal__contact")
   const modalContactText = document.querySelector(".modal__contact-text")
   const modalContactAdd = document.createElement('div');
@@ -95,6 +102,7 @@ function createAddContact() {
 
     const modalContactButton = document.createElement('button')
     modalContactButton.classList.add("modal__contact-button")
+    modalContactButton.dataset.tippyContent = "Удалить контакт"
     modalContactAdd.append(modalContactButton)
     modalContactButton.addEventListener('click', () => modalContactAdd.remove())
 
@@ -185,6 +193,7 @@ const contact = new Contact(select.value, input.value)
 }
 
 console.log(createAddContact())
+
 
 
 window.createAddContact()
