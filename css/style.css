@@ -182,6 +182,7 @@ tbody {
   line-height: 19px;
   color: #333333;
   cursor: pointer;
+  transition: color .5s;
 }
 
 .btn-change::before {
@@ -192,6 +193,12 @@ tbody {
   background-image: url(/CRM/img/edit.svg);
 }
 
+.btn-change:focus,
+.btn-change:hover,
+.btn-change:active{
+color: var(--firm);
+}
+
 .btn-delete {
   display: flex;
   font-weight: 400;
@@ -199,6 +206,7 @@ tbody {
   line-height: 19px;
   color: #333333;
   cursor: pointer;
+  transition: color .5s;
 }
 
 .btn-delete::before {
@@ -207,6 +215,12 @@ tbody {
   height: 16px;
   background-repeat: no-repeat;
   background-image: url(/CRM/img/cancelred.svg);
+}
+
+.btn-delete:focus,
+.btn-delete:hover,
+.btn-delete:active{
+color: var(--red);
 }
 
 /* модальное окно "Удалить" */
@@ -586,6 +600,7 @@ tbody {
 
 .modal__link {
   margin: 0 200px;
+  margin-bottom: 25px;
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
@@ -727,10 +742,14 @@ tbody {
   transition: background-image .5s border .5s;
 }
 
+
+.modal__contact-button:focus,
+.modal__contact-button:hover,
 .modal__contact-button:active {
   background-image: url(/CRM/img/cancelred.svg);
   border: 1px solid var(--red);
   outline: none;
+  cursor: pointer;
 }
 
 
