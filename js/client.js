@@ -1,4 +1,6 @@
-
+import {createFormEditClient} from "./modalForm.js"
+import {createDeleteForm} from "./modalForm.js"
+import {serverDeleteClient} from "./server.js"
 // export default
 
 // создадим массив куда будем добавлять наших клиетов
@@ -7,11 +9,6 @@ let listClients = []
 
 
 class Client {
-
-  // ID клиента, заполняется сервером автоматически, после создания нельзя изменить
-  // get id() {
-
-  // }
 
   // * обязательное поле, имя клиента  и фамилия, отчество необязательно
   constructor(id, surname, name, lastName, createdAt, updatedAt, contacts) {
@@ -36,6 +33,8 @@ class Client {
     }
   }
 
+ // контакты - необязательное поле, массив контактов
+  // каждый объект в массиве (если он передан) должен содержать непустые свойства type и value
 
   // get contacts(){
   //   return createAddContact()
@@ -45,27 +44,9 @@ class Client {
     return this.surname + ' ' + this.name + ' ' + this.lastName
   }
 
-
-
-  // контакты - необязательное поле, массив контактов
-  // каждый объект в массиве (если он передан) должен содержать непустые свойства type и value
-  // contacts = [
-  //   {
-  //     type: 'Телефон',
-  //     value: '+71234567890'
-  //   },
-  //   {
-  //     type: 'Email',
-  //     value: 'abc@xyz.com'
-  //   },
-  //   {
-  //     type: 'Facebook',
-  //     value: 'https://facebook.com/vasiliy-pupkin-the-best'
-  //   }
-  // ]
 }
 
-async function getNewClient(Client) {
+async function getNewClient(client) {
   const $tbody = document.querySelector(".table__body")
   const $clientTR = document.createElement('tr');
   const $idTD = document.createElement('td');
@@ -82,24 +63,14 @@ async function getNewClient(Client) {
   const $changeBTN = document.createElement('btn');
   const $deleteBTN = document.createElement('btn');
 
-  // const response = await fetch(SERVER_URL + '/api/clients/' + Client.id, {
-  //   method: "GET",
-  // })
 
-  // //  получаем ответ в виде массива от сервера
-  // const data = await response.json()
-
-  // console.log(data)
-
-
-  $idTD.textContent = Client.id
-  $fioTD.textContent = Client.fio
-  $createDataDIV.textContent = Client.createdAt.date
-  $createTimeDIV.textContent = Client.createdAt.time
-  $updateDataDIV.textContent = Client.updatedAt.date
-  $updateTimeDIV.textContent = Client.updatedAt.time
-  // $contactTD.textContent = Client.contacts
-  $actionTD.textContent = Client.action
+  $idTD.textContent = client.id
+  $fioTD.textContent = client.fio
+  $createDataDIV.textContent = client.createdAt.date
+  $createTimeDIV.textContent = client.createdAt.time
+  $updateDataDIV.textContent = client.updatedAt.date
+  $updateTimeDIV.textContent = client.updatedAt.time
+  $actionTD.textContent = client.action
   $changeBTN.textContent = 'Изменить'
   $deleteBTN.textContent = 'Удалить'
 
@@ -116,10 +87,9 @@ async function getNewClient(Client) {
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
 
-  $changeBTN.addEventListener('click', function (e) {
-    e.preventDefault()
-    document.querySelector("#modal-add-client").classList.add('open');
-    createFormChangeClient(Client)
+  $changeBTN.addEventListener('click',  function () {
+     createFormEditClient(client);
+    document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
   })
 
 
@@ -127,26 +97,30 @@ async function getNewClient(Client) {
   const $contactsGroup2 = document.createElement('div');
   $contactsGroup1.classList.add('contacts__icon-group1')
   $contactsGroup2.classList.add('contacts__icon-group2')
-  for (let i = 0; i < Client.contacts.length; i++) {
+  for (let i = 0; i < client.contacts.length; i++) {
 
     const $contactICON = document.createElement('div');
     $contactICON.classList.add('contacts-icon')
 
     $contactICON.dataset.number = i+1
-    $contactICON.dataset.tippyContent = Client.contacts[i].value
+
+    if( !$contactICON.classList.contains("last-icon")) $contactICON.dataset.tippyContent = client.contacts[i].type + ': ' + client.contacts[i].value
+
+    // console.log(!$contactICON.classList.contains("last-icon"))
+
 
     if (i < 5) {
       $contactsGroup1.append($contactICON)
     }
 
-    console.log
+
     if( $contactICON.dataset.number == 5){
       $contactICON.classList.add("last-icon")
       const iconNamber = document.createElement('div')
 
       iconNamber.classList.add("contacts__icon-number")
 
-      let count = Client.contacts.length - 4;
+      let count = client.contacts.length - 4;
       iconNamber.textContent = "+" + count;
       $contactsGroup2.classList.add('hidden')
 
@@ -165,9 +139,9 @@ $contactICON.append(iconNamber)
       $contactsGroup2.append($contactICON)
     }
 
-    console.log( Client.contacts[i].type)
-    console.log($contactICON)
-    switch (Client.contacts[i].type) {
+    // console.log( Client.contacts[i].type)
+    // console.log($contactICON)
+    switch (client.contacts[i].type) {
           case "Телефон":
             $contactICON.classList.add('tel')
             break
@@ -189,101 +163,14 @@ $contactICON.append(iconNamber)
   $contactTD.append($contactsGroup1)
   $contactTD.append($contactsGroup2)
 
-  // Client.contacts.forEach(function (contact) {
-
-
-  //   // const $contactICON = document.createElement('div');
-  //   // const $contactsGroup1 = document.createElement('div');
-  //   // const $contactsGroup2 = document.createElement('div');
-  //   // $contactICON.classList.add('contacts-icon')
-  //   // $contactsGroup1.classList.add('contacts__icon-group1')
-  //   // $contactsGroup2.classList.add('contacts__icon-group2')
-
-  //   // switch (contact.type) {
-  //   //   case "Телефон":
-  //   //     $contactICON.id = 'tel'
-  //   //     break
-  //   //   case "Доп. телефон":
-  //   //     $contactICON.id = 'tel'
-  //   //     break
-  //   //   case "Email":
-  //   //     $contactICON.id = 'email'
-  //   //     break
-  //   //   case "Vk":
-  //   //     $contactICON.id = 'vk'
-  //   //     break
-  //   //   case "Facebook":
-  //   //     $contactICON.id = 'fb'
-  //   //     break
-  //   // }
-  //   count++
-
-  //   if (Client.contacts.length > 3)
-
-  //     console.log(contact.id)
-  //   console.log(Client.contacts)
-  //   console.log(Client.contacts.length)
-  //   console.log($contactICON)
-  //   console.log($contactICON)
-
-
-
-  //   // $contactTD.append($contactsGroup)
-
-  //   // $contactTD.append($contactICON)
-  //   // $contactTD.append($contactsGroup2)
-  // })
-
-
-
-  $deleteBTN.addEventListener('click', function (e) {
-    e.preventDefault;
-    // onDelete({ Client, element: $clientTR });
-
-
-    document.querySelector("#modal-add-client").classList.add('open');
-    const $modalDeleteElement = document.createElement('div')
-    const $modalDeleteTITLE = document.createElement('h2')
-    const $modalDeleteTEXT = document.createElement('p')
-    const $modalDeleteBTN = document.createElement('button')
-    const $modalDeleteCencel = document.createElement('p')
-    const $modalDeleteClose = document.createElement('button')
-
-    $modalDeleteElement.classList.add("modal__delete-element")
-    $modalDeleteTITLE.classList.add("modal__delete-title")
-    $modalDeleteTEXT.classList.add("modal__delete-text")
-    $modalDeleteBTN.classList.add("modal__delete-btn")
-    $modalDeleteCencel.classList.add("modal__delete-cencel")
-    $modalDeleteClose.classList.add("modal__btn-close")
-
-    $modalDeleteTITLE.textContent = "Удалить клиента"
-    $modalDeleteTEXT.textContent = "Вы действительно хотите удалить данного клиента?"
-    $modalDeleteBTN.textContent = "Удалить"
-    $modalDeleteCencel.textContent = "Отмена"
-
-    $modalDeleteClose.addEventListener('click', function () {
-      document.querySelector("#modal-add-client").classList.remove('open')
-    })
-
-    $modalDeleteBTN.addEventListener('click', function () {
+  $deleteBTN.addEventListener('click', function () {
+    createDeleteForm(client)
+    document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
+    document.querySelector(".modal__delete-btn").addEventListener('click', function () {
       $clientTR.remove();
-      fetch(`http://localhost:3000/api/clients/${Client.id}`, {
-        method: 'DELETE',
-      });
+      serverDeleteClient(client.id)
     })
-
-    $modalDeleteCencel.addEventListener('click', function () {
-      document.querySelector("#modal-add-client").classList.add('open')
-    })
-    document.querySelector('.modal-add').removeChild(document.querySelector('.modal-newclient'))
-    document.querySelector('.modal-add').append($modalDeleteElement)
-    $modalDeleteElement.append($modalDeleteClose)
-    $modalDeleteElement.append($modalDeleteTITLE)
-    $modalDeleteElement.append($modalDeleteTEXT)
-    $modalDeleteElement.append($modalDeleteBTN)
-    $modalDeleteElement.append($modalDeleteCencel)
   });
-
 
   $clientTR.append($idTD)
   $clientTR.append($fioTD)
@@ -298,69 +185,101 @@ $contactICON.append(iconNamber)
   $actionTD.append($actionBTN)
   $actionBTN.append($changeBTN)
   $actionBTN.append($deleteBTN)
-
   $tbody.append($clientTR)
 
   // return $clientTR
 }
 
 
-async function createFormChangeClient(client) {
-  const $changeClientTITLE = document.querySelector(".modal__title")
-  const $textClientP = document.createElement('p')
-  const $idClientP = document.createElement('p')
+// async function createModalChangeClient(client) {
+//   const $changeClientTITLE = document.querySelector(".modal__title")
+//   const $textClientP = document.createElement('p')
+//   const $idClientP = document.createElement('p')
+// const deleteClient =  document.querySelector(".modal__link")
 
-  $changeClientTITLE.textContent = ""
-  $changeClientTITLE.id = "change-client"
+//   $changeClientTITLE.textContent = ""
+//   $changeClientTITLE.id = "change-client"
 
-  $textClientP.textContent = "Изменить данные"
+//   $textClientP.textContent = "Изменить данные"
+//  deleteClient.textContent = "Удалить клиента"
 
-  $idClientP.classList.add('modal__title-id')
-  $idClientP.textContent = "ID: " + client.id
+//   $idClientP.classList.add('modal__title-id')
+//   $idClientP.textContent = "ID: " + client.id
 
-  const response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
-    method: "GET",
-  })
+//   const response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
+//     method: "GET",
+//   })
 
-  //  получаем ответ в виде массива от сервера
-  const data = await response.json()
-  console.log(data)
-  console.log(data.name)
-  console.log(data.surname)
+//   //  получаем ответ в виде массива от сервера
+//   const data = await response.json()
 
+//   const modalInput = document.querySelectorAll(".modal__input")
 
-  const modalInput = document.querySelectorAll(".modal__input")
-
-  modalInput.forEach(elem => {
-    switch (elem.id) {
-      case "surname":
-        elem.value = data.surname
-        break
-      case "name":
-        elem.value = data.name
-        break
-      case "lastName":
-        elem.value = data.lastName
-        break
-    }
-  })
-
-  const modalBtnSave = document.querySelector(".modal__btn-save")
-
-  // modalBtnSave.addEventListener('click', serverChangeClient(client))
-
-
-  modalBtnSave.addEventListener('click', function () {
-    alert("csefsdv")
-    serverChangeClient(data)
-  })
+//   modalInput.forEach(elem => {
+//     console.log(elem)
+//     switch (elem.id) {
+//       case "surname":
+//         elem.value = data.surname
+//         break
+//       case "name":
+//         elem.value = data.name
+//         break
+//       case "lastName":
+//         elem.value = data.lastName
+//         break
+//     }
+//   })
 
 
 
-  $changeClientTITLE.append($textClientP)
-  $changeClientTITLE.append($idClientP)
+//   const modalBtnSave = document.querySelector(".modal__btn-save")
+//   console.log(modalBtnSave)
+//   // modalBtnSave.addEventListener('click', serverChangeClient(client))
 
-}
+
+//   modalBtnSave.addEventListener('submit', async function () {
+//     alert("отправляю изменения")
+//     // e.preventDefault()
+//     // serverChangeClient(data)
+//     const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
+//   const contactsArr = [];
+//   modalContactAddArr.forEach(function(elem){
+//     let select= elem.querySelector('select')
+// let input= elem.querySelector('input')
+
+//     contactsArr.push({
+//       type:select.value,
+//       value:input.value
+//     })
+//   })
+
+//   let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
+//     method: "PATCH",
+//     body: JSON.stringify({
+//       name: document.querySelector("#name").value.trim(),
+//       surname: document.querySelector("#surname").value.trim(),
+//       lastName: document.querySelector("#lastName").value.trim(),
+//       contacts: contactsArr,
+//     }),
+//     headers: { 'Content-Type': 'aplication/json' },
+//   })
+//   console.log(response)
+//   //  получаем ответ в виде массива от сервера
+//   let data = await response.json()
+//   console.log(data)
+//   // return data
+//   })
+
+//   deleteClient.addEventListener('click', function(){
+//     serverDeleteClient(client.id)
+//     })
+
+
+
+//   $changeClientTITLE.append($textClientP)
+//   $changeClientTITLE.append($idClientP)
+
+// }
 
 
 // функция удаления клиента
@@ -375,7 +294,9 @@ const SERVER_URL = 'http://localhost:3000'
 
 
 //  функция получения массива клиентов с сервера
+let promise = new Promise(function(resolve){
 
+})
 async function serverGetClients() {
   let response = await fetch(SERVER_URL + '/api/clients', {
     method: "GET",
@@ -384,14 +305,19 @@ async function serverGetClients() {
 
   //  получаем ответ в виде массива от сервера
   let data = await response.json()
-  // console.log(data)
   return data
 }
+
+
 
 // полученный массив запишем в переменную
 
 let serverData = await serverGetClients()
+
+
 // console.log(serverData)
+
+
 
 
 // назначаем проверку если serverData не пустой, тогда массив listClients будет равен массиву serverData
@@ -399,266 +325,68 @@ let serverData = await serverGetClients()
 if (serverData) {
   serverData.forEach(function (elem) {
     const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
-    // console.log(elem.contacts)
-    listClients.push(client)
+    // listClients.push(client)
     getNewClient(client)
   })
 }
 
+// const contactTypes = document.querySelectorAll(".modal__contact-select option");
+// const contactValues = document.querySelectorAll(".modal__contact-enter").value;
+// console.log(contactTypes)
+// console.log(contactValues)
+// let contacts = []
+// for (let i = 0; i < contactTypes.length;i++ ){
+//   contacts.push({
+//     type:contactTypes[i].getAttribute('data-type'),
+//     value:contactValues[i].value
+//   })
+// }
 
-async function serverChangeClient(client) {
-  alert('изменение')
-  let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
-    method: "PATCH",
-    body: JSON.stringify({
-      name: document.querySelector("#name").value.trim(),
-      surname: document.querySelector("#surname").value.trim(),
-      lastName: document.querySelector("#lastName").value.trim(),
-      contacts: [
-        {
-          type: 'Телефон',
-          value: '+71234567890'
-        },
-        {
-          type: 'Email',
-          value: 'abc@xyz.com'
-        },
-        {
-          type: 'Facebook',
-          value: 'https://facebook.com/vasiliy-pupkin-the-best'
-        }
-      ]
-    }),
-    headers: { 'Content-Type': 'aplication/json' },
-  })
+// console.log(contacts)
 
-  //  получаем ответ в виде массива от сервера
-  let data = await response.json()
-  // console.log(data)
-  return data
-}
+
+// async function serverChangeClient(client) {
+//   const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
+//   const contactsArr = [];
+//   modalContactAddArr.forEach(function(elem){
+
+//     let select= elem.querySelector('select')
+// let input= elem.querySelector('input')
+
+//     contactsArr.push({
+//       type:select.value,
+//       value:input.value
+//     })
+//   })
+
+//   let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
+//     method: "PATCH",
+//     body: JSON.stringify({
+//       name: document.querySelector("#name").value.trim(),
+//       surname: document.querySelector("#surname").value.trim(),
+//       lastName: document.querySelector("#lastName").value.trim(),
+//       contacts: contactsArr,
+//     }),
+//     headers: { 'Content-Type': 'aplication/json' },
+//   })
+
+//   //  получаем ответ в виде массива от сервера
+//   let data = await response.json()
+//   // console.log(data)
+//   return data
+// }
 
 
 
 // и функцию удаления клиента с сервера по id
 
-async function serverDeleteClient(id) {
+// async function serverDeleteClient(id) {
 
-  let response = await fetch(SERVER_URL + '/api/clients' + id, {
-    method: "DELETE",
-  })
+//   let response = await fetch(SERVER_URL + '/api/clients' + id, {
+//     method: "DELETE",
+//   })
 
-  let data = await response.json()
-  return data
-}
+//   let data = await response.json()
+//   return data
+// }
 
-
-
-
-
-
-
-// функция создания формы для добавления нового клиента
-
-let testClient = {
-  id: '1234567890',
-  createdAt: '2021-02-03T13:07:29.554Z',
-  updatedAt: '2021-02-03T13:07:29.554Z',
-  name: 'Василий',
-  surname: 'Пупкин',
-  lastName: 'Васильевич',
-  // contacts: [
-  //   {
-  //     type: 'Телефон',
-  //     value: '+71234567890'
-  //   },
-  //   {
-  //     type: 'Email',
-  //     value: 'abc@xyz.com'
-  //   },
-  //   {
-  //     type: 'Facebook',
-  //     value: 'https://facebook.com/vasiliy-pupkin-the-best'
-  //   }
-  // ]
-}
-
-
-function createAddContact() {
-  const modalContact = document.querySelector(".modal__contact")
-  const modalContactText = document.querySelector(".modal__contact-text")
-  const modalContactAdd = document.createElement('div');
-  const modalContactContent = document.createElement('div');
-  const modalContactSelect = document.createElement('select');
-  const modalContactEnter = document.createElement('input');
-  const modalBtnSave = document.querySelector(".modal__btn-save")
-
-  modalContactAdd.classList.add('modal__contact-add');
-  modalContactContent.classList.add('modal__contact-content');
-  modalContactSelect.classList.add('modal__contact-select');
-  modalContactEnter.classList.add('modal__contact-enter');
-
-  for (let i = 1; i < 6; i++) {
-    const modalOption = document.createElement('option')
-    modalOption.id = "option" + i
-    modalContactSelect.append(modalOption)
-
-    // исправить modalContactEnter.type
-
-    switch (modalOption.id) {
-      case 'option1':
-        modalOption.textContent = 'Телефон'
-        modalOption.value = "Телефон"
-
-        break
-
-      case 'option2':
-        modalOption.textContent = "Доп. телефон"
-        modalOption.value = "Доп. телефон"
-
-        break
-
-      case 'option3':
-        modalOption.textContent = "Email"
-        modalOption.value = "Email"
-        break
-
-      case 'option4':
-        modalOption.textContent = "Vk"
-        modalOption.value = "Vk"
-
-        break
-
-      case 'option5':
-        modalOption.textContent = "Facebook"
-        modalOption.value = "Facebook"
-
-        break
-    }
-
-  }
-
-  // при изменении значения в селекте, меняем тип данных которые вводим в импут
-
-  modalContactSelect.addEventListener('change', function () {
-    this.dataset.type = this.value
-    console.log(this.value);
-    console.log(this.dataset.type);
-
-    if (this.value == "Доп. телефон" || this.value === "Телефон") modalContactEnter.type = "number"
-    if (this.value == "Email") modalContactEnter.type = "email"
-    if (this.value == "Vk" || this.value == "Facebook") modalContactEnter.type = "text"
-  })
-
-  const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
-
-
-
-  // появление крестика после введения контакта в импут
-
-
-  modalContactEnter.addEventListener('blur', function buttonCencelAdd() {
-
-    // const select = document.querySelector('select')
-    // const enter = document.querySelector('input')
-    // const contact = new Contact(select.value, enter.value)
-    // contactsArr.push(contact)
-
-    const modalContactButton = document.createElement('button')
-    modalContactButton.classList.add("modal__contact-button");
-    modalContactButton.dataset.tippyContent = "Удалить контакт"
-    modalContactButton.dataset.name = "Удалить контакт";
-    modalContactAdd.append(modalContactButton);
-
-    modalContactButton.addEventListener('click', () => modalContactAdd.remove())
-
-
-
-
-
-    modalContactEnter.removeEventListener('blur', buttonCencelAdd)
-  })
-
-
-
-  // сделаем ограничение на количество контактов(не более 10)
-
-  if (modalContactAddArr.length > 8) {
-    document.querySelector(".modal__error").textContent = "Нельзя ввести более 10 контактов"
-    modalContactText.innerHTML = " "
-    modalContactText.id = "grey"
-  }
-
-  // сохранение данных контакта в виде объекта
-
-  const contact = new Contact()
-
-
-  //   modalBtnSave.addEventListener('submit', async function(){
-
-  //     modalContactAddArr.forEach(function(elem){
-  //       let select= elem.querySelector('select')
-  // let input= elem.querySelector('input')
-  // const contact = new Contact(select.value, input.value)
-  //       contactsArr.push(contact)
-  //       console.log(elem)
-  //       console.log(select.value)
-  //       console.log(input.value)
-  //     })
-
-  //     let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
-  //           method: "PATCH",
-  //           body: JSON.stringify({
-  //         contacts:  contactsArr
-  //           }),
-  //           headers: { 'Content-Type': 'aplication/json' },
-  //         })
-
-  //         //  получаем ответ в виде массива от сервера
-  //         let data = await response.json()
-  //         console.log(data)
-  //   })
-
-
-
-
-  //   document.querySelectorAll('.modal__title-id').addEventListener('click', function(){
-  //     modalContactAddArr.forEach(function(elem){
-  //       let select= elem.querySelector('select')
-  // let input= elem.querySelector('input')
-  // const contact = new Contact(select.value, input.value)
-  //       contactsArr.push(contact)
-  //       console.log(elem)
-  //       console.log(select.value)
-  //       console.log(input.value)
-  //     })
-  //   })
-
-
-  modalBtnSave.addEventListener('submit', function () {
-    modalContactAddArr.forEach(function (elem) {
-      let select = elem.querySelector('select')
-      let input = elem.querySelector('input')
-      const contact = new Contact(select.value, input.value)
-      contactsArr.push(contact)
-      console.log(elem)
-      console.log(select.value)
-      console.log(input.value)
-    })
-  })
-
-
-  // присвоить каждому котакту тип контакта
-
-
-  modalContact.append(modalContactAdd)
-  modalContactAdd.append(modalContactContent)
-  modalContactContent.append(modalContactSelect)
-  modalContactAdd.append(modalContactEnter)
-
-  return contactsArr
-}
-
-// тултип
-
-tippy('[data-tippy-content]');

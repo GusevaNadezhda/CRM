@@ -1,8 +1,6 @@
 
 
-const contactsArr = [];
 
-console.log(contactsArr);
 
 class Contact {
 
@@ -16,10 +14,7 @@ class Contact {
 
 // Создадим функцию которая будет добавлять в форму новые контакты
 
-function createAddContact() {
-  // тултип
-
-tippy('[data-tippy-content]');
+export const createAddContact = function () {
 
   const modalContact = document.querySelector(".modal__contact")
   const modalContactText = document.querySelector(".modal__contact-text")
@@ -34,6 +29,8 @@ tippy('[data-tippy-content]');
   modalContactSelect.classList.add('modal__contact-select');
   modalContactEnter.classList.add('modal__contact-enter');
 
+  modalContactContent.addEventListener('click', () => modalContactContent.classList.toggle('active') )
+
   for (let i = 1; i < 6; i++) {
     const modalOption = document.createElement('option')
     modalOption.id = "option" + i
@@ -45,13 +42,11 @@ tippy('[data-tippy-content]');
       case 'option1':
         modalOption.textContent = 'Телефон'
         modalOption.value = "Телефон"
-
         break
 
       case 'option2':
         modalOption.textContent = "Доп. телефон"
         modalOption.value = "Доп. телефон"
-
         break
 
       case 'option3':
@@ -62,13 +57,11 @@ tippy('[data-tippy-content]');
       case 'option4':
         modalOption.textContent = "Vk"
         modalOption.value = "Vk"
-
         break
 
       case 'option5':
         modalOption.textContent = "Facebook"
         modalOption.value = "Facebook"
-
         break
     }
 
@@ -95,20 +88,20 @@ tippy('[data-tippy-content]');
 
   modalContactEnter.addEventListener('blur', function buttonCencelAdd() {
 
-    // const select = document.querySelector('select')
-    // const enter = document.querySelector('input')
-    // const contact = new Contact(select.value, enter.value)
-    // contactsArr.push(contact)
-
     const modalContactButton = document.createElement('button')
+    const modalContactTooltip = document.createElement('div')
     modalContactButton.classList.add("modal__contact-button")
-    modalContactButton.dataset.tippyContent = "Удалить контакт"
+    modalContactTooltip.classList.add("tooltip")
+    modalContactTooltip.textContent = "Удалить контакт"
     modalContactAdd.append(modalContactButton)
-    modalContactButton.addEventListener('click', () => modalContactAdd.remove())
+    modalContactButton .append(modalContactTooltip)
 
-
-
-
+    modalContactButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      modalContactAdd.remove();
+      modalContactText.classList.remove('hidden')
+    }
+    )
 
     modalContactEnter.removeEventListener('blur', buttonCencelAdd)
   })
@@ -118,10 +111,19 @@ tippy('[data-tippy-content]');
   // сделаем ограничение на количество контактов(не более 10)
 
   if (modalContactAddArr.length > 8) {
-    document.querySelector(".modal__error").textContent = "Нельзя ввести более 10 контактов"
-    modalContactText.innerHTML = " "
-    modalContactText.id = "grey"
+    const modalError = document.querySelector(".modal__error")
+    modalError.classList.add('active')
+    modalError.textContent = "Ошибка: Нельзя ввести более 10 контактов"
+    modalContactText.classList.add('hidden')
   }
+
+  if (modalContactAddArr.length >= 4){
+    document.querySelector(".modal-client").style.top = '70%'
+  }
+
+  // else{
+  //   // document.querySelector(".modal-client").style.top = "50%"
+  // }
 
   // сохранение данных контакта в виде объекта
 
@@ -167,33 +169,49 @@ tippy('[data-tippy-content]');
   //       console.log(input.value)
   //     })
   //   })
+//   const contactsArr = [];
+//   modalContactAddArr.forEach(function(elem){
 
 
 
-  modalContactAddArr.forEach(function(elem){
-    let select= elem.querySelector('select')
-let input= elem.querySelector('input')
-const contact = new Contact(select.value, input.value)
-    contactsArr.push(contact)
-    console.log(elem)
-    console.log(select.value)
-    console.log(input.value)
-  })
+//     let select= elem.querySelector('select')
+// let input= elem.querySelector('input')
+// // const contact = new Contact(select.value, input.value)
+//     contactsArr.push({
+//       type:select.value,
+//       value:input.value
+//     })
+//     console.log(elem)
+//     console.log(select.value)
+//     console.log(input.value)
+//     console.log(contact)
+
+
+
+//   })
+//   console.log(contactsArr);
+
+
+
 
 
   // присвоить каждому котакту тип контакта
 
 
-  modalContact.append(modalContactAdd)
+  // modalContact.append(modalContactAdd)
   modalContactAdd.append(modalContactContent)
   modalContactContent.append(modalContactSelect)
   modalContactAdd.append(modalContactEnter)
 
-  // return contactsArr
+  return {
+    modalContactAdd,
+    modalContactContent,
+    modalContactSelect,
+    modalContactEnter
+  }
 }
 
-console.log(createAddContact())
+// console.log(createAddContact())
 
 
 
-window.createAddContact()

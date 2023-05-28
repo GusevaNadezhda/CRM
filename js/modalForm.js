@@ -1,132 +1,356 @@
+import {createAddContact} from "./contacts.js"
+import {serverGetClient} from "./server.js"
+import {serverAddClient} from "./server.js"
+import {serverChangeClient} from "./server.js"
+import {serverDeleteClient} from "./server.js"
 
 
-function createFormNewClient() {
+export const createModalFormClient = function () {
 
-  // const $modalNewclient = document.querySelector(".modal-newclient")
-  const $newClientTITLE = document.querySelector(".modal__title")
-  // const $addClientFORM = document.querySelector('.modal__form')
-  // const $addContactDIV = document.createElement('div')
-  const $saveClientBTN = document.querySelector('.modal__btn-save')
-  const $cancelA = document.querySelector('.modal__link')
-
-
-
-  $newClientTITLE.textContent = "Новый клиент"
-  $newClientTITLE.id = "new-client"
-  // $newClientTITLE.classList.add("modal__title")
-
-  // for (let i = 1; i < 4; i++) {
-  //   const $addClientINPUT = document.createElement('input');
-  //   $addClientINPUT.id = i;
-  //   $addClientINPUT.classList.add("modal__input")
-  //   $addClientINPUT.type = "text";
-  //   $addClientFORM.append($addClientINPUT)
-
-
-  //   switch ($addClientINPUT.id) {
-  //     case '1':
-  //       $addClientINPUT.placeholder = "Фамилия";
-  //       $addClientINPUT.required = true
-  //       break
-  //     case '2':
-  //       $addClientINPUT.placeholder = "Имя";
-  //       $addClientINPUT.required = true
-  //       break
-  //     case '3':
-  //       $addClientINPUT.placeholder = "Отчество";
-  //       break
-  //   }
-  // }
-
-  // $addContactDIV.textContent = "Добавить контакт"
-  // $addContactDIV.classList.add("modal__contact")
-
-  // $saveClientBTN.textContent = "Сохранить"
-  // $saveClientBTN.type = "submit"
-  // $saveClientBTN.classList.add("save-btn")
-
- $saveClientBTN
+  const modalClientForm = document.createElement("form")
+  const modalFormFio = document.createElement('div')
+  const modalСontact = document.createElement('div')
+  const modalСontactText = document.createElement('div')
+  const modalBtnSave = document.createElement('button')
   const modalError = document.createElement('div')
+  const modalLink = document.createElement('div')
+  let modalInputSurname;
+  let modalInputName;
+  let modalInputLastName;
+
+  modalClientForm.classList.add("modal__form")
+  modalFormFio.classList.add("modal__form-fio")
+  modalСontact.classList.add("modal__contact")
+  modalСontactText.classList.add("modal__contact-text")
+  modalBtnSave.classList.add("modal__btn-save")
   modalError.classList.add("modal__error")
+  modalLink.classList.add("modal__link")
+
+  modalСontactText.textContent = "Добавить контакт";
+  modalBtnSave.textContent = "Сохранить"
   modalError.textContent = ""
-  // $saveClientBTN.prepend(modalError)
-  $saveClientBTN.insertAdjacentElement('beforeBegin', modalError)
 
-  // родитель.insertBefore(элемент, перед кем вставить)
+  for (let i = 0; i < 3; i++) {
+    const modalField = document.createElement('label')
 
-  $cancelA.textContent = "Отмена"
-  // $cancelA.classList.add("modal__link")
+    const modalPlaceholder = document.createElement('div')
+    const modalSpan = document.createElement('span')
+    const modalInputs = document.querySelectorAll(".modal__input")
 
-  // $modalNewclient.append($newClientTITLE)
-  // $modalNewclient.append($addClientFORM)
-  // $modalNewclient.append($cancelA)
-  // $addClientFORM.append($addContactDIV)
-  // $addClientFORM.append($saveClientBTN)
+    modalField.classList.add("modal__field")
 
-  document.querySelector(".modal__link").addEventListener('click', function () {
-    document.querySelector("#modal-add-client").classList.remove('open')
-  })
-  // document.querySelector("#modal-add-client").addEventListener('click', function(){
-  //   document.querySelector("#modal-add-client").classList.remove('open')
-  // })
+    modalPlaceholder.classList.add("modal__placeholder")
+
+
+
+    modalField.dataset.number = i + 1
+
+    switch (modalField.getAttribute("data-number")) {
+      case "1":
+        modalInputSurname = document.createElement('input')
+        modalInputSurname.classList.add("modal__input")
+        modalInputSurname.id="surname"
+        modalPlaceholder.textContent = "Фамилия"
+        modalSpan.textContent = "*"
+        modalInputSurname.required = true
+        modalInputSurname.type = "text"
+        modalField.append(modalInputSurname);
+        break
+      case "2":
+        modalInputName = document.createElement('input')
+        modalInputName.classList.add("modal__input")
+        modalInputName.id="name"
+        modalPlaceholder.textContent = "Имя"
+        modalSpan.textContent = "*"
+        modalInputName.required = true
+        modalInputName.type = "text"
+        modalField.append(modalInputName);
+        break
+      case "3":
+        modalInputLastName = document.createElement('input')
+        modalInputLastName.classList.add("modal__input")
+        modalInputLastName.id="lastName"
+        modalPlaceholder.textContent = "Отчество"
+        modalInputLastName.type = "text"
+        modalField.append(modalInputLastName);
+        break
+    }
+
+
+    modalFormFio.append(modalField)
+
+    modalField.append(modalPlaceholder);
+    modalPlaceholder.append(modalSpan)
+  }
+
+
+  // добавление контакта при нажатии на кнопку "Добавить контакт"
+
+
+modalСontactText.addEventListener('click', () => {
+  createAddContact()
+  modalСontact.append(createAddContact().modalContactAdd)
+})
+
+
+
+  modalСontact.append(modalСontactText)
+  modalClientForm.append(modalFormFio)
+  modalClientForm.append(modalСontact)
+  modalClientForm.append(modalBtnSave)
+  modalClientForm.append(modalLink)
+  modalBtnSave.prepend(modalError)
+  modalBtnSave.insertAdjacentElement('beforeBegin', modalError)
+
+  return  {
+   modalClientForm,
+   modalFormFio,
+   modalСontact,
+   modalСontactText,
+   modalInputSurname,
+   modalInputName,
+   modalInputLastName,
+   modalBtnSave,
+   modalLink
+}
 }
 
-createFormNewClient()
+export const createFormNewClient = function () {
 
-// function createFormChangeClient(client) {
-//   const $changeClientTITLE = document.querySelector(".modal__title")
-// const $idClientP = document.createElement('p')
+  const $modalNewClientElement = document.createElement('div')
+  const $modalNewClientContent = document.createElement('div')
+  const $modalNewClientClose = document.createElement('button')
+  const $modalNewClientTITLE = document.createElement('h2')
+  const modalForm = createModalFormClient()
+  const $modalNewClientForm = modalForm.modalClientForm
+  const modalBtnSave = modalForm.modalBtnSave
+  const modalNewClientCancel = modalForm.modalLink
 
-//   $changeClientTITLE.textContent = "Изменить данные"
-//   $idClientP.textContent = client.id
+  $modalNewClientElement.classList.add("modal-add")
+  $modalNewClientElement.classList.add('open')
+  $modalNewClientContent.classList.add("modal-client")
+  $modalNewClientTITLE.classList.add("modal__title")
+  $modalNewClientClose.classList.add("modal__btn-close")
+  $modalNewClientElement.id = "modal-add-client"
+  $modalNewClientClose.id = "modal-close"
+  $modalNewClientTITLE.id = "new-client"
 
-//   const modalInput = document.querySelectorAll(".modal__input")
-
-//   switch (modalInput.id) {
-//     case "surname":
-//       this.value = client.surname
-//       break
-//       case "name":
-//       this.value = client.name
-//       break
-//       case "lastName":
-//       this.value = client.lastName
-//       break
-//   }
-// }
-
+  $modalNewClientTITLE.textContent = "Новый клиент"
+  modalForm.modalLink.textContent = "Отмена"
 
 
+  $modalNewClientClose.addEventListener('click',() => $modalNewClientElement.remove())
 
-// let testClient = {
-//   // ID клиента, заполняется сервером автоматически, после создания нельзя изменить
-//   id: '1234567890',
-//   // дата и время создания клиента, заполняется сервером автоматически, после создания нельзя изменить
-//   createdAt: '2021-02-03T13:07:29.554Z',
-//   // дата и время изменения клиента, заполняется сервером автоматически при изменении клиента
-//   updatedAt: '2021-02-03T13:07:29.554Z',
-//   // * обязательное поле, имя клиента
-//   name: 'Василий',
-//   // * обязательное поле, фамилия клиента
-//   surname: 'Пупкин',
-//   // необязательное поле, отчество клиента
-//   lastName: 'Васильевич',
-//   // контакты - необязательное поле, массив контактов
-//   // каждый объект в массиве (если он передан) должен содержать непустые свойства type и value
-//   contacts: [
-//     {
-//       type: 'Телефон',
-//       value: '+71234567890'
-//     },
-//     {
-//       type: 'Email',
-//       value: 'abc@xyz.com'
-//     },
-//     {
-//       type: 'Facebook',
-//       value: 'https://facebook.com/vasiliy-pupkin-the-best'
-//     }
-//   ]
-// }
+  window.addEventListener('click', (e) => {
+    if (e.target == $modalNewClientElement) {
+      $modalNewClientElement.remove();
+    }
+  })
 
-// createFormChangeClient(testClient)
+
+modalBtnSave.addEventListener('click', () => serverAddClient())
+modalNewClientCancel.addEventListener('click', () => $modalNewClientElement.remove())
+
+
+
+  $modalNewClientElement.append($modalNewClientContent)
+  $modalNewClientContent.append($modalNewClientClose)
+  $modalNewClientContent.append($modalNewClientTITLE)
+  $modalNewClientContent.append($modalNewClientForm)
+
+
+  return {
+    $modalNewClientElement,
+    $modalNewClientContent,
+  }
+}
+
+export const createFormEditClient = function (client) {
+
+  const $modalEditClientElement = document.createElement('div')
+  const $modalEditClientContent = document.createElement('div')
+  const $modalEditClientClose = document.createElement('button')
+  const $modalEditClientTITLE = document.createElement('h2')
+  const $textClientP = document.createElement('p')
+  const $idClientP = document.createElement('p')
+  const modalForm = createModalFormClient()
+  const $modalEditClientForm = modalForm.modalClientForm
+  const modalBtnSaveEdit = modalForm.modalBtnSave
+  const modalEditClientCancel = modalForm.modalLink
+  const modalContact = modalForm.modalСontact
+  // const createContact = createAddContact();
+
+
+
+  $modalEditClientElement.classList.add("modal-add")
+  $modalEditClientElement.classList.add('open')
+  $modalEditClientContent.classList.add("modal-client")
+  $modalEditClientTITLE.classList.add("modal__title")
+  $idClientP.classList.add('modal__title-id')
+  $modalEditClientClose.classList.add("modal__btn-close")
+  $modalEditClientElement.id = "modal-add-client"
+  $modalEditClientClose.id = "modal-close"
+  $modalEditClientTITLE.id = "edit-client"
+
+
+  $modalEditClientTITLE.textContent = ""
+  $textClientP.textContent = "Изменить данные"
+  $idClientP.textContent = "ID: " + client.id
+  modalForm.modalLink.textContent = "Удалить клиента"
+
+
+  const modalInput = modalForm.modalFormFio.querySelectorAll("input");
+
+
+
+  modalInput.forEach(elem => {
+    switch (elem.id) {
+      case "surname":
+        elem.value = client.surname
+        break
+      case "name":
+        elem.value = client.name
+        break
+      case "lastName":
+        elem.value = client.lastName
+        break
+    }
+  })
+
+  for (const contact of client.contacts) {
+    const createContact = createAddContact();
+    createAddContact()
+    createContact.modalContactSelect.value = contact.type
+    createContact.modalContactEnter.value = contact.value
+
+    modalContact.append(createContact.modalContactAdd)
+  }
+
+  // при нажатии на кнопку Сохранить отредактированные данные отправляются на сервер
+  modalBtnSaveEdit.addEventListener('click',  (e) =>{
+    e.preventDefault;
+    // собираем измененные данные клиента:
+
+
+    const contactTypes = document.querySelectorAll('.modal__contact-select');
+    const contactValues = document.querySelectorAll('.modal__contact-enter');
+
+    let editClient = {};
+    let editContactsArr = [];
+
+    editClient.id = client.id
+    editClient.name = modalForm.modalInputName.value;
+    editClient.surname = modalForm.modalInputSurname.value;
+    editClient.lastName = modalForm.modalInputLastName.value;
+    editClient.contacts = editContactsArr;
+
+    for (let i = 0; i < contactTypes.length; i++) {
+      editContactsArr.push({
+        type:contactTypes[i].value,
+        value:contactValues[i].value})
+  }
+
+
+
+    console.log(editClient)
+
+alert('отправка изменений');
+ serverChangeClient(editClient)
+}
+)
+
+// при нажатии на кнопку Удалить клиента открывается форма с подтверждением удаления
+modalEditClientCancel.addEventListener('click', function(){
+  createDeleteForm(client)
+  document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
+    document.querySelector(".modal__delete-btn").addEventListener('click', function () {
+      document.querySelector("tr").remove();
+      serverDeleteClient(client.id)
+    })
+  })
+
+  $modalEditClientClose.addEventListener('click',() => $modalEditClientElement.remove())
+
+  window.addEventListener('click', (e) => {
+    if (e.target == $modalEditClientElement) {
+      $modalEditClientElement.remove();
+    }
+  })
+
+
+
+
+
+  $modalEditClientElement.append($modalEditClientContent)
+  $modalEditClientContent.append($modalEditClientClose)
+  $modalEditClientContent.append($modalEditClientTITLE)
+  $modalEditClientTITLE.append($textClientP)
+  $modalEditClientTITLE.append($idClientP)
+  $modalEditClientContent.append($modalEditClientForm)
+
+
+  return {
+    $modalEditClientElement,
+    $modalEditClientContent,
+  }
+}
+
+
+export const createDeleteForm = function (Client) {
+
+  const $modalDeleteElement = document.createElement('div')
+  const $modalDeleteContent = document.createElement('div')
+  const $modalDeleteTITLE = document.createElement('h2')
+  const $modalDeleteTEXT = document.createElement('p')
+  const $modalDeleteBTN = document.createElement('button')
+  const $modalDeleteCencel = document.createElement('p')
+  const $modalDeleteClose = document.createElement('button')
+
+  $modalDeleteElement.classList.add("modal__delete-element")
+  $modalDeleteElement.classList.add('open')
+  $modalDeleteContent.classList.add("modal__delete-content")
+  $modalDeleteTITLE.classList.add("modal__delete-title")
+  $modalDeleteTEXT.classList.add("modal__delete-text")
+  $modalDeleteBTN.classList.add("modal__delete-btn")
+  $modalDeleteCencel.classList.add("modal__delete-cencel")
+  $modalDeleteClose.classList.add("modal__btn-close")
+
+
+  $modalDeleteTITLE.textContent = "Удалить клиента"
+  $modalDeleteTEXT.textContent = "Вы действительно хотите удалить данного клиента?"
+  $modalDeleteBTN.textContent = "Удалить"
+  $modalDeleteCencel.textContent = "Отмена"
+
+  // закрытие модального окна при нажатии на крестик
+
+  $modalDeleteClose.addEventListener('click', () => $modalDeleteElement.remove())
+
+
+  // отмена модального окна при нажатии на кнопку отмена
+
+  $modalDeleteCencel.addEventListener('click', () => $modalDeleteElement.remove())
+
+  window.addEventListener('click', (e) => {
+    if (e.target == $modalDeleteElement) {
+      $modalDeleteElement.remove();
+    }
+  })
+
+
+  $modalDeleteContent.append(
+    $modalDeleteClose,
+    $modalDeleteTITLE,
+    $modalDeleteTEXT,
+    $modalDeleteBTN,
+    $modalDeleteCencel
+  )
+  $modalDeleteElement.append($modalDeleteContent)
+
+  return {
+    $modalDeleteElement,
+    $modalDeleteContent,
+    $modalDeleteBTN,
+  }
+}
+
+
