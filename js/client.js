@@ -1,6 +1,7 @@
 import {createFormEditClient} from "./modalForm.js"
 import {createDeleteForm} from "./modalForm.js"
 import {serverDeleteClient} from "./server.js"
+
 // export default
 
 // создадим массив куда будем добавлять наших клиетов
@@ -45,6 +46,44 @@ class Client {
   }
 
 }
+// Создадим функцию которая будет добавлять tooltip над контактами
+
+function contactTooltip(type, value){
+  const tooltip = document.createElement('div');
+  const tooltipType = document.createElement('span');
+  const tooltipValue = document.createElement('a');
+
+  tooltip.classList.add('contact__tooltip', 'tooltip');
+  tooltipType.classList.add('contact__tooltip-type');
+  tooltipValue.classList.add('contact__tooltip-value');
+
+  tooltipType.textContent = type + ': ';
+  tooltipValue.textContent = value;
+
+  if(type === "Телефон" ){
+
+    tooltipValue.href = `tel:${value.trim()}`;
+    tooltipType.style.display = 'none';
+    tooltipValue.style.color = 'var(--color-white)';
+    tooltipValue.style.textDecoration = 'none';
+  }else if(type === "Email" ){
+    tooltipValue.href = `mailto:${value.trim()}`;
+  }else{
+    tooltipValue.href = value.trim()
+  }
+
+tooltip.append(tooltipType, tooltipValue)
+
+return tooltip
+
+  // return{
+  //   tooltip,
+  //   tooltipType,
+  //   tooltipValue
+  // }
+}
+
+
 
 async function getNewClient(client) {
   const $tbody = document.querySelector(".table__body")
@@ -62,6 +101,7 @@ async function getNewClient(client) {
   const $actionBTN = document.createElement('div');
   const $changeBTN = document.createElement('btn');
   const $deleteBTN = document.createElement('btn');
+
 
 
   $idTD.textContent = client.id
@@ -97,6 +137,7 @@ async function getNewClient(client) {
   const $contactsGroup2 = document.createElement('div');
   $contactsGroup1.classList.add('contacts__icon-group1')
   $contactsGroup2.classList.add('contacts__icon-group2')
+
   for (let i = 0; i < client.contacts.length; i++) {
 
     const $contactICON = document.createElement('div');
@@ -104,10 +145,13 @@ async function getNewClient(client) {
 
     $contactICON.dataset.number = i+1
 
-    if( !$contactICON.classList.contains("last-icon")) $contactICON.dataset.tippyContent = client.contacts[i].type + ': ' + client.contacts[i].value
+    // if( !$contactICON.classList.contains("last-icon")) $contactICON.dataset.tippyContent = client.contacts[i].type + ': ' + client.contacts[i].value
 
     // console.log(!$contactICON.classList.contains("last-icon"))
 
+      // const contactTooltip = contactTooltip()
+
+    if( !$contactICON.classList.contains("last-icon")) $contactICON.append(contactTooltip(client.contacts[i].type, client.contacts[i].value))
 
     if (i < 5) {
       $contactsGroup1.append($contactICON)
