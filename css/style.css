@@ -60,6 +60,7 @@ img {
   --orange: #E6B127;
   --green: #34C759;
   --white: #FFFFFF;
+  --wild-sand:#F5F5F5;
   --gap: 32px;
 }
 
@@ -72,15 +73,14 @@ body {
   background: #F5F5F5;
 }
 
-main {
-  padding: 20px;
-  background: #E5E5E5;
-}
 
-header {
+
+
+
+/* header {
 
   padding: 20px;
-}
+} */
 
 tbody {
   background: white;
@@ -92,9 +92,22 @@ tbody {
   visibility: hidden;
 }
 
+.container {
+  max-width: 1216px;
+  margin: 0 auto;
+  padding: 1px 90px;
+}
 
-.header__content {
+/* header */
+header{
+  background: var(--white);
+  box-shadow: 0px 9.03012px 27.0904px rgba(176, 190, 197, 0.32), 0px 3.38629px 5.64383px rgba(176, 190, 197, 0.32);
+}
+.header__container {
+padding: 20px;
   display: flex;
+ align-items: center;
+
 }
 
 .header__logo {
@@ -107,14 +120,37 @@ tbody {
   border-radius: 0%;
 }
 
+.header__input::placeholder{
+color: var(--txt_grey);
+}
+
+/* main */
+
+main {
+  padding: 20px;
+  background: #E5E5E5;
+}
+
 .main__title {
-  font-family: 'Open Sans';
-  font-style: normal;
+  margin-top: 20px;
   font-weight: 700;
   font-size: 24px;
   line-height: 33px;
   color: var(--black);
 }
+
+/* таблица */
+.table tr {
+  padding: 12px 10px;
+  border-top: 1px solid #dee2e6;
+}
+
+.table td {
+  padding: 10px;
+  vertical-align: inherit;
+  border-top:none;
+}
+/* заголовки */
 
 .table__heard--descr {
   font-family: 'Open Sans';
@@ -127,15 +163,7 @@ tbody {
   color: var(--txt_grey);
 }
 
-.table tr {
-  padding: 12px 10px;
-}
-
-.table td {
-  padding: 10px;
-  vertical-align: inherit;
-
-}
+/* тело таблицы */
 
 .table__body-id {
   font-weight: 400;
@@ -224,7 +252,29 @@ color: var(--red);
 }
 
 /* модальное окно "Удалить" */
+
 .modal__delete-element {
+  position: fixed;
+  display: grid;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.6);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .5s visibility .5s;
+}
+.modal__delete-element.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal__delete-content {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -240,7 +290,7 @@ color: var(--red);
   transition: transform .8s;
 }
 
-.modal-add.open .modal__delete-element {
+.modal__delete-element.open .modal__delete-content{
   transform: scale(1);
 }
 
@@ -303,10 +353,10 @@ color: var(--red);
   display: flex;
   margin: 0 auto;
   align-items: center;
-  padding: 26.5px;
-  width: 216px;
+  padding: 14px 26.5px;
   height: 44px;
   border: 1px solid var(--firm);
+  cursor: pointer;
 }
 
 .main__button::before {
@@ -331,7 +381,7 @@ color: var(--red);
 
 /* модальное окно */
 
-.modal-add {
+.modal-add{
   position: fixed;
   display: grid;
   left: 0;
@@ -348,7 +398,7 @@ color: var(--red);
   transition: opacity .5s visibility .5s;
 }
 
-.modal-newclient {
+.modal-client{
   position: relative;
   max-width: 450px;
   min-height: 400px;
@@ -402,7 +452,7 @@ color: var(--red);
 
 }
 
-.modal-add.open .modal-newclient {
+.modal-add.open .modal-client {
   transform: scale(1);
 }
 
@@ -425,8 +475,16 @@ color: var(--red);
   color: var(--txt_grey);
 }
 
+/* форма в модальном окне */
+.modal__form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .modal__form-fio {
-  margin: 0 30px;
+  margin: 20px 30px;
 }
 
 .modal__input {
@@ -495,10 +553,11 @@ color: var(--red);
 } */
 
 .modal__contact {
+  margin-bottom: 25px;
+  width: 100%;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  margin: 25px 0;
   padding: 8px;
   background: rgba(200, 197, 209, 0.3);
   transition: cursor .5s
@@ -550,12 +609,13 @@ color: var(--red);
   background-image: url(/CRM/img/add_circle_active.svg);
 }
 
-.modal__contact-text#grey::before {
+/* .modal__contact-text#grey::before {
   opacity: 0;
-}
+} */
 
 
 .modal__error {
+  display: none;
   padding: 8px;
   font-weight: 400;
   font-size: 10px;
@@ -564,10 +624,12 @@ color: var(--red);
   color: var(--red);
 }
 
+.modal__error.active{
+  display: block;
+}
 
 
 .modal__btn-save {
-  margin: 0 150px;
   padding: 12.5px 35px;
   background: var(--firm);
   font-weight: 600;
@@ -599,13 +661,13 @@ color: var(--red);
 
 
 .modal__link {
-  margin: 0 200px;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
   text-decoration-line: underline;
   color: var(--black);
+  cursor: pointer;
 }
 
 /* Контакты */
@@ -613,14 +675,17 @@ color: var(--red);
 /* селект и импут */
 
 .modal__contact-add {
-  padding: 25px 30px;
+  margin-bottom: 15px;
   display: flex;
   width: 390px;
 }
 
+.modal__contact-add:first-child{
+  margin-top: 25px;
+}
 
 .modal__contact-enter {
-  width: 70%;
+  width: 48%;
   border-radius: 0%;
   border: 1px solid var(--grey);
 }
@@ -654,6 +719,8 @@ color: var(--red);
   color: var(--black);
 }
 
+/* modal__contact-select */
+
 .modal__contact-content {
   position: relative;
   width: 42%;
@@ -669,6 +736,12 @@ color: var(--red);
   height: 12px;
   width: 12px;
   background-image: url(/CRM/img/arrow_back_ios.svg);
+  transition: transform .3s ease-in-out;
+}
+
+.modal__contact-content.active::after{
+  transform: rotate(-180deg);
+  transition: transform .3s ease-in-out;
 }
 
 /* иконки кнопок в таблице */
@@ -733,6 +806,7 @@ color: var(--red);
 /* добавляем кнопку */
 
 .modal__contact-button {
+  position: relative;
   width: 10%;
   background: #E7E5EB;
   background-image: url(/CRM/img/cancel.svg);
@@ -755,4 +829,43 @@ color: var(--red);
 
 .btn-group {
   display: flex;
+}
+
+
+/* тултип */
+
+.tooltip{
+  position: absolute;
+  top: -41px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease-in-out, visibility .3s ease-in-out ;
+  padding: 7px 14px;
+  background-color: var(--black);
+  color: var(--white);
+
+}
+/* стрелочка внизу тултипа */
+.tooltip::before{
+content: "";
+position: absolute;
+bottom: -9px;
+left: 50%;
+width: 14.39px;
+height: 14.39px;
+transform: translateX(-50%);
+clip-path: polygon(49% 100%, 0 0, 100% 0);
+background-color: var(--black);
+
+}
+
+.modal__contact-button:hover .tooltip{
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .3s ease-in-out, visibility .3s ease-in-out ;
+}
+.modal__contact-button .tooltip{
+  min-width: 150px;
 }
