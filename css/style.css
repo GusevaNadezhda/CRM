@@ -760,7 +760,7 @@ color: var(--red);
 }
 
 .contacts-icon {
-
+position: relative;
   width: 16px;
   height: 16px;
   background-repeat: no-repeat;
@@ -832,7 +832,7 @@ color: var(--red);
 }
 
 
-/* тултип */
+/* тултипы */
 
 .tooltip{
   position: absolute;
@@ -845,7 +845,7 @@ color: var(--red);
   padding: 7px 14px;
   background-color: var(--black);
   color: var(--white);
-
+z-index: 10;
 }
 /* стрелочка внизу тултипа */
 .tooltip::before{
@@ -868,4 +868,26 @@ background-color: var(--black);
 }
 .modal__contact-button .tooltip{
   min-width: 150px;
+}
+
+.contacts-icon:hover .tooltip{
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .3s ease-in-out, visibility .3s ease-in-out ;
+}
+
+.contact__tooltip {
+  display: flex;
+}
+
+.contact__tooltip-type{
+display: block;
+color: var(--white);
+}
+
+.contact__tooltip-value{
+  display: block;
+  text-decoration: underline;
+  font-weight: 700;
+  color: var(--firm);
 }
