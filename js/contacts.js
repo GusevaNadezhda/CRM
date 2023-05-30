@@ -1,17 +1,5 @@
 
 
-
-
-class Contact {
-
-  constructor(type, value) {
-    this.type = type
-    this.value = value
-  }
-}
-
-
-
 // Создадим функцию которая будет добавлять в форму новые контакты
 
 export const createAddContact = function () {
@@ -211,7 +199,36 @@ export const createAddContact = function () {
   }
 }
 
+// Создадим функцию которая будет добавлять tooltip над контактами
 
+export const contactTooltip= function (type, value){
+  const tooltip = document.createElement('div');
+  const tooltipType = document.createElement('span');
+  const tooltipValue = document.createElement('a');
+
+  tooltip.classList.add('contact__tooltip', 'tooltip');
+  tooltipType.classList.add('contact__tooltip-type');
+  tooltipValue.classList.add('contact__tooltip-value');
+
+  tooltipType.textContent = type + ': ';
+  tooltipValue.textContent = value;
+
+  if(type === "Телефон" ){
+    tooltipValue.href = `tel:${value.trim()}`;
+    tooltipType.style.display = 'none';
+    tooltipValue.style.color = 'var(--color-white)';
+    tooltipValue.style.textDecoration = 'none';
+  }else if(type === "Email" ){
+    tooltipValue.href = `mailto:${value.trim()}`;
+  }else{
+    tooltipValue.href = value.trim()
+  }
+
+tooltip.append(tooltipType, tooltipValue)
+
+return tooltip
+
+}
 
 
 
