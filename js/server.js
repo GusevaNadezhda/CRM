@@ -4,14 +4,17 @@ import {createModalFormClient} from "./modalForm.js"
 const SERVER_URL = 'http://localhost:3000'
 // let listClients = []
 
-//  функция получения массива клиентов с сервера
+// функция получения массива клиентов с сервера
 
-async function serverGetClients() {
-  const response = await fetch(SERVER_URL + '/api/clients')
+export async function serverGetClients() {
+  let response = await fetch(SERVER_URL + '/api/clients', {
+    method: "GET",
+    headers: { 'Content-Type': 'aplication/json' },
+  })
 
   //  получаем ответ в виде массива от сервера
-  const data = await response.json()
-  console.log(data)
+  let data = await response.json()
+  return data
 }
 
 //  функция получения данных клиента с сервера
@@ -98,9 +101,6 @@ alert('продолжается функция отправки на серве�
   console.log(data)
   return data
 }
-
-
-
 
 // функция создания формы для добавления нового клиента
 
