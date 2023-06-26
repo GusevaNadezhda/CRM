@@ -3,6 +3,7 @@ import {createFormEditClient} from "./modalForm.js"
 import {createDeleteForm} from "./modalForm.js"
 import {serverDeleteClient} from "./server.js"
 
+
 // создание таблицы с помощью функцию вывода одного клиента в таблицу.
 // Функция должна вернуть html элемент с информацией и пользователе.У функции должен быть один аргумент - объект клиента.
 
@@ -50,8 +51,20 @@ import {serverDeleteClient} from "./server.js"
   $actionBTN.classList.add('btn-group')
 
   $changeBTN.addEventListener('click',  function () {
+    const promise = new Promise(function (resolve) {
+      $changeBTN.classList.add('loading')
+      $changeBTN.append(createPreloader())
+      $changeBTN.querySelector('.preloader-block').classList.add('change');
      createFormEditClient(client);
     document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
+
+    window.onload = resolve()
+    })
+
+    promise.then(function(){
+      $changeBTN.classList.remove('loading')
+      document.querySelector('.preloader-block').classList.remove('loading');
+    })
   })
 
 
@@ -175,3 +188,48 @@ export const createPreloader = function(){
   return preloaderBlock
 
 }
+
+
+// сортировка таблицы
+export function sortClient(prop, dir = false, arr) {
+
+  const clientsCopy = [...arr]
+
+  clientsCopy.forEach(client => {
+    if(prop== 'fio') client.fio = client.surname +client.name + client.Lastname
+  })
+
+
+  return clientsCopy.sort(function (clientA, clientB) {
+    if (!dir == false ? clientA[prop] < clientB[prop] : clientA[prop] > clientB[prop])
+      return -1
+  });
+}
+
+export const filter = function(prop, value,arr) {
+
+  let result = [];
+  let clientsCopy = [...arr]
+
+  for (let client of clientsCopy) {
+    if (String(student[prop]).includes(value) == true) result.push(client)
+  }
+  return result
+}
+
+
+
+// export const createSortClients = function(){
+//   const headers = table.querySelectorAll('th')
+//   const tbody = table.querySelector('tbody')
+
+
+//   // событие сортировки
+//   headers.forEach(element => {
+//     element.addEventListener('click', function () {
+//       column = this.id
+//       columDir = !columDir
+//       // renderStudentsTable()
+//     })
+//   });
+// }

@@ -115,7 +115,7 @@ export const createAddContact = function () {
 
   // сохранение данных контакта в виде объекта
 
-    const contact = new Contact()
+    // const contact = new Contact()
 
 
   //   modalBtnSave.addEventListener('submit', async function(){
