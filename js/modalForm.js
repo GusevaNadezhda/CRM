@@ -1,8 +1,8 @@
-import {createAddContact} from "./contacts.js"
-import {serverGetClient} from "./server.js"
-import {serverAddClient} from "./server.js"
-import {serverChangeClient} from "./server.js"
-import {serverDeleteClient} from "./server.js"
+import { createAddContact } from "./contacts.js"
+import { serverGetClient } from "./server.js"
+import { serverAddClient } from "./server.js"
+import { serverChangeClient } from "./server.js"
+import { serverDeleteClient } from "./server.js"
 
 
 export const createModalFormClient = function () {
@@ -49,27 +49,27 @@ export const createModalFormClient = function () {
       case "1":
         modalInputSurname = document.createElement('input')
         modalInputSurname.classList.add("modal__input")
-        modalInputSurname.id="surname"
+        modalInputSurname.id = "surname"
         modalPlaceholder.textContent = "Фамилия"
         modalSpan.textContent = "*"
-        modalInputSurname.required = true
+        // modalInputSurname.required = true
         modalInputSurname.type = "text"
         modalField.append(modalInputSurname);
         break
       case "2":
         modalInputName = document.createElement('input')
         modalInputName.classList.add("modal__input")
-        modalInputName.id="name"
+        modalInputName.id = "name"
         modalPlaceholder.textContent = "Имя"
         modalSpan.textContent = "*"
-        modalInputName.required = true
+        // modalInputName.required = true
         modalInputName.type = "text"
         modalField.append(modalInputName);
         break
       case "3":
         modalInputLastName = document.createElement('input')
         modalInputLastName.classList.add("modal__input")
-        modalInputLastName.id="lastName"
+        modalInputLastName.id = "lastName"
         modalPlaceholder.textContent = "Отчество"
         modalInputLastName.type = "text"
         modalField.append(modalInputLastName);
@@ -87,10 +87,10 @@ export const createModalFormClient = function () {
   // добавление контакта при нажатии на кнопку "Добавить контакт"
 
 
-modalСontactText.addEventListener('click', () => {
-  createAddContact()
-  modalСontact.append(createAddContact().modalContactAdd)
-})
+  modalСontactText.addEventListener('click', () => {
+    createAddContact()
+    modalСontact.append(createAddContact().modalContactAdd)
+  })
 
 
 
@@ -102,17 +102,18 @@ modalСontactText.addEventListener('click', () => {
   modalBtnSave.prepend(modalError)
   modalBtnSave.insertAdjacentElement('beforeBegin', modalError)
 
-  return  {
-   modalClientForm,
-   modalFormFio,
-   modalСontact,
-   modalСontactText,
-   modalInputSurname,
-   modalInputName,
-   modalInputLastName,
-   modalBtnSave,
-   modalLink
-}
+  return {
+    modalClientForm,
+    modalFormFio,
+    modalСontact,
+    modalСontactText,
+    modalInputSurname,
+    modalInputName,
+    modalInputLastName,
+    modalError,
+    modalBtnSave,
+    modalLink
+  }
 }
 
 export const createFormNewClient = function () {
@@ -138,8 +139,31 @@ export const createFormNewClient = function () {
   $modalNewClientTITLE.textContent = "Новый клиент"
   modalForm.modalLink.textContent = "Отмена"
 
+  console.log(validateModalForm())
 
-  $modalNewClientClose.addEventListener('click',() => $modalNewClientElement.remove())
+  $modalNewClientForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if(!validateModalForm()) {
+      return ;
+    }else{
+        const promise = new Promise(function (resolve) {
+          modalBtnSave.classList.add('loading')
+          modalBtnSave.append(createPreloader())
+          modalBtnSave.querySelector('.preloader-block').classList.add('save');
+          serverAddClient()
+
+        window.onload = resolve()
+        })
+
+        promise.then(function(){
+          modalBtnSave.classList.remove('loading')
+          document.querySelector('.preloader-block').classList.remove('loading');
+        })
+    };
+
+  })
+
+  $modalNewClientClose.addEventListener('click', () => $modalNewClientElement.remove())
 
   window.addEventListener('click', (e) => {
     if (e.target == $modalNewClientElement) {
@@ -148,8 +172,8 @@ export const createFormNewClient = function () {
   })
 
 
-modalBtnSave.addEventListener('click', () => serverAddClient())
-modalNewClientCancel.addEventListener('click', () => $modalNewClientElement.remove())
+
+  modalNewClientCancel.addEventListener('click', () => $modalNewClientElement.remove())
 
 
 
@@ -227,7 +251,7 @@ export const createFormEditClient = function (client) {
   }
 
   // при нажатии на кнопку Сохранить отредактированные данные отправляются на сервер
-  modalBtnSaveEdit.addEventListener('click',  (e) =>{
+  modalBtnSaveEdit.addEventListener('click', (e) => {
     e.preventDefault;
     // собираем измененные данные клиента:
 
@@ -246,30 +270,31 @@ export const createFormEditClient = function (client) {
 
     for (let i = 0; i < contactTypes.length; i++) {
       editContactsArr.push({
-        type:contactTypes[i].value,
-        value:contactValues[i].value})
-  }
+        type: contactTypes[i].value,
+        value: contactValues[i].value
+      })
+    }
 
 
 
     console.log(editClient)
 
-alert('отправка изменений');
- serverChangeClient(editClient)
-}
-)
+    alert('отправка изменений');
+    serverChangeClient(editClient)
+  }
+  )
 
-// при нажатии на кнопку Удалить клиента открывается форма с подтверждением удаления
-modalEditClientCancel.addEventListener('click', function(){
-  createDeleteForm(client)
-  document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
+  // при нажатии на кнопку Удалить клиента открывается форма с подтверждением удаления
+  modalEditClientCancel.addEventListener('click', function () {
+    createDeleteForm(client)
+    document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
     document.querySelector(".modal__delete-btn").addEventListener('click', function () {
       document.querySelector("tr").remove();
       serverDeleteClient(client.id)
     })
   })
 
-  $modalEditClientClose.addEventListener('click',() => $modalEditClientElement.remove())
+  $modalEditClientClose.addEventListener('click', () => $modalEditClientElement.remove())
 
   window.addEventListener('click', (e) => {
     if (e.target == $modalEditClientElement) {
@@ -351,6 +376,87 @@ export const createDeleteForm = function (Client) {
     $modalDeleteContent,
     $modalDeleteBTN,
   }
+}
+
+export function validateModalForm(){
+
+  const modalForm = createModalFormClient()
+  const modalError = modalForm.modalError;
+  const userSurname = modalForm.modalInputSurname;
+  // const userSurname = document.getElementById('surname');
+  const userName = modalForm.modalInputName;
+  const userLastName = modalForm.modalInputLastName;
+  const regexp = /[^а-яА-ЯёЁ]+$/g;
+
+  // console.log(modalForm.modalError)
+  // console.log(modalForm.modalInputName)
+  // console.log(userLastName)
+
+  // const onInputValue = input => {
+  //   input.addEventListener('input', () => {
+  //     input.style.borderColor = "var(--red)";
+  //     // modalError.textContent = ''
+  //   });
+
+  //   input.oncut = input.oncopy = input.onpast = () => {
+  //     input.style.borderColor = "var(--red)";
+  //     // modalError.textContent = ''
+  //   };
+
+  //   input.onchange = () => {
+  //     input.style.borderColor = "var(--red)";
+
+  //     if (userSurname && userName && userLastName) {
+  //       // modalError.textContent = ''
+  //     }
+  //   }
+  // };
+
+  // onInputValue(userSurname)
+  // onInputValue(userName)
+  // onInputValue(userLastName)
+  console.log(userName)
+  console.log(userName.value)
+  console.log(userName.textContent)
+  console.log(userName.innerHTML)
+
+  const checkRequiredName = (input,massage,name) => {
+    console.log(input.value)
+    if(!input.value){
+      massage.classList.add('active')
+      input.style.borderColor = "var(--red)";
+      massage.textContent = `Введите ${name} клиента`
+      return false
+    }else{
+      massage.textContent = ''
+    }
+    return true
+  }
+
+  const checkByRegexp = (input, regexp) => {
+    if (regexp.test(input.value)) {
+        input.style.borderColor = "var(--red)";
+        modalError.classList.add('active')
+        modalError.textContent = 'Недопустимые символы!';
+        return false;
+    }
+
+    return true;
+};
+// checkRequiredName(userSurname, modalError, 'Фамилию')
+// checkRequiredName(userName, modalError, 'Имя')
+// console.log(checkRequiredName(userSurname, modalError, 'Фамилию'))
+
+
+if (!checkRequiredName(userSurname, modalError, 'Фамилию')) { return false };
+if (!checkRequiredName(userName, modalError, 'Имя')) { return false };
+if (!checkRequiredName(userLastName, modalError, 'Отчество')) { return false };
+if (!checkByRegexp(userName, regexp)) { return false };
+if (!checkByRegexp(userSurname, regexp)) { return false };
+if (!checkByRegexp(userLastName, regexp)) { return false };
+
+
+return true
 }
 
 
