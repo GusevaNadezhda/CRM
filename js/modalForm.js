@@ -66,7 +66,7 @@ export const createModalFormClient = function () {
       case "1":
         modalInputSurname = document.createElement('input')
         modalInputSurname.classList.add("modal__input")
-        modalInputSurname.id = "surname"
+        modalInputSurname.id = "surname-client"
         modalPlaceholder.textContent = "Фамилия"
         modalSpan.textContent = "*"
         // modalInputSurname.required = true
@@ -76,7 +76,7 @@ export const createModalFormClient = function () {
       case "2":
         modalInputName = document.createElement('input')
         modalInputName.classList.add("modal__input")
-        modalInputName.id = "name"
+        modalInputName.id = "name-client"
         modalPlaceholder.textContent = "Имя"
         modalSpan.textContent = "*"
         // modalInputName.required = true
@@ -86,7 +86,7 @@ export const createModalFormClient = function () {
       case "3":
         modalInputLastName = document.createElement('input')
         modalInputLastName.classList.add("modal__input")
-        modalInputLastName.id = "lastName"
+        modalInputLastName.id = "lastName-client"
         modalPlaceholder.textContent = "Отчество"
         modalInputLastName.type = "text"
         modalField.append(modalInputLastName);
@@ -129,6 +129,12 @@ export const createModalFormClient = function () {
     modalInputName,
     modalInputLastName,
     modalError,
+    unacceptableLetter,
+     writeSurname,
+     writeName,
+     writeLastname,
+     requiredValue,
+     requiredContact,
     modalBtnSave,
     modalLink
   }
@@ -163,21 +169,22 @@ export const createFormNewClient = function () {
     e.preventDefault();
     if(!validateModalForm()) {
       return ;
-    }else{
-        const promise = new Promise(function (resolve) {
-          modalBtnSave.classList.add('loading')
-          modalBtnSave.append(createPreloader())
-          modalBtnSave.querySelector('.preloader-block').classList.add('save');
-          serverAddClient()
+    }
+    // }else{
+    //     const promise = new Promise(function (resolve) {
+    //       modalBtnSave.classList.add('loading')
+    //       modalBtnSave.append(createPreloader())
+    //       modalBtnSave.querySelector('.preloader-block').classList.add('save');
+    //       serverAddClient()
 
-        window.onload = resolve()
-        })
+    //     window.onload = resolve()
+    //     })
 
-        promise.then(function(){
-          modalBtnSave.classList.remove('loading')
-          document.querySelector('.preloader-block').classList.remove('loading');
-        })
-    };
+    //     promise.then(function(){
+    //       modalBtnSave.classList.remove('loading')
+    //       document.querySelector('.preloader-block').classList.remove('loading');
+    //     })
+    // };
 
   })
 
@@ -247,13 +254,13 @@ export const createFormEditClient = function (client) {
 
   modalInput.forEach(elem => {
     switch (elem.id) {
-      case "surname":
+      case "surname-client":
         elem.value = client.surname
         break
-      case "name":
+      case "name-client":
         elem.value = client.name
         break
-      case "lastName":
+      case "lastName-client":
         elem.value = client.lastName
         break
     }
@@ -398,51 +405,70 @@ export const createDeleteForm = function (Client) {
 
 export function validateModalForm(){
 
+
+
   const modalForm = createModalFormClient()
   const modalError = modalForm.modalError;
-  const userSurname = modalForm.modalInputSurname;
-  // const userSurname = document.getElementById('surname');
-  const userName = modalForm.modalInputName;
-  const userLastName = modalForm.modalInputLastName;
+  const clientSurname = modalForm.modalInputSurname;
+  const clientName = modalForm.modalInputName;
+  const clientLastName = modalForm.modalInputLastName;
+  const unacceptableLetter = modalForm.unacceptableLetter;
+  const writeSurname = modalForm.writeSurname;
+  const writeName = modalForm.writeName;
+  const writeLastname = modalForm.writeLastname;
+  const requiredValue = modalForm.requiredValue;
+  const requiredContact = modalForm.requiredContact;
+  const validateArray = [unacceptableLetter, writeSurname, writeName, writeLastname, requiredValue, requiredContact];
   const regexp = /[^а-яА-ЯёЁ]+$/g;
 
-  // console.log(modalForm.modalError)
-  // console.log(modalForm.modalInputName)
-  // console.log(userLastName)
+  console.log(modalForm.modalError)
+  console.log(modalForm.modalInputName)
+  console.log(clientSurname)
 
-  // const onInputValue = input => {
-  //   input.addEventListener('input', () => {
-  //     input.style.borderColor = "var(--red)";
-  //     // modalError.textContent = ''
-  //   });
+  const onInputValue = input => {
+    input.addEventListener('input', () => {
+      input.style.borderColor = "var(--txt_grey)";
+     for(const error of validateArray){
+      error.textContent = "";
+     }
+    });
 
-  //   input.oncut = input.oncopy = input.onpast = () => {
-  //     input.style.borderColor = "var(--red)";
-  //     // modalError.textContent = ''
-  //   };
+    input.oncut = input.oncopy = input.onpast = () => {
+      input.style.borderColor = "var(--txt_grey)";
+      for(const error of validateArray){
+        error.textContent = "";
+       }
+    };
 
-  //   input.onchange = () => {
-  //     input.style.borderColor = "var(--red)";
+    input.onchange = () => {
+      input.style.borderColor = "var(--txt_grey)";
 
-  //     if (userSurname && userName && userLastName) {
-  //       // modalError.textContent = ''
-  //     }
-  //   }
-  // };
+      if (clientSurname.value && clientName.value && clientLastName.value) {
+        for(const error of validateArray){
+          error.textContent = "";
+         }
+      }
+    }
+  };
 
-  // onInputValue(userSurname)
-  // onInputValue(userName)
-  // onInputValue(userLastName)
-  console.log(userName)
-  console.log(userName.value)
-  console.log(userName.textContent)
-  console.log(userName.innerHTML)
+  console.log(clientName)
+  console.log(clientName.value)
+  console.log(clientName.textContent)
+  console.log(clientName.innerHTML)
+
+  onInputValue(clientSurname)
+  onInputValue(clientName)
+  onInputValue(clientLastName)
+  console.log(clientName)
+  console.log(clientName.value)
+  console.log(clientName.textContent)
+  console.log(clientName.innerHTML)
 
   const checkRequiredName = (input,massage,name) => {
     console.log(input.value)
     if(!input.value){
-      massage.classList.add('active')
-      input.style.borderColor = "var(--red)";
+      // massage.classList.add('active')
+      input.style.borderColor = "red";
       massage.textContent = `Введите ${name} клиента`
       return false
     }else{
@@ -453,25 +479,22 @@ export function validateModalForm(){
 
   const checkByRegexp = (input, regexp) => {
     if (regexp.test(input.value)) {
-        input.style.borderColor = "var(--red)";
-        modalError.classList.add('active')
-        modalError.textContent = 'Недопустимые символы!';
+        input.style.borderColor = "red";
+        // modalError.classList.add('active')
+        unacceptableLetter.textContent = 'Недопустимые символы!';
         return false;
     }
 
     return true;
 };
-// checkRequiredName(userSurname, modalError, 'Фамилию')
-// checkRequiredName(userName, modalError, 'Имя')
-// console.log(checkRequiredName(userSurname, modalError, 'Фамилию'))
 
 
-if (!checkRequiredName(userSurname, modalError, 'Фамилию')) { return false };
-if (!checkRequiredName(userName, modalError, 'Имя')) { return false };
-if (!checkRequiredName(userLastName, modalError, 'Отчество')) { return false };
-if (!checkByRegexp(userName, regexp)) { return false };
-if (!checkByRegexp(userSurname, regexp)) { return false };
-if (!checkByRegexp(userLastName, regexp)) { return false };
+if (!checkRequiredName(clientSurname, writeSurname, 'Фамилию')) { return false };
+if (!checkRequiredName(clientName, writeName, 'Имя')) { return false };
+if (!checkRequiredName(clientLastName, writeLastname, 'Отчество')) { return false };
+if (!checkByRegexp(clientName, regexp)) { return false };
+if (!checkByRegexp(clientSurname, regexp)) { return false };
+if (!checkByRegexp(clientLastName, regexp)) { return false };
 
 
 return true
