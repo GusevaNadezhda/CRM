@@ -41,11 +41,12 @@ if (serverData) {
 
 }
 
-console.log(promiseArr)
+// событие нажатия на кнопку добавить клиента
 
-
-
-
+document.querySelector("#btn-add-client").addEventListener('click', function () {
+  createFormNewClient()
+  document.querySelector('main').append(createFormNewClient().$modalNewClientElement)
+})
 
 // сортировка
 
@@ -73,7 +74,25 @@ headers.forEach(element => {
   })
   });
 
+  // фильтрация
 
+  // const headerInp = document.querySelector(".header__input")
+
+  // headerInp.addEventListener('input', ()=> {
+  //   setInterval(()=>{}, 300)
+  // })
+
+  // const fioVal = document.getElementById("inp-fio").value;
+  // const fio = document.getElementById("inp-fio");
+  // const facultyVal = document.getElementById("inp-facul").value;
+  // const startVal = document.getElementById("inp-yearStudyStart").value;
+  // const finishVal = document.getElementById("inp-yearStudyFinish").value;
+
+
+  // if (fioVal !== "") studentsCopy = filter('fio', fioVal)
+  // if (facultyVal !== "") studentsCopy = filter('faculty', facultyVal)
+  // if (startVal !== "") studentsCopy = filter('yearStudyStart', startVal)
+  // if (finishVal !== "") studentsCopy = filter('YearStudyFinish', finishVal)
 
   // window.onload = () => {
   //   alert("удалим прелоадер")
@@ -162,10 +181,7 @@ headers.forEach(element => {
   // serverData.onload = ()=>{
   //   alert("удалим прелоадер")
   // }
-  document.querySelector("#btn-add-client").addEventListener('click', function () {
-    createFormNewClient()
-    document.querySelector('main').append(createFormNewClient().$modalNewClientElement)
-  })
+
 
 
 

@@ -12,7 +12,16 @@ export const createModalFormClient = function () {
   const modalСontact = document.createElement('div')
   const modalСontactText = document.createElement('div')
   const modalBtnSave = document.createElement('button')
+
   const modalError = document.createElement('div')
+  const unacceptableLetter = document.createElement('span')
+  const writeSurname = document.createElement('span')
+  const writeName = document.createElement('span')
+  const writeLastname = document.createElement('span')
+  const requiredValue = document.createElement('span')
+  const requiredContact = document.createElement('span')
+
+
   const modalLink = document.createElement('div')
   let modalInputSurname;
   let modalInputName;
@@ -22,8 +31,16 @@ export const createModalFormClient = function () {
   modalFormFio.classList.add("modal__form-fio")
   modalСontact.classList.add("modal__contact")
   modalСontactText.classList.add("modal__contact-text")
-  modalBtnSave.classList.add("modal__btn-save")
+
   modalError.classList.add("modal__error")
+  unacceptableLetter.id = "unacceptableLetter"
+  writeSurname.id = "writeSurname"
+  writeName.id = "writeName"
+  writeLastname.id = "writeLastname"
+  requiredValue.id = "requiredValue"
+  requiredContact.id = "requiredContact"
+
+  modalBtnSave.classList.add("modal__btn-save")
   modalLink.classList.add("modal__link")
 
   modalСontactText.textContent = "Добавить контакт";
@@ -100,6 +117,7 @@ export const createModalFormClient = function () {
   modalClientForm.append(modalBtnSave)
   modalClientForm.append(modalLink)
   modalBtnSave.prepend(modalError)
+  modalError.append(unacceptableLetter, writeSurname, writeName, writeLastname, requiredValue, requiredContact)
   modalBtnSave.insertAdjacentElement('beforeBegin', modalError)
 
   return {
