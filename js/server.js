@@ -110,6 +110,21 @@ alert('продолжается функция отправки на серве�
   return data
 }
 
+// функция поиска клиента
+
+export const findClient = async (value) => {
+  // используем синтаксическую конструкцию try..catch, которая позволяет «ловить» ошибки
+  try {
+    const response = await fetch(SERVER_URL + '/api/clients?' + `search=${value}`, {
+      method: "GET",
+    })
+    const data = await response.json();
+
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
 // функция создания формы для ответов сервера
 
  function serverResponceMistake(response){
