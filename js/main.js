@@ -3,6 +3,7 @@ import { createPreloader } from "./table.js"
 import { getNewClient } from "./table.js"
 import { Client } from "./client.js"
 import { serverGetClients } from "./server.js"
+import { findClient } from "./server.js"
 import { sortClient } from "./table.js"
 
 document.querySelector("tbody").append(createPreloader())
@@ -61,8 +62,8 @@ headers.forEach(element => {
     element.classList.toggle('active')
     column = this.id
     columDir = !columDir
-    console.log(column)
-    console.log(columDir)
+    // console.log(column)
+    // console.log(columDir)
     $tbody.innerHTML = ""
     copyServerData = sortClient(column, columDir, serverData)
     copyServerData.forEach(function (elem) {
@@ -74,7 +75,124 @@ headers.forEach(element => {
   })
   });
 
-  // фильтрация
+  // фильтрация (поиск)
+
+  const createSearchClient = () =>{
+    const form = document.querySelector('.header__form');
+    const input = document.querySelector('.header__input');
+    const inner = document.createElement('div');
+    const findList = document.createElement('ul');
+
+    inner.classList.add("header__inner")
+    findList.classList.add("header__list", "hidden")
+    inner.append(input, findList);
+form.append(inner)
+  }
+
+
+
+  const searchClient = (clients) => {
+    const findList = document.querySelector('.header__list');
+    const input = document.querySelector('.header__input');
+
+    clients.forEach(client => {
+      // console.log(client)
+      const findItem = document.createElement('li');
+      const findLink = document.createElement('a');
+
+      findItem.classList.add('header__item');
+      findLink.classList.add('header__link');
+
+      findLink.textContent = ` ${client.surname} ${client.name} ${client.lastName}`
+      findLink.href = "#";
+
+      findItem.append(findLink);
+      findList.append(findItem)
+    });
+
+    const rewriteTable = async(str) => {
+      copyServerData = await findClient(str);
+      const tbody = document.querySelector('.table__body')
+      tbody.innerHTML = '';
+
+
+
+      copyServerData.forEach(function (elem) {
+        const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
+        const clientSection = getNewClient(client)
+        $tbody.append(clientSection)
+      })
+    }
+
+    input.addEventListener('input', async ()=> {
+      const value = input.value.trim();
+      const founditems = document.querySelectorAll('.header__link');
+
+      if(value !== ''){
+        rewriteTable(value);
+
+
+        founditems.forEach(link =>{
+
+          // console.log(link )
+          // console.log(link.textContent)
+          // console.log(link.innerHTML)
+          // console.log(link.innerText)
+          // console.log(value)
+          if(link.innerText.search(value) == -1){
+            link.classList.add('hidden');
+            link.innerHTML = link.innerText;
+          }else{
+            link.classList.remove('hidden');
+            findList.classList.remove('hidden');
+            const str = link.innerText;
+            console.log(str)
+            console.log(link.innerText.search(value))
+            console.log(value.length)
+            link.innerHTML = insertMark(str, link.innerText.search(value), value.length )
+          }
+        })
+      }else{
+        founditems.forEach(link => {
+          $tbody.innerHTML = '';
+
+          copyServerData.forEach(function (elem) {
+            const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
+            const clientSection = getNewClient(client)
+            $tbody.append(clientSection)
+          })
+
+          link.classList.remove('hidden');
+          findList.classList.add('hidden');
+          link.innerHTML = link.innerText;
+
+        })
+      }
+    })
+
+    const insertMark = (str,pos,len) =>
+
+    str.slice(0, pos) + '<mark>' + str.slice(pos, pos+len) + '</mark>' + str.slice(pos+len)
+
+
+
+  }
+
+  try {
+
+    const clients = await serverGetClients();
+    createSearchClient()
+    searchClient(clients)
+    // console.log(clients)
+    // for(const client of clients){
+    //   console.log(client)
+    //   $tbody.append(getNewClient(client))
+    // }
+  } catch (error) {
+    console.log(error)
+  } finally{
+    setTimeout(()=> createPreloader().remove,1500)
+  }
 
   // const headerInp = document.querySelector(".header__input")
 
