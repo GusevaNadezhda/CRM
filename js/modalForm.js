@@ -459,10 +459,7 @@ export function validateModalForm(){
   onInputValue(clientSurname)
   onInputValue(clientName)
   onInputValue(clientLastName)
-  console.log(clientName)
-  console.log(clientName.value)
-  console.log(clientName.textContent)
-  console.log(clientName.innerHTML)
+
 
   const checkRequiredName = (input,massage,name) => {
     console.log(input.value)
