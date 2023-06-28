@@ -66,7 +66,7 @@ export const createModalFormClient = function () {
       case "1":
         modalInputSurname = document.createElement('input')
         modalInputSurname.classList.add("modal__input")
-        modalInputSurname.id = "surname-client"
+        modalInputSurname.id = "surname"
         modalPlaceholder.textContent = "Фамилия"
         modalSpan.textContent = "*"
         // modalInputSurname.required = true
@@ -76,7 +76,7 @@ export const createModalFormClient = function () {
       case "2":
         modalInputName = document.createElement('input')
         modalInputName.classList.add("modal__input")
-        modalInputName.id = "name-client"
+        modalInputName.id = "name"
         modalPlaceholder.textContent = "Имя"
         modalSpan.textContent = "*"
         // modalInputName.required = true
@@ -86,7 +86,7 @@ export const createModalFormClient = function () {
       case "3":
         modalInputLastName = document.createElement('input')
         modalInputLastName.classList.add("modal__input")
-        modalInputLastName.id = "lastName-client"
+        modalInputLastName.id = "lastName"
         modalPlaceholder.textContent = "Отчество"
         modalInputLastName.type = "text"
         modalField.append(modalInputLastName);
@@ -167,9 +167,10 @@ export const createFormNewClient = function () {
 
   $modalNewClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    if(!validateModalForm()) {
-      return ;
-    }
+    serverAddClient()
+    // if(!validateModalForm()) {
+    //   return ;
+
     // }else{
     //     const promise = new Promise(function (resolve) {
     //       modalBtnSave.classList.add('loading')
