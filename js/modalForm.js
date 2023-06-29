@@ -148,6 +148,9 @@ export const createFormNewClient = function () {
   const $modalNewClientTITLE = document.createElement('h2')
   const modalForm = createModalFormClient()
   const $modalNewClientForm = modalForm.modalClientForm
+  const modalInputSurnameNewClient= modalForm.modalInputSurname
+  const modalInputNameNewClient= modalForm.modalInputName
+  const modalInputLastNameNewClient= modalForm.modalInputLastName
   const modalBtnSave = modalForm.modalBtnSave
   const modalNewClientCancel = modalForm.modalLink
 
@@ -156,6 +159,9 @@ export const createFormNewClient = function () {
   $modalNewClientContent.classList.add("modal-client")
   $modalNewClientTITLE.classList.add("modal__title")
   $modalNewClientClose.classList.add("modal__btn-close")
+  modalInputSurnameNewClient.classList.add("surname-new")
+  modalInputNameNewClient.classList.add("name-new")
+  modalInputLastNameNewClient.classList.add("lastname-new")
   $modalNewClientElement.id = "modal-add-client"
   $modalNewClientClose.id = "modal-close"
   $modalNewClientTITLE.id = "new-client"
@@ -163,11 +169,25 @@ export const createFormNewClient = function () {
   $modalNewClientTITLE.textContent = "Новый клиент"
   modalForm.modalLink.textContent = "Отмена"
 
-  console.log(validateModalForm())
+  // console.log(validateModalForm(modalInputSurnameNewClient,modalInputNameNewClient,modalInputLastNameNewClient))
+
+// let valid = validateModalForm(modalInputSurnameNewClient,modalInputNameNewClient,modalInputLastNameNewClient)
+
 
   $modalNewClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    serverAddClient()
+    validateModalForm(modalForm)
+    console.log(validateModalForm(modalForm))
+
+    // serverAddClient()
+
+    if(!validateModalForm(modalForm)) {
+        return ;
+
+      }else{
+            serverAddClient()
+          }
+
     // if(!validateModalForm()) {
     //   return ;
 
@@ -212,6 +232,9 @@ export const createFormNewClient = function () {
   return {
     $modalNewClientElement,
     $modalNewClientContent,
+    modalInputSurnameNewClient,
+  modalInputNameNewClient,
+  modalInputLastNameNewClient,
   }
 }
 
@@ -404,11 +427,8 @@ export const createDeleteForm = function (Client) {
   }
 }
 
-export function validateModalForm(){
+export function validateModalForm(modalForm){
 
-
-
-  const modalForm = createModalFormClient()
   const modalError = modalForm.modalError;
   const clientSurname = modalForm.modalInputSurname;
   const clientName = modalForm.modalInputName;
@@ -422,27 +442,33 @@ export function validateModalForm(){
   const validateArray = [unacceptableLetter, writeSurname, writeName, writeLastname, requiredValue, requiredContact];
   const regexp = /[^а-яА-ЯёЁ]+$/g;
 
-  console.log(modalForm.modalError)
-  console.log(modalForm.modalInputName)
+
   console.log(clientSurname)
+  console.log(surname)
+  console.log(clientSurname.value)
+  console.log(surname.value)
+  console.log(clientSurname,clientName,clientLastName)
+console.log(clientSurname.value)
+
 
   const onInputValue = input => {
+
     input.addEventListener('input', () => {
-      input.style.borderColor = "var(--txt_grey)";
+      input.style.borderColor = 'var(--grey)';
      for(const error of validateArray){
       error.textContent = "";
      }
     });
 
     input.oncut = input.oncopy = input.onpast = () => {
-      input.style.borderColor = "var(--txt_grey)";
+      input.style.borderColor = 'var(--grey)';
       for(const error of validateArray){
         error.textContent = "";
        }
     };
 
     input.onchange = () => {
-      input.style.borderColor = "var(--txt_grey)";
+      input.style.borderColor = 'var(--grey)';
 
       if (clientSurname.value && clientName.value && clientLastName.value) {
         for(const error of validateArray){
@@ -452,20 +478,17 @@ export function validateModalForm(){
     }
   };
 
-  console.log(clientName)
-  console.log(clientName.value)
-  console.log(clientName.textContent)
-  console.log(clientName.innerHTML)
 
   onInputValue(clientSurname)
   onInputValue(clientName)
   onInputValue(clientLastName)
 
 
+
+
   const checkRequiredName = (input,massage,name) => {
-    console.log(input.value)
     if(!input.value){
-      // massage.classList.add('active')
+      modalError.classList.add('active')
       input.style.borderColor = "red";
       massage.textContent = `Введите ${name} клиента`
       return false
@@ -478,7 +501,7 @@ export function validateModalForm(){
   const checkByRegexp = (input, regexp) => {
     if (regexp.test(input.value)) {
         input.style.borderColor = "red";
-        // modalError.classList.add('active')
+        modalError.classList.add('active')
         unacceptableLetter.textContent = 'Недопустимые символы!';
         return false;
     }
@@ -489,7 +512,7 @@ export function validateModalForm(){
 
 if (!checkRequiredName(clientSurname, writeSurname, 'Фамилию')) { return false };
 if (!checkRequiredName(clientName, writeName, 'Имя')) { return false };
-if (!checkRequiredName(clientLastName, writeLastname, 'Отчество')) { return false };
+// if (!checkRequiredName(clientLastName, writeLastname, 'Отчество')) { return false };
 if (!checkByRegexp(clientName, regexp)) { return false };
 if (!checkByRegexp(clientSurname, regexp)) { return false };
 if (!checkByRegexp(clientLastName, regexp)) { return false };

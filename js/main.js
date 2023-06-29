@@ -133,12 +133,6 @@ form.append(inner)
 
 
         founditems.forEach(link =>{
-
-          // console.log(link )
-          // console.log(link.textContent)
-          // console.log(link.innerHTML)
-          // console.log(link.innerText)
-          // console.log(value)
           if(link.innerText.search(value) == -1){
             link.classList.add('hidden');
             link.innerHTML = link.innerText;
@@ -183,16 +177,16 @@ form.append(inner)
     const clients = await serverGetClients();
     createSearchClient()
     searchClient(clients)
-    // console.log(clients)
-    // for(const client of clients){
-    //   console.log(client)
-    //   $tbody.append(getNewClient(client))
-    // }
+
   } catch (error) {
     console.log(error)
   } finally{
     setTimeout(()=> createPreloader().remove,1500)
   }
+
+
+
+
 
   // const headerInp = document.querySelector(".header__input")
 
