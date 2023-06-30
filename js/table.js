@@ -50,22 +50,45 @@ import {serverDeleteClient} from "./server.js"
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
 
+  // $changeBTN.addEventListener('click',  function () {
+  //   const promise = new Promise(function (resolve) {
+
+  //       $changeBTN.classList.add('loading')
+  //       $changeBTN.append(createPreloader())
+  //       $changeBTN.querySelector('.preloader-block').classList.add('change');
+  //       createFormEditClient(client);
+  //       document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
+
+  //       const $modalEditClientElement = document.querySelector('.modal-add')
+  // if($modalEditClientElement.classList.contains('open')){
+  //   resolve()
+  // }
+
+  //   })
+
+  //   promise.then(function(){
+  //     $changeBTN.classList.remove('loading')
+  //     document.querySelector('.preloader-block').classList.remove('loading');
+  //   })
+  // })
+
   $changeBTN.addEventListener('click',  function () {
-    const promise = new Promise(function (resolve) {
-      $changeBTN.classList.add('loading')
-      $changeBTN.append(createPreloader())
-      $changeBTN.querySelector('.preloader-block').classList.add('change');
-     createFormEditClient(client);
-    document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
 
-    window.onload = resolve()
-    })
+        $changeBTN.classList.add('loading')
+        $changeBTN.append(createPreloader())
+        $changeBTN.querySelector('.preloader-block').classList.add('change');
+        createFormEditClient(client);
+        document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
 
-    promise.then(function(){
-      $changeBTN.classList.remove('loading')
+        const $modalEditClientElement = document.querySelector('.modal-add')
+  if($modalEditClientElement.classList.contains('open')){
+    $changeBTN.classList.remove('loading')
       document.querySelector('.preloader-block').classList.remove('loading');
+  }
+
     })
-  })
+
+
 
 
   const $contactsGroup1 = document.createElement('div');

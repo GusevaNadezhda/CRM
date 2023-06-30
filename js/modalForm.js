@@ -294,7 +294,7 @@ export const createFormEditClient = function (client) {
   const modalBtnSaveEdit = modalForm.modalBtnSave
   const modalEditClientCancel = modalForm.modalLink
   const modalContact = modalForm.modalСontact
-  // const createContact = createAddContact();
+
 
 
 
@@ -321,13 +321,13 @@ export const createFormEditClient = function (client) {
 
   modalInput.forEach(elem => {
     switch (elem.id) {
-      case "surname-client":
+      case "surname":
         elem.value = client.surname
         break
-      case "name-client":
+      case "name":
         elem.value = client.name
         break
-      case "lastName-client":
+      case "lastName":
         elem.value = client.lastName
         break
     }
@@ -343,9 +343,15 @@ export const createFormEditClient = function (client) {
   }
 
   // при нажатии на кнопку Сохранить отредактированные данные отправляются на сервер
-  modalBtnSaveEdit.addEventListener('click', (e) => {
-    e.preventDefault;
-    // собираем измененные данные клиента:
+  $modalEditClientForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if(!validateModalForm(modalForm)) {
+      return ;
+    }
+
+          else{
+            // собираем измененные данные клиента:
 
 
     const contactTypes = document.querySelectorAll('.modal__contact-select');
@@ -361,20 +367,21 @@ export const createFormEditClient = function (client) {
     editClient.contacts = editContactsArr;
 
     for (let i = 0; i < contactTypes.length; i++) {
+      if (!validateContact(contactTypes[i], contactValues[i])) {
+                  return;
+              }
       editContactsArr.push({
         type: contactTypes[i].value,
         value: contactValues[i].value
       })
     }
 
-
-
-    console.log(editClient)
-
-    alert('отправка изменений');
     serverChangeClient(editClient)
-  }
-  )
+          }
+    }
+)
+
+
 
   // при нажатии на кнопку Удалить клиента открывается форма с подтверждением удаления
   modalEditClientCancel.addEventListener('click', function () {
