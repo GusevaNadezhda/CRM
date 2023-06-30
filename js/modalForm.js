@@ -153,6 +153,10 @@ export const createFormNewClient = function () {
   const modalInputLastNameNewClient= modalForm.modalInputLastName
   const modalBtnSave = modalForm.modalBtnSave
   const modalNewClientCancel = modalForm.modalLink
+  const clientContact = createAddContact();
+
+  // const contactType = clientContact.modalContactSelect;
+  // const contactValue = clientContact.modalContactEnter;
 
   $modalNewClientElement.classList.add("modal-add")
   $modalNewClientElement.classList.add('open')
@@ -169,24 +173,66 @@ export const createFormNewClient = function () {
   $modalNewClientTITLE.textContent = "Новый клиент"
   modalForm.modalLink.textContent = "Отмена"
 
-  // console.log(validateModalForm(modalInputSurnameNewClient,modalInputNameNewClient,modalInputLastNameNewClient))
-
-// let valid = validateModalForm(modalInputSurnameNewClient,modalInputNameNewClient,modalInputLastNameNewClient)
-
 
   $modalNewClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
     validateModalForm(modalForm)
     console.log(validateModalForm(modalForm))
+    const contactArray = document.querySelectorAll(".modal__contact-add")
 
-    // serverAddClient()
 
     if(!validateModalForm(modalForm)) {
         return ;
+      }else {
+        contactArray.forEach(function(elem){
+        const contactTypes = elem.querySelector('select');
+        const contactValue = elem.querySelector('.modal__contact-enter');
 
-      }else{
-            serverAddClient()
-          }
+        // console.log(contactTypes)
+        //   console.log(contactValue)
+
+        //   validateContact(contactTypes, contactValue)
+
+          if (!validateContact(contactTypes, contactValue)) {
+                return;
+            }else{
+              serverAddClient()
+            }
+
+        // for (let i = 0; i < contactTypes.length; i++) {
+        //   validateContact(contactTypes[i], contactValue)
+        //   console.log(contactTypes[1])
+        //   console.log(contactTypes[2])
+        //   console.log(contactTypes.length)
+        //   console.log(contactValue)
+            // if (!validateContact(contactTypes[i], contactValue)) {
+            //     return;
+            // }else{
+            //   serverAddClient()
+            // }
+          // }})
+        // // console.log(contactArray)
+        // contactArray.forEach(function(elem){
+        //   console.log(elem)
+        //   let contactType= elem.querySelectorAll('select option')
+        //   let contactValue= elem.querySelector('input')
+
+
+
+
+        //   // validateContact(contactType, contactValue)
+        //   console.log(validateContact(contactType, contactValue))
+
+        //   if(!validateContact(contactType, contactValue)){
+        //     return;
+        //   }
+        // })
+      }
+  )}
+
+
+
+
 
     // if(!validateModalForm()) {
     //   return ;
@@ -232,9 +278,6 @@ export const createFormNewClient = function () {
   return {
     $modalNewClientElement,
     $modalNewClientContent,
-    modalInputSurnameNewClient,
-  modalInputNameNewClient,
-  modalInputLastNameNewClient,
   }
 }
 
@@ -443,12 +486,12 @@ export function validateModalForm(modalForm){
   const regexp = /[^а-яА-ЯёЁ]+$/g;
 
 
-  console.log(clientSurname)
-  console.log(surname)
-  console.log(clientSurname.value)
-  console.log(surname.value)
-  console.log(clientSurname,clientName,clientLastName)
-console.log(clientSurname.value)
+//   console.log(clientSurname)
+//   console.log(surname)
+//   console.log(clientSurname.value)
+//   console.log(surname.value)
+//   console.log(clientSurname,clientName,clientLastName)
+// console.log(clientSurname.value)
 
 
   const onInputValue = input => {
@@ -489,7 +532,7 @@ console.log(clientSurname.value)
   const checkRequiredName = (input,massage,name) => {
     if(!input.value){
       modalError.classList.add('active')
-      input.style.borderColor = "red";
+      input.style.borderColor = 'var(--red)';
       massage.textContent = `Введите ${name} клиента`
       return false
     }else{
@@ -500,7 +543,7 @@ console.log(clientSurname.value)
 
   const checkByRegexp = (input, regexp) => {
     if (regexp.test(input.value)) {
-        input.style.borderColor = "red";
+        input.style.borderColor = 'var(--red)';
         modalError.classList.add('active')
         unacceptableLetter.textContent = 'Недопустимые символы!';
         return false;
@@ -512,13 +555,83 @@ console.log(clientSurname.value)
 
 if (!checkRequiredName(clientSurname, writeSurname, 'Фамилию')) { return false };
 if (!checkRequiredName(clientName, writeName, 'Имя')) { return false };
-// if (!checkRequiredName(clientLastName, writeLastname, 'Отчество')) { return false };
 if (!checkByRegexp(clientName, regexp)) { return false };
 if (!checkByRegexp(clientSurname, regexp)) { return false };
 if (!checkByRegexp(clientLastName, regexp)) { return false };
-
 
 return true
 }
 
 
+export function validateContact(contactType, contactValue){
+
+const modalError = document.querySelector(".modal__error")
+  const onlyNumbers = /[^0-9]+$/g;
+  const onlyEmail = /[^a-zA-Z|@|.]+$/g;
+
+
+  console.log(contactType.dataset.type)
+  console.log(contactValue)
+  console.log(contactValue.value)
+
+const onInputValue = input => {
+
+    input.addEventListener('input', () => {
+      input.style.borderColor = 'var(--grey)';
+
+    });
+
+    input.oncut = input.oncopy = input.onpast = () => {
+      input.style.borderColor = 'var(--grey)';
+
+    };
+
+    input.onchange = () => {
+      input.style.borderColor = 'var(--grey)';
+      modalError.classList.remove('active')
+
+      // if (clientSurname.value && clientName.value && clientLastName.value) {
+      //   for(const error of validateArray){
+      //     error.textContent = "";
+      //    }
+      // }
+    }
+  };
+
+  const showErrorMassage = (massage, block, input) => {
+block.textContent = massage;
+input.style.borderColor = 'var(--red)'
+  }
+
+  onInputValue(contactValue)
+
+  // проверка на заполнение полей контактов
+
+  if(!contactValue.value){
+    modalError.classList.add('active')
+    showErrorMassage("Заполните поле контакта", modalError, contactValue)
+    return false
+  }
+
+  switch (contactType.dataset.type) {
+    case "Телефон":
+      if(onlyNumbers.test(contactValue.value)){
+        modalError.classList.add('active')
+        showErrorMassage("Возможен ввод только цифр", modalError, contactValue)
+        return false
+      } else if(contactValue.value.length !== 11){
+        modalError.classList.add('active')
+        showErrorMassage("Номер телефона состоит из 11 цифр", modalError, contactValue)
+        return false
+      }
+      return true
+      case "Email":
+      if(onlyEmail.test(contactValue.value)){
+        modalError.classList.add('active')
+        showErrorMassage("Email введент неверно", modalError, contactValue)
+        return false
+      }
+
+        return true;
+}
+}

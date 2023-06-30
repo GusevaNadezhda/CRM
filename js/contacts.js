@@ -1,5 +1,5 @@
 
-
+import { validateContact } from "./modalForm.js"
 // Создадим функцию которая будет добавлять в форму новые контакты
 
 export const createAddContact = function () {
@@ -10,18 +10,25 @@ export const createAddContact = function () {
   const modalContactContent = document.createElement('div');
   const modalContactSelect = document.createElement('select');
   const modalContactEnter = document.createElement('input');
-  const modalBtnSave = document.querySelector(".modal__btn-save")
+  const modalBtnSave = document.querySelector(".modal__btn-save");
+  const modalContactButton = document.createElement('button');
+    const modalContactTooltip = document.createElement('div');
+
+    modalContactTooltip.textContent = "Удалить контакт";
 
   modalContactAdd.classList.add('modal__contact-add');
   modalContactContent.classList.add('modal__contact-content');
   modalContactSelect.classList.add('modal__contact-select');
   modalContactEnter.classList.add('modal__contact-enter');
+  modalContactButton.classList.add("modal__contact-button");
+  modalContactTooltip.classList.add("tooltip");
 
   modalContactContent.addEventListener('click', () => modalContactContent.classList.toggle('active') )
 
   for (let i = 1; i < 6; i++) {
     const modalOption = document.createElement('option')
     modalOption.id = "option" + i
+    modalOption.classList.add('modal__contact-option')
     modalContactSelect.append(modalOption)
 
     // исправить modalContactEnter.type
@@ -30,32 +37,41 @@ export const createAddContact = function () {
       case 'option1':
         modalOption.textContent = 'Телефон'
         modalOption.value = "Телефон"
+
+
         break
 
       case 'option2':
         modalOption.textContent = "Доп. телефон"
         modalOption.value = "Доп. телефон"
+
         break
 
       case 'option3':
         modalOption.textContent = "Email"
         modalOption.value = "Email"
+
         break
 
       case 'option4':
         modalOption.textContent = "Vk"
         modalOption.value = "Vk"
+
         break
 
       case 'option5':
         modalOption.textContent = "Facebook"
         modalOption.value = "Facebook"
+
         break
     }
 
   }
 
+
   // при изменении значения в селекте, меняем тип данных которые вводим в импут
+
+  modalContactSelect.dataset.type = "Телефон"
 
   modalContactSelect.addEventListener('change', function () {
     this.dataset.type = this.value
@@ -71,18 +87,8 @@ export const createAddContact = function () {
 
 
 
-  // появление крестика после введения контакта в импут
+  // удаление контакта при нажатии на крестик
 
-
-  modalContactEnter.addEventListener('blur', function buttonCencelAdd() {
-
-    const modalContactButton = document.createElement('button')
-    const modalContactTooltip = document.createElement('div')
-    modalContactButton.classList.add("modal__contact-button")
-    modalContactTooltip.classList.add("tooltip")
-    modalContactTooltip.textContent = "Удалить контакт"
-    modalContactAdd.append(modalContactButton)
-    modalContactButton .append(modalContactTooltip)
 
     modalContactButton.addEventListener('click', (e) => {
       e.preventDefault();
@@ -91,12 +97,8 @@ export const createAddContact = function () {
     }
     )
 
-    modalContactEnter.removeEventListener('blur', buttonCencelAdd)
-  })
-
-
-
   // сделаем ограничение на количество контактов(не более 10)
+
 
   if (modalContactAddArr.length > 8) {
     const modalError = document.querySelector(".modal__error")
@@ -108,6 +110,15 @@ export const createAddContact = function () {
   if (modalContactAddArr.length >= 4){
     document.querySelector(".modal-client").style.top = '70%'
   }
+
+
+
+
+
+
+
+
+
 
   // else{
   //   // document.querySelector(".modal-client").style.top = "50%"
@@ -190,10 +201,12 @@ export const createAddContact = function () {
   modalContactAdd.append(modalContactContent)
   modalContactContent.append(modalContactSelect)
   modalContactAdd.append(modalContactEnter)
-
+  modalContactAdd.append(modalContactButton)
+  modalContactButton .append(modalContactTooltip)
   return {
     modalContactAdd,
     modalContactContent,
+    modalContactAddArr,
     modalContactSelect,
     modalContactEnter
   }

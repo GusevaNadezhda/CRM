@@ -1,4 +1,5 @@
 import {createModalFormClient} from "./modalForm.js"
+import { validateContact } from "./modalForm.js"
 
 // данные клиента мы получаем от сервера, запишем его в константу (при смене сервера также удобно будет поменять его только в одном месте)
 const SERVER_URL = 'http://localhost:3000'
@@ -37,19 +38,23 @@ export async function serverAddClient() {
 
   const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
   const contactsArr = [];
-  modalContactAddArr.forEach(function(elem){
 
+
+  modalContactAddArr.forEach(function(elem){
     let select= elem.querySelector('select')
-let input= elem.querySelector('input')
-// const contact = new Contact(select.value, input.value)
+    let input= elem.querySelector('input')
+
     contactsArr.push({
       type:select.value,
       value:input.value
     })
-    console.log(elem)
-    console.log(select.value)
-    console.log(input.value)
+    // console.log(elem)
+    // console.log(select.value)
+    // console.log(input.value)
   })
+
+
+
   console.log(contactsArr);
 
   const response = await fetch(SERVER_URL + '/api/clients/', {
@@ -65,6 +70,7 @@ let input= elem.querySelector('input')
     }
   })
 console.log(response)
+
   const client = await response.json();
 
   serverResponceMistake(response)
