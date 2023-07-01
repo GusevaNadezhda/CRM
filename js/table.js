@@ -1,6 +1,7 @@
 import {contactTooltip} from "./contacts.js"
 import {createFormEditClient} from "./modalForm.js"
 import {createDeleteForm} from "./modalForm.js"
+import {serverGetClient} from "./server.js"
 import {serverDeleteClient} from "./server.js"
 
 
@@ -72,23 +73,49 @@ import {serverDeleteClient} from "./server.js"
   //   })
   // })
 
-  $changeBTN.addEventListener('click',  function () {
+  // $changeBTN.addEventListener('click',  async function () {
 
-        $changeBTN.classList.add('loading')
+  //   $changeBTN.classList.add('loading')
+  //       $changeBTN.append(createPreloader())
+  //       $changeBTN.querySelector('.preloader-block').classList.add('change');
+
+
+  //   try {
+  //     const data = await serverGetClient(client)
+  //     createFormEditClient(data);
+  //     document.querySelector('main').append(createFormEditClient(data).$modalEditClientElement)
+
+
+  // } catch (error) {
+  //     console.log(error);
+  // }finally{
+  //   if(!error){
+  //     $changeBTN.classList.remove('loading')
+  //     document.querySelector('.preloader-block').classList.remove('loading');
+  //   }
+  // }
+  // })
+
+
+  $changeBTN.addEventListener('click', function () {
+    $changeBTN.classList.add('loading')
         $changeBTN.append(createPreloader())
-        $changeBTN.querySelector('.preloader-block').classList.add('change');
-        createFormEditClient(client);
-        document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
+        $changeBTN.querySelector('.preloader-block').classList.add('change', 'loading')
+        // $changeBTN.querySelector('.preloader-block').classList.add('loading');
 
-        const $modalEditClientElement = document.querySelector('.modal-add')
-  if($modalEditClientElement.classList.contains('open')){
-    $changeBTN.classList.remove('loading')
-      document.querySelector('.preloader-block').classList.remove('loading');
-  }
+  let promise = new Promise(function(resolve) {
+    const data = serverGetClient(client)
+    resolve(data)})
 
-    })
+    promise.then( data =>  {createFormEditClient(data)
+        document.querySelector('main').append(createFormEditClient(data).$modalEditClientElement)
+        $changeBTN.classList.remove('loading')
 
+        $changeBTN.querySelector('.preloader-block').classList.remove('change', 'loading');
+        // $changeBTN.querySelector('.preloader-block').classList.remove('loading');
+      })
 
+	});
 
 
   const $contactsGroup1 = document.createElement('div');
@@ -199,7 +226,7 @@ export const createPreloader = function(){
   const preloaderCircle4 = document.createElement('div')
 
   preloaderBlock.classList.add("preloader-block")
-  preloaderBlock.classList.add("loading")
+  // preloaderBlock.classList.add("loading")
   preloader.classList.add("lds-ring")
 
   preloaderBlock.append(preloader)

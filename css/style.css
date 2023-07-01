@@ -133,7 +133,7 @@ color: var(--txt_grey);
 
 main {
   padding: 20px;
-  background: #E5E5E5;
+  /* background: #E5E5E5; */
 }
 
 .main__title {

@@ -177,7 +177,6 @@ export const createFormNewClient = function () {
   $modalNewClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
     validateModalForm(modalForm)
-    console.log(validateModalForm(modalForm))
     const contactArray = document.querySelectorAll(".modal__contact-add")
 
 
@@ -188,45 +187,12 @@ export const createFormNewClient = function () {
         const contactTypes = elem.querySelector('select');
         const contactValue = elem.querySelector('.modal__contact-enter');
 
-        // console.log(contactTypes)
-        //   console.log(contactValue)
-
-        //   validateContact(contactTypes, contactValue)
-
           if (!validateContact(contactTypes, contactValue)) {
                 return;
             }else{
               serverAddClient()
             }
 
-        // for (let i = 0; i < contactTypes.length; i++) {
-        //   validateContact(contactTypes[i], contactValue)
-        //   console.log(contactTypes[1])
-        //   console.log(contactTypes[2])
-        //   console.log(contactTypes.length)
-        //   console.log(contactValue)
-            // if (!validateContact(contactTypes[i], contactValue)) {
-            //     return;
-            // }else{
-            //   serverAddClient()
-            // }
-          // }})
-        // // console.log(contactArray)
-        // contactArray.forEach(function(elem){
-        //   console.log(elem)
-        //   let contactType= elem.querySelectorAll('select option')
-        //   let contactValue= elem.querySelector('input')
-
-
-
-
-        //   // validateContact(contactType, contactValue)
-        //   console.log(validateContact(contactType, contactValue))
-
-        //   if(!validateContact(contactType, contactValue)){
-        //     return;
-        //   }
-        // })
       }
   )}
 
