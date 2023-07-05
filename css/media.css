@@ -1,0 +1,31 @@
+
+
+@media(max-width:805px) {
+
+
+
+  .btn-group{
+    flex-direction: column;
+  }
+
+  .btn-change {
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+}
+
+@media(max-width:470px) {
+.container {
+  /* max-width: 1216px; */
+  margin: 0 auto;
+  padding: 1px 10px;
+}
+
+.header__form{
+  display: none;
+}
+
+.header__logo {
+  margin: 10px auto;
+}
+}

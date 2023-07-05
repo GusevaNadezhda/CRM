@@ -1,6 +1,7 @@
 import {contactTooltip} from "./contacts.js"
 import {createFormEditClient} from "./modalForm.js"
 import {createDeleteForm} from "./modalForm.js"
+import {serverGetClient} from "./server.js"
 import {serverDeleteClient} from "./server.js"
 
 
@@ -50,45 +51,25 @@ import {serverDeleteClient} from "./server.js"
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
 
-  // $changeBTN.addEventListener('click',  function () {
-  //   const promise = new Promise(function (resolve) {
 
-  //       $changeBTN.classList.add('loading')
-  //       $changeBTN.append(createPreloader())
-  //       $changeBTN.querySelector('.preloader-block').classList.add('change');
-  //       createFormEditClient(client);
-  //       document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
-
-  //       const $modalEditClientElement = document.querySelector('.modal-add')
-  // if($modalEditClientElement.classList.contains('open')){
-  //   resolve()
-  // }
-
-  //   })
-
-  //   promise.then(function(){
-  //     $changeBTN.classList.remove('loading')
-  //     document.querySelector('.preloader-block').classList.remove('loading');
-  //   })
-  // })
-
-  $changeBTN.addEventListener('click',  function () {
-
-        $changeBTN.classList.add('loading')
+  $changeBTN.addEventListener('click', function () {
+    $changeBTN.classList.add('loading')
         $changeBTN.append(createPreloader())
-        $changeBTN.querySelector('.preloader-block').classList.add('change');
-        createFormEditClient(client);
-        document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
-
-        const $modalEditClientElement = document.querySelector('.modal-add')
-  if($modalEditClientElement.classList.contains('open')){
-    $changeBTN.classList.remove('loading')
-      document.querySelector('.preloader-block').classList.remove('loading');
-  }
-
-    })
+        $changeBTN.querySelector('.preloader-block').classList.add('change', 'loading')
 
 
+  let promise = new Promise(function(resolve) {
+    const data = serverGetClient(client)
+    resolve(data)})
+
+    promise.then( data =>  {
+      createFormEditClient(data)
+        document.querySelector('main').append(createFormEditClient(data).$modalEditClientElement)
+        $changeBTN.classList.remove('loading')
+
+        $changeBTN.querySelector('.preloader-block').classList.remove('change', 'loading');
+      })
+	});
 
 
   const $contactsGroup1 = document.createElement('div');
@@ -103,12 +84,9 @@ import {serverDeleteClient} from "./server.js"
 
     $contactICON.dataset.number = i+1
 
-    if( !$contactICON.classList.contains("last-icon")) $contactICON.append(contactTooltip(client.contacts[i].type, client.contacts[i].value))
-
     if (i < 5) {
       $contactsGroup1.append($contactICON)
     }
-
 
     if( $contactICON.dataset.number == 5){
       $contactICON.classList.add("last-icon")
@@ -122,7 +100,8 @@ import {serverDeleteClient} from "./server.js"
 
       iconNamber.addEventListener('click', function(){
         $contactICON.classList.remove("last-icon")
-        iconNamber.innerHTML = ""
+        $contactICON.append(contactTooltip(client.contacts[i].type, client.contacts[i].value))
+        iconNamber.remove()
         $contactsGroup2.classList.remove('hidden')
       })
 
@@ -141,7 +120,7 @@ $contactICON.append(iconNamber)
           case "Телефон":
             $contactICON.classList.add('tel')
             break
-          case "Доп. телефон":
+          case "Доп.телефон":
             $contactICON.classList.add('tel')
             break
           case "Email":
@@ -154,10 +133,14 @@ $contactICON.append(iconNamber)
             $contactICON.classList.add('fb')
             break
         }
+
+  if( !$contactICON.classList.contains("last-icon")) $contactICON.append(contactTooltip(client.contacts[i].type, client.contacts[i].value))
+
   }
 
   $contactTD.append($contactsGroup1)
   $contactTD.append($contactsGroup2)
+
 
   $deleteBTN.addEventListener('click', function () {
     createDeleteForm(client)
@@ -199,7 +182,7 @@ export const createPreloader = function(){
   const preloaderCircle4 = document.createElement('div')
 
   preloaderBlock.classList.add("preloader-block")
-  preloaderBlock.classList.add("loading")
+  // preloaderBlock.classList.add("loading")
   preloader.classList.add("lds-ring")
 
   preloaderBlock.append(preloader)

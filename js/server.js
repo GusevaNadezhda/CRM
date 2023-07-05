@@ -108,11 +108,17 @@ alert('продолжается функция отправки на серве�
     }),
     headers: { 'Content-Type': 'aplication/json' },
   })
-
   serverResponceMistake(response)
+  console.log(serverResponceMistake(response))
+  alert('ответ от сервера')
+
   //  получаем ответ в виде массива от сервера
   let data = await response.json()
   console.log(data)
+
+
+
+  alert("что то не так")
   return data
 }
 
@@ -135,23 +141,30 @@ export const findClient = async (value) => {
 
  function serverResponceMistake(response){
   const modalError = document.querySelector('.modal__error')
-  if(response.status === 422) {
-    modalError.classList.add('active')
+  console.log(response.status)
+
+  if(response.status === 200 || response.status === 201){
+    modalError.classList.remove('active-server')
+    modalError.textContent = " "
+  }else if(response.status === 422) {
+    modalError.classList.add('active-server')
     modalError.textContent = "Cервер успешно принял запрос, может работать с указанным видом данных , однако имеется какая-то логическая ошибка, из-за которой невозможно произвести операцию над ресурсом"
     console.log("Cервер успешно принял запрос, может работать с указанным видом данных , однако имеется какая-то логическая ошибка, из-за которой невозможно произвести операцию над ресурсом")
   }else if(response.status === 404){
-    modalError.classList.add('active')
+    modalError.classList.add('active-server')
     modalError.textContent = "Сервер понял запрос, но не нашёл соответствующего ресурса по указанному URL."
     console.log("Сервер понял запрос, но не нашёл соответствующего ресурса по указанному URL.")
   }else if(response.status === 500){
-    modalError.classList.add('active')
+    modalError.classList.add('active-server')
     modalError.textContent = "Внутренняя ошибка сервера"
     console.log(modalError.textContent)
-} else{
-  modalError.classList.add('active')
+} else if(response.status == "" || response.status !== 200 || response.status !== 201 ){
+  modalError.classList.add('active-server')
   modalError.textContent = "Что-то пошло не так..."
-  console.log(modalError.textContent)
-}}
+
+}
+return response.status
+}
 
 
 
