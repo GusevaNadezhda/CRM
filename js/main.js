@@ -1,4 +1,5 @@
 import { createFormNewClient } from "./modalForm.js"
+import { createFormEditClient } from "./modalForm.js"
 import { createPreloader } from "./table.js"
 import { getNewClient } from "./table.js"
 import { Client } from "./client.js"
@@ -8,11 +9,13 @@ import { sortClient } from "./table.js"
 
 // document.querySelector("tbody").append(createPreloader())
 // document.querySelector('.preloader-block').classList.add('loading','start');
-let serverData;
+
+// let serverData;
 const $tbody = document.querySelector("tbody")
 const promiseArr = []
 // $tbody.prepend(createPreloader())
 // document.querySelector("tbody").append(createPreloader())
+
 
 
 
@@ -21,8 +24,8 @@ window.addEventListener('load', function () {
   document.querySelector('.preloader-block').classList.add('loading','start');
 
 let promise = new Promise(function(resolve) {
-  const serverData = serverGetClients()
-  resolve(serverData)})
+ let serverGetClient = serverGetClients()
+  resolve(serverGetClient)})
 
   promise.then( serverData =>  {
     serverData.forEach(function (elem) {
@@ -32,7 +35,6 @@ let promise = new Promise(function(resolve) {
       $tbody.append(clientSection)
       document.querySelector('.preloader-block').classList.remove('loading');
       $tbody.querySelectorAll('tr').forEach(function (elem) {
-        // console.log(elem)
         elem.classList.remove("hidden")
       })
     })
@@ -40,11 +42,15 @@ let promise = new Promise(function(resolve) {
 });
 
 
+let serverData = await serverGetClients();
+console.log(serverData)
 
+// window.addEventListener('load', function () {
+//     document.querySelector("tbody").append(createPreloader())
+//     document.querySelector('.preloader-block').classList.add('loading','start')
+//   })
 
 // if (serverData) {
-
-
 //   serverData.forEach(function (elem) {
 //     const promise = new Promise(function (resolve) {
 //       const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
@@ -52,6 +58,8 @@ let promise = new Promise(function(resolve) {
 //       clientSection.classList.add("hidden")
 
 //       window.onload = resolve()
+
+//     // resolve()
 
 //       $tbody.append(clientSection)
 //     })
@@ -66,8 +74,6 @@ let promise = new Promise(function(resolve) {
 //         })
 //       })
 //   })
-
-
 // }
 
 // событие нажатия на кнопку добавить клиента
@@ -78,7 +84,7 @@ document.querySelector("#btn-add-client").addEventListener('click', function () 
 })
 
 // сортировка
-
+console.log(serverData)
 let copyServerData = [...serverData]
 let column;
 let columDir = false;
@@ -124,7 +130,6 @@ form.append(inner)
     const input = document.querySelector('.header__input');
 
     clients.forEach(client => {
-      // console.log(client)
       const findItem = document.createElement('li');
       const findLink = document.createElement('a');
 
@@ -132,7 +137,12 @@ form.append(inner)
       findLink.classList.add('header__link');
 
       findLink.textContent = ` ${client.surname} ${client.name} ${client.lastName}`
-      findLink.href = "#";
+      findLink.href = `#${client.id}`;
+
+      findLink.addEventListener('click', function(){
+        createFormEditClient (client)
+        document.querySelector('main').append(createFormEditClient(client).$modalEditClientElement)
+      })
 
       findItem.append(findLink);
       findList.append(findItem)
@@ -146,6 +156,7 @@ form.append(inner)
 
 
       copyServerData.forEach(function (elem) {
+
         const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
         const clientSection = getNewClient(client)
         $tbody.append(clientSection)
@@ -153,6 +164,10 @@ form.append(inner)
     }
 
     input.addEventListener('input', async ()=> {
+
+      setTimeout(() => {
+
+
       const value = input.value.trim();
       const founditems = document.querySelectorAll('.header__link');
 
@@ -168,9 +183,9 @@ form.append(inner)
             link.classList.remove('hidden');
             findList.classList.remove('hidden');
             const str = link.innerText;
-            console.log(str)
-            console.log(link.innerText.search(value))
-            console.log(value.length)
+            console.log(link)
+            // console.log(link.innerText.search(value))
+            // console.log(value.length)
             link.innerHTML = insertMark(str, link.innerText.search(value), value.length )
           }
         })
@@ -190,6 +205,7 @@ form.append(inner)
 
         })
       }
+    }, 300);
     })
 
     const insertMark = (str,pos,len) =>
@@ -197,6 +213,8 @@ form.append(inner)
     str.slice(0, pos) + '<mark>' + str.slice(pos, pos+len) + '</mark>' + str.slice(pos+len)
 
   }
+
+
 
   try {
     const clients = await serverGetClients();

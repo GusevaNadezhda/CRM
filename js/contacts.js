@@ -23,7 +23,7 @@ export const createAddContact = function () {
   modalContactButton.classList.add("modal__contact-button");
   modalContactTooltip.classList.add("tooltip");
 
-  modalContactContent.addEventListener('click', () => modalContactContent.classList.toggle('active') )
+  modalContactSelect.addEventListener('click', () => modalContactContent.classList.toggle('active') )
 
   for (let i = 1; i < 6; i++) {
     const modalOption = document.createElement('option')
@@ -42,8 +42,8 @@ export const createAddContact = function () {
         break
 
       case 'option2':
-        modalOption.textContent = "Доп. телефон"
-        modalOption.value = "Доп. телефон"
+        modalOption.textContent = "Доп.телефон"
+        modalOption.value = "Доп.телефон"
 
         break
 
@@ -78,9 +78,9 @@ export const createAddContact = function () {
     console.log(this.value);
     console.log(this.dataset.type);
 
-    if (this.value == "Доп. телефон" || this.value === "Телефон") modalContactEnter.type = "number"
-    if (this.value == "Email") modalContactEnter.type = "email"
-    if (this.value == "Vk" || this.value == "Facebook") modalContactEnter.type = "text"
+    // if (this.value == "Доп.телефон" || this.value === "Телефон") modalContactEnter.type = "number"
+    // if (this.value == "Email") modalContactEnter.type = "email"
+    // if (this.value == "Vk" || this.value == "Facebook") modalContactEnter.type = "text"
   })
 
   const modalContactAddArr = document.querySelectorAll(".modal__contact-add")

@@ -83,7 +83,7 @@ body {
 } */
 
 tbody {
-  background: white;
+  background: var(--white);
 }
 
 /* общие настройки */
@@ -127,6 +127,16 @@ padding: 20px;
 
 .header__input::placeholder{
 color: var(--txt_grey);
+}
+
+mark {
+  /* padding: 0.2em; */
+  background-color: var(--firm);
+
+}
+
+.header__item{
+  margin-bottom: 5px;
 }
 
 /* main */
@@ -176,9 +186,9 @@ cursor: pointer;
   transform: rotate(-180deg);
 }
 
-.table__heard--col.active .heard__svg-letters{
+/* .table__heard--col.active .heard__svg-letters{
   transform: rotate(90deg);
-}
+} */
 
 /* тело таблицы */
 
@@ -327,6 +337,8 @@ color: var(--red);
 }
 
 .modal__delete-text {
+  max-width: 275px;
+  min-height: 39px;
   margin-top: 11px;
   margin-bottom: 25px;
   text-align: center;
@@ -342,7 +354,7 @@ color: var(--red);
   color: var(--white);
   border: none;
   margin-bottom: 5px;
-  transition: background .5s border .5s cursor .5s;
+  transition: background .5s border .5s cursor .5s outline .5s;
 }
 
 .modal__delete-btn:focus {
@@ -368,6 +380,7 @@ color: var(--red);
   line-height: 16px;
   text-decoration-line: underline;
   color: var(--black);
+  cursor: pointer;
 }
 
 
@@ -376,12 +389,13 @@ color: var(--red);
 
 .main__button {
   display: flex;
-  margin: 0 auto;
+  margin: 25px auto;
   align-items: center;
   padding: 14px 26.5px;
   height: 44px;
   border: 1px solid var(--firm);
   cursor: pointer;
+  transition: background .5s border .5s cursor .5s outline .5s color .5s;
 }
 
 .main__button::before {
@@ -395,6 +409,7 @@ color: var(--red);
   background-size: cover;
   background-repeat: no-repeat;
   background-image: url(/CRM/img/Vector\ \(1\).svg);
+  transition: background-image .5s content .5s;
 }
 
 .button__content {
@@ -402,6 +417,53 @@ color: var(--red);
   line-height: 19px;
   text-align: center;
   color: var(--firm);
+  transition: color .5s;
+}
+
+.main__button:focus {
+  background: #B89EFF;
+  border: 1px solid #9873FF;
+  outline: none;
+}
+
+.main__button:focus .button__content{
+  color: var(--white);
+}
+
+.main__button:focus::before{
+  content: "";
+  background-image: url(/CRM/img/vector1white.svg);
+}
+
+.main__button:hover {
+  color: var(--white);
+  background: #B89EFF;
+  border: 1px solid #9873FF;
+  cursor: pointer;
+}
+
+.main__button:hover .button__content{
+  color: var(--white);
+}
+
+.main__button:hover::before{
+  content: "";
+  background-image: url(/CRM/img/vector1white.svg);
+}
+
+.main__button:active {
+  color: var(--white);
+  background: #8052FF;
+  border: 1px solid #9873FF;
+  cursor: pointer;
+}
+
+.main__button:active .button__content{
+  color: var(--white);
+}
+.main__button:active::before{
+  content: "";
+  background-image: url(/CRM/img/vector1white.svg);
 }
 
 /* модальное окно */
@@ -436,6 +498,11 @@ color: var(--red);
   transition: transform .8s;
 }
 
+.modal-client .save{
+  position: absolute;
+  background-color: transparent;
+}
+
 .modal__btn-close {
   position: absolute;
   width: 29px;
@@ -448,6 +515,7 @@ color: var(--red);
   cursor: pointer;
   background-image: url(/CRM/img/Frame\ 339.svg);
   background-repeat: no-repeat;
+  transition: outline .5s;
 
 }
 
@@ -520,6 +588,7 @@ color: var(--red);
   color: var(--black);
   border: none;
   border-bottom: 1px solid var(--grey);
+  transition: outline .5s;
 }
 
 .modal__input:focus {
@@ -649,7 +718,8 @@ color: var(--red);
   color: var(--red);
 }
 
-.modal__error.active{
+.modal__error.active,
+.modal__error.active-server{
   display: block;
 }
 
@@ -663,7 +733,7 @@ color: var(--red);
   text-align: center;
   color: #FFFFFF;
   border: 1px solid var(--firm);
-  transition: background .5s border .5s cursor .5s;
+  transition: background .5s border .5s cursor .5s outline .5s;
 }
 
 .modal__btn-save:focus {
@@ -713,6 +783,7 @@ color: var(--red);
   width: 48%;
   border-radius: 0%;
   border: 1px solid var(--grey);
+  transition: outline .5s;
 }
 
 .modal__contact-enter:focus {
@@ -912,6 +983,7 @@ color: var(--white);
 
 .contact__tooltip-value{
   display: block;
+  text-wrap: nowrap;
   text-decoration: underline;
   font-weight: 700;
   color: var(--firm);
@@ -945,6 +1017,9 @@ color: var(--white);
 .preloader-block.change {
   width: 16px;
   height: 16px;
+  /* background-color: rgba(0,0,0,.075); */
+  background-color: rgb(245, 237, 237);
+
 }
 
 .preloader-block.change .lds-ring {
@@ -1000,6 +1075,11 @@ color: var(--white);
   100% {
     transform: rotate(360deg);
   }
+}
+
+.modal__btn-save .preloader-block.change {
+  margin-left: -20px;
+  background-color: #8052FF;
 }
 
 
