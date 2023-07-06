@@ -489,7 +489,6 @@ color: var(--red);
   position: relative;
   max-width: 450px;
   min-height: 400px;
-  /* padding: 24px 30px; */
   margin: 30px 15px;
   z-index: 1;
   background: #FFFFFF;
@@ -600,27 +599,7 @@ color: var(--red);
 }
 
 
-.modal__placeholder {
-  z-index: 100;
-  left: 10px;
-  cursor: text;
-  position: absolute;
-  top: -10px;
-  left: 5px;
-  width: 100%;
-  display: inline;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 14px;
-  color: var(--txt_grey);
-  transition: top .5s font-size .5s line-height .5s;
-}
 
-.modal__field input:invalid+.modal__placeholder {
-  top: 1px;
-  font-size: 14px;
-  line-height: 19px;
-}
 
 .modal__field {
   margin: 0;
@@ -634,18 +613,36 @@ color: var(--red);
   margin-top: 0;
 }
 
+.modal__field .modal__placeholder {
+  z-index: 100;
+  cursor: text;
+  position: absolute;
+  top: 0px;
+  left: 5px;
+  width: 100%;
+  display: inline;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 14px;
+  color: var(--txt_grey);
+  transition: top .5s font-size .5s line-height .5s;
+}
+
+/* поднятие вверх плейсхолдера при фокусе и заполнении импута */
+.modal__field input:focus + .modal__placeholder,
+.modal__input.filled + .modal__placeholder{
+  top: -15px;
+  font-size: 12px;
+  line-height: 19px;
+}
+
 .modal__placeholder span {
   color: var(--firm);
 }
 
-
-/* .modal__input::placeholder {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 19px;
-  color: var(--txt_grey);
-} */
-
+.modal__input::placeholder {
+  font-size: 0;
+}
 .modal__contact {
   margin-bottom: 25px;
   width: 100%;

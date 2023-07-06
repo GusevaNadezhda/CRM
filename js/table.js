@@ -6,8 +6,7 @@ import {serverDeleteClient} from "./server.js"
 
 
 // создание таблицы с помощью функцию вывода одного клиента в таблицу.
-// Функция должна вернуть html элемент с информацией и пользователе.У функции должен быть один аргумент - объект клиента.
-
+// Функция должна вернуть html элемент с информацией и пользователе.У функции один аргумент - объект клиента.
 
  export const getNewClient = function (client) {
 
@@ -25,8 +24,6 @@ import {serverDeleteClient} from "./server.js"
   const $actionBTN = document.createElement('div');
   const $changeBTN = document.createElement('btn');
   const $deleteBTN = document.createElement('btn');
-
-
 
   $idTD.textContent = client.id
   $fioTD.textContent = client.fio
@@ -51,12 +48,11 @@ import {serverDeleteClient} from "./server.js"
   $deleteBTN.classList.add('btn-delete')
   $actionBTN.classList.add('btn-group')
 
-
+// событие открытия модального окна при нажатии на кнопку Изменить, на время получения данных от сервера включается прелоадер
   $changeBTN.addEventListener('click', function () {
     $changeBTN.classList.add('loading')
         $changeBTN.append(createPreloader())
         $changeBTN.querySelector('.preloader-block').classList.add('change', 'loading')
-
 
   let promise = new Promise(function(resolve) {
     const data = serverGetClient(client)
@@ -66,28 +62,28 @@ import {serverDeleteClient} from "./server.js"
       createFormEditClient(data)
         document.querySelector('main').append(createFormEditClient(data).$modalEditClientElement)
         $changeBTN.classList.remove('loading')
-
         $changeBTN.querySelector('.preloader-block').classList.remove('change', 'loading');
       })
 	});
 
-
+// формирование логики отражения иконок в поле контакты
+// создадим две группы для отображения верхней и нижней строчек контактов (максимум по 5 контактов)
   const $contactsGroup1 = document.createElement('div');
   const $contactsGroup2 = document.createElement('div');
+
   $contactsGroup1.classList.add('contacts__icon-group1')
   $contactsGroup2.classList.add('contacts__icon-group2')
 
   for (let i = 0; i < client.contacts.length; i++) {
-
     const $contactICON = document.createElement('div');
-    $contactICON.classList.add('contacts-icon')
-
+    $contactICON.classList.add('contacts-icon');
     $contactICON.dataset.number = i+1
-
+// если количество контактов меньше 5 добавляем в первую группу
     if (i < 5) {
       $contactsGroup1.append($contactICON)
     }
-
+// если контактов больше 5, тогда пятому нонтакту меняем иконку и включаем счетчик контактов. При нажатии на иконку открываются все контакты
+// т.е добавляем вторую скрытую группу
     if( $contactICON.dataset.number == 5){
       $contactICON.classList.add("last-icon")
       const iconNamber = document.createElement('div')
@@ -107,15 +103,11 @@ import {serverDeleteClient} from "./server.js"
 
 $contactICON.append(iconNamber)
     }
-
-
-
+// если контактов более или равно 5 добавляем во вторую группу
     if (i >= 5) {
       $contactsGroup2.append($contactICON)
     }
 
-    // console.log( Client.contacts[i].type)
-    // console.log($contactICON)
     switch (client.contacts[i].type) {
           case "Телефон":
             $contactICON.classList.add('tel')
@@ -134,14 +126,15 @@ $contactICON.append(iconNamber)
             break
         }
 
+        // над кнопками контактов при наведении появляются тултипы с типов и значением контакта.
+        // Реализована возможность сразу перейти на набор номера при типе контакта телефон и переходна почту при типе контакта email
   if( !$contactICON.classList.contains("last-icon")) $contactICON.append(contactTooltip(client.contacts[i].type, client.contacts[i].value))
-
   }
 
   $contactTD.append($contactsGroup1)
   $contactTD.append($contactsGroup2)
 
-
+// при нажатии на кнопку удалить, удаляем клиента с сервера и таблицы
   $deleteBTN.addEventListener('click', function () {
     createDeleteForm(client)
     document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
@@ -165,9 +158,6 @@ $contactICON.append(iconNamber)
   $actionBTN.append($changeBTN)
   $actionBTN.append($deleteBTN)
 
-
-
-
   return $clientTR
 }
 
@@ -182,7 +172,6 @@ export const createPreloader = function(){
   const preloaderCircle4 = document.createElement('div')
 
   preloaderBlock.classList.add("preloader-block")
-  // preloaderBlock.classList.add("loading")
   preloader.classList.add("lds-ring")
 
   preloaderBlock.append(preloader)
@@ -192,19 +181,16 @@ export const createPreloader = function(){
                         preloaderCircle4)
 
   return preloaderBlock
-
 }
 
 
 // сортировка таблицы
 export function sortClient(prop, dir = false, arr) {
-
   const clientsCopy = [...arr]
 
   clientsCopy.forEach(client => {
     if(prop== 'fio') client.fio = client.surname +client.name + client.Lastname
   })
-
 
   return clientsCopy.sort(function (clientA, clientB) {
     if (!dir == false ? clientA[prop] < clientB[prop] : clientA[prop] > clientB[prop])
@@ -214,30 +200,4 @@ export function sortClient(prop, dir = false, arr) {
 
 
 
-export const filter = function(prop, value,arr) {
 
-  let result = [];
-  let clientsCopy = [...arr]
-
-  for (let client of clientsCopy) {
-    if (String(student[prop]).includes(value) == true) result.push(client)
-  }
-  return result
-}
-
-
-
-// export const createSortClients = function(){
-//   const headers = table.querySelectorAll('th')
-//   const tbody = table.querySelector('tbody')
-
-
-//   // событие сортировки
-//   headers.forEach(element => {
-//     element.addEventListener('click', function () {
-//       column = this.id
-//       columDir = !columDir
-//       // renderStudentsTable()
-//     })
-//   });
-// }

@@ -7,22 +7,23 @@ import { serverGetClients } from "./server.js"
 import { findClient } from "./server.js"
 import { sortClient } from "./table.js"
 
-// document.querySelector("tbody").append(createPreloader())
-// document.querySelector('.preloader-block').classList.add('loading','start');
 
-// let serverData;
+
+const createApp = async () => {
+// запишем константы которые будут использоваться в нескольких функциях и событиях
+
 const $tbody = document.querySelector("tbody")
-const promiseArr = []
-// $tbody.prepend(createPreloader())
-// document.querySelector("tbody").append(createPreloader())
 
-
-
+// загрузка страницы начинается с появления прелодера до момента передачи данных в таблицу с сервера
 
 window.addEventListener('load', function () {
-  document.querySelector("tbody").append(createPreloader())
-  document.querySelector('.preloader-block').classList.add('loading','start');
+// появление прелоадера
 
+$tbody.append(createPreloader());
+  const preloader = document.querySelector('.preloader-block');
+  preloader.classList.add('loading','start');
+
+// используем промис для ожидания ответа от сервера, заполнения таблицы данными полученными с сервера и удаления прелоадера
 let promise = new Promise(function(resolve) {
  let serverGetClient = serverGetClients()
   resolve(serverGetClient)})
@@ -33,7 +34,7 @@ let promise = new Promise(function(resolve) {
       const clientSection = getNewClient(client)
       clientSection.classList.add("hidden")
       $tbody.append(clientSection)
-      document.querySelector('.preloader-block').classList.remove('loading');
+      preloader.classList.remove('loading');
       $tbody.querySelectorAll('tr').forEach(function (elem) {
         elem.classList.remove("hidden")
       })
@@ -41,42 +42,7 @@ let promise = new Promise(function(resolve) {
   })
 });
 
-
-let serverData = await serverGetClients();
-console.log(serverData)
-
-// window.addEventListener('load', function () {
-//     document.querySelector("tbody").append(createPreloader())
-//     document.querySelector('.preloader-block').classList.add('loading','start')
-//   })
-
-// if (serverData) {
-//   serverData.forEach(function (elem) {
-//     const promise = new Promise(function (resolve) {
-//       const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
-//       const clientSection = getNewClient(client)
-//       clientSection.classList.add("hidden")
-
-//       window.onload = resolve()
-
-//     // resolve()
-
-//       $tbody.append(clientSection)
-//     })
-//     promiseArr.push(promise)
-
-//     Promise.all(promiseArr).then(
-//       function () {
-//         document.querySelector('.preloader-block').classList.remove('loading');
-//         $tbody.querySelectorAll('tr').forEach(function (elem) {
-//           // console.log(elem)
-//           elem.classList.remove("hidden")
-//         })
-//       })
-//   })
-// }
-
-// событие нажатия на кнопку добавить клиента
+// событие нажатия на кнопку добавить клиента - открывается модальное окно с формой для заполнения данными
 
 document.querySelector("#btn-add-client").addEventListener('click', function () {
   createFormNewClient()
@@ -84,26 +50,23 @@ document.querySelector("#btn-add-client").addEventListener('click', function () 
 })
 
 // сортировка
-console.log(serverData)
+let serverData = await serverGetClients();
 let copyServerData = [...serverData]
 let column;
 let columDir = false;
 const headers = document.querySelectorAll('th')
 
-// событие сортировки
+// событие сортировки при нажатии на заголовки в таблице
 headers.forEach(element => {
   element.addEventListener('click', function () {
     element.classList.toggle('active')
     column = this.id
     columDir = !columDir
-    // console.log(column)
-    // console.log(columDir)
     $tbody.innerHTML = ""
     copyServerData = sortClient(column, columDir, serverData)
     copyServerData.forEach(function (elem) {
       const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
       const clientSection = getNewClient(client)
-      // console.log(clientSection)
       $tbody.append(clientSection)
     })
   })
@@ -111,6 +74,7 @@ headers.forEach(element => {
 
   // фильтрация (поиск)
 
+  // создание списка найденных клиентов
   const createSearchClient = () =>{
     const form = document.querySelector('.header__form');
     const input = document.querySelector('.header__input');
@@ -123,7 +87,7 @@ headers.forEach(element => {
 form.append(inner)
   }
 
-
+  // заполнение списка клиентами которые были найдены. ФИО клиента заполняют в ссылках, при нажатии на которые открывается модальное окно
 
   const searchClient = (clients) => {
     const findList = document.querySelector('.header__list');
@@ -148,33 +112,30 @@ form.append(inner)
       findList.append(findItem)
     });
 
+    // отрисовка таблицы после фильтрации только клиентами которые соответствуют поиску
+
     const rewriteTable = async(str) => {
       copyServerData = await findClient(str);
       const tbody = document.querySelector('.table__body')
       tbody.innerHTML = '';
 
-
-
       copyServerData.forEach(function (elem) {
-
         const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
         const clientSection = getNewClient(client)
         $tbody.append(clientSection)
       })
     }
 
+// запуск процесса поиска начинается с введения символов в строуку поиска. Делаем задержку в 300 мс, согласно заданию.
     input.addEventListener('input', async ()=> {
-
+      // используем таймер в 300 мс
       setTimeout(() => {
-
-
       const value = input.value.trim();
       const founditems = document.querySelectorAll('.header__link');
-
+// если импут не пустой включаем функцию отрисовки таблицы
       if(value !== ''){
         rewriteTable(value);
-
-
+// находим среди списка клиентов, тех которые соответствуют заданному поиску по символам. Их показываем, остальных скрываем с помощью класса hidden
         founditems.forEach(link =>{
           if(link.innerText.search(value) == -1){
             link.classList.add('hidden');
@@ -183,16 +144,12 @@ form.append(inner)
             link.classList.remove('hidden');
             findList.classList.remove('hidden');
             const str = link.innerText;
-            console.log(link)
-            // console.log(link.innerText.search(value))
-            // console.log(value.length)
             link.innerHTML = insertMark(str, link.innerText.search(value), value.length )
           }
         })
       }else{
         founditems.forEach(link => {
           $tbody.innerHTML = '';
-
           copyServerData.forEach(function (elem) {
             const client = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
             const clientSection = getNewClient(client)
@@ -208,14 +165,13 @@ form.append(inner)
     }, 300);
     })
 
+    // функция для выделения символов в списке клиентов которые совпадают с поисковым запросом
     const insertMark = (str,pos,len) =>
-
     str.slice(0, pos) + '<mark>' + str.slice(pos, pos+len) + '</mark>' + str.slice(pos+len)
-
   }
 
 
-
+// делаем попытку найти клиентов, в случае ошибки можем отловить ее с помощью catch
   try {
     const clients = await serverGetClients();
     createSearchClient()
@@ -223,9 +179,9 @@ form.append(inner)
   } catch (error) {
     console.log(error)
   }
-  // finally{
-  //   // setTimeout(()=> createPreloader().remove,1500)
-  // }
+}
+
+createApp()
 
 
 
