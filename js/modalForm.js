@@ -3,11 +3,6 @@ import { serverAddClient } from "./server.js"
 import { serverChangeClient } from "./server.js"
 import { serverDeleteClient } from "./server.js"
 import { createPreloader } from "./table.js"
-import { getNewClient } from "./table.js"
-import { serverGetClients } from "./server.js"
-import { Client } from "./client.js"
-
-
 export const createModalFormClient = function () {
 
   // создание формы модального окна
@@ -171,42 +166,44 @@ export const createFormNewClient = function () {
     })
   })
 
-
-  $modalNewClientForm.addEventListener('submit', async (e) => {
+  $modalNewClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    // validateModalForm(modalForm)
-    console.log(validateModalForm(modalForm))
-    console.log(validateContact($modalNewClientForm))
+    validateModalForm(modalForm)
+    const contactArray = document.querySelectorAll(".modal__contact-add")
+
 
     if (!validateModalForm(modalForm)) {
       return;
-    } else if (!validateContact($modalNewClientForm)) {
-      return;
     } else {
-      const inputsForm = $modalNewClientForm.querySelectorAll('input')
-      const $tbody = document.querySelector('tbody')
-      let clientAdd = await serverAddClient();
-      const client = new Client(clientAdd.id, clientAdd.surname, clientAdd.name, clientAdd.lastName, clientAdd.createdAt, clientAdd.updatedAt, clientAdd.contacts)
-      const clientSection = getNewClient(client)
-      $tbody.append(clientSection)
-      inputsForm.forEach(input => {
-        input.disabled = true;
+      contactArray.forEach(function (elem) {
+        const contactTypes = elem.querySelector('select');
+        const contactValue = elem.querySelector('.modal__contact-enter');
+
+        if (!validateContact(contactTypes, contactValue)) {
+          return;
+        } else {
+          serverAddClient()
+          if (modalError.classList.contains("active-server")) {
+            return
+          }
+        }
       })
-      $modalNewClientElement.remove()
     }
-    const inputsForm = $modalNewClientForm.querySelectorAll('input')
-    inputsForm.forEach(input => input.disabled = true)
   })
 
   // закрытие формы при нажатии на крестик
   $modalNewClientClose.addEventListener('click', () => $modalNewClientElement.remove())
-  // закрытие формы при нажатии на область вне модального окна
+
+// закрытие формы при нажатии на область вне модального окна
+
   window.addEventListener('click', (e) => {
     if (e.target == $modalNewClientElement) {
       $modalNewClientElement.remove();
     }
   })
-  // закрытие формы при нажатии на кнопку отмена
+
+// закрытие формы при нажатии на кнопку отмена
+
   modalNewClientCancel.addEventListener('click', () => $modalNewClientElement.remove())
 
   $modalNewClientElement.append($modalNewClientContent)
@@ -250,7 +247,9 @@ export const createFormEditClient = function (client) {
   $idClientP.textContent = "ID: " + client.id
   modalForm.modalLink.textContent = "Удалить клиента"
 
-  // заполнение полей ФИО в форме согласно данным клиента
+
+// заполнение полей ФИО в форме согласно данным клиента
+
   modalInput.forEach(elem => {
     switch (elem.id) {
       case "surname":
@@ -267,7 +266,9 @@ export const createFormEditClient = function (client) {
       elem.classList.add('filled')
     }
   })
-  // заполнение полей контактов в форме согласно данным клиента
+
+// заполнение полей контактов в форме согласно данным клиента
+
   for (const contact of client.contacts) {
     const createContact = createAddContact();
     createAddContact()
@@ -278,19 +279,19 @@ export const createFormEditClient = function (client) {
   }
 
   // при нажатии на кнопку Сохранить отредактированные данные отправляются на сервер
-  $modalEditClientForm.addEventListener('submit', async (e) => {
+
+  $modalEditClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
     modalBtnSaveEdit.style.backgroundColor = "#8052FF";
-    // включаем прелоадер в кнопке Сохранить при ожидании отправки на сервер
+// включаем прелоадер в кнопке Сохранить при ожидании отправки на сервер
     modalBtnSaveEdit.prepend(createPreloader())
     modalBtnSaveEdit.querySelector('.preloader-block').classList.add('change', 'loading')
     $modalEditClientContent.classList.add("save")
-    // проверяем валидацию полей ФИО
+// проверяем валидацию полей ФИО
     if (!validateModalForm(modalForm)) {
       return;
-    } else if (!validateContact($modalEditClientForm)) {
-      return;
-    } else {
+    }
+    else {
       // собираем измененные данные клиента:
       const contactTypes = document.querySelectorAll('.modal__contact-add');
 
@@ -302,12 +303,16 @@ export const createFormEditClient = function (client) {
       editClient.surname = modalForm.modalInputSurname.value;
       editClient.lastName = modalForm.modalInputLastName.value;
 
-
-      // --------------------
-
       contactTypes.forEach(elem => {
         const contactType = elem.querySelector('select')
         const contactValue = elem.querySelector('input')
+// после сбора контактов по типу и значению проводим валидацию
+        if (!validateContact(contactType, contactValue)) {
+          $modalEditClientForm.classList.add('no-valid')
+          return;
+        } else {
+          $modalEditClientForm.classList.remove('no-valid')
+        }
 
         // добавляем контакты для отправки на сервер
         editContactsArr.push({
@@ -317,54 +322,35 @@ export const createFormEditClient = function (client) {
       })
       editClient.contacts = editContactsArr;
 
-      // если валидация не пройдена данные на сервер не отправляются, форма остается открытой,
-      //  если пройдена то на момент отправки все поля импутов блокируются до успешного ответа от сервера
-
-
-
-      const inputsForm = $modalEditClientForm.querySelectorAll('input')
-      inputsForm.forEach(input => {
-        input.disabled = true;
-      })
-
-
-      const $tbody = document.querySelector('tbody')
-      let clientEdit = await serverChangeClient(editClient);
-      let clientList = await serverGetClients()
-      $tbody.innerHTML = ''
-      clientList.forEach(elem => {
-        const clientsInTable = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
-        const clientSection = getNewClient(clientsInTable)
-        $tbody.append(clientSection)
-      })
-
-
-      $modalEditClientElement.remove()
+// если валидация не пройдена данные на сервер не отправляются, форма остается открытой,
+//  если пройдена то на момент отправки все поля импутов блокируются до успешного ответа от сервера
+      if ($modalEditClientForm.classList.contains('no-valid')) {
+        return;
+      } else {
+        let promise = new Promise(function (resolve) {
+          const inputsForm = $modalEditClientForm.querySelectorAll('input')
+          serverChangeClient(editClient)
+          inputsForm.forEach(input => {
+            input.disabled = true;
+            resolve(input)
+          })
+        })
+        promise.then(input => {
+          input.disabled = false;
+        })
+        const inputsForm = $modalEditClientForm.querySelectorAll('input')
+        inputsForm.forEach(input => input.disabled = true)
+      }
     }
-    const inputsForm = $modalEditClientForm.querySelectorAll('input')
-    inputsForm.forEach(input => input.disabled = true)
-    return true
   })
 
   // при нажатии на кнопку Удалить клиента открывается форма с подтверждением удаления
-  // modalEditClientCancel.addEventListener('click', function () {
-  //   // createDeleteForm(client)
-  //   document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
-  //   document.querySelector(".modal__delete-btn").addEventListener('click', function () {
-  //     document.querySelector("tr").remove();
-  //     serverDeleteClient(client.id)
-  //     createDeleteForm().$modalDeleteElement.remove()
-  //   })
-  //   return true
-  // })
+  modalEditClientCancel.addEventListener('click', function () {
+    createDeleteForm(client)
+    document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
+    document.querySelector(".modal__delete-btn").addEventListener('click', function () {
+      document.querySelector("tr").remove();
 
-
-  modalEditClientCancel.addEventListener('click',  function () {
-    const deleteForm = createDeleteForm()
-    document.querySelector('main').append(deleteForm.$modalDeleteElement)
-    document.querySelector(".modal__delete-btn").addEventListener('click', async function () {
-      // getNewClient(client).remove();
-      document.querySelector("tr").remove()
       serverDeleteClient(client.id)
       const $tbody = document.querySelector('tbody')
       let clientList = await serverGetClients()
@@ -377,7 +363,8 @@ export const createFormEditClient = function (client) {
       $modalEditClientElement.remove()
     })
   })
-  });
+
+
   // закрытие формы при нажатии на крестик
   $modalEditClientClose.addEventListener('click', () => $modalEditClientElement.remove())
   // закрытие формы при нажатии на область вне модального окна
@@ -428,7 +415,9 @@ export const createDeleteForm = function (Client) {
   $modalDeleteClose.addEventListener('click', () => $modalDeleteElement.remove())
   // отмена модального окна при нажатии на кнопку отмена
   $modalDeleteCencel.addEventListener('click', () => $modalDeleteElement.remove())
-  // закрытие модального окна при нажатии на область вне модального окна
+
+ // закрытие модального окна при нажатии на область вне модального окна
+
   window.addEventListener('click', (e) => {
     if (e.target == $modalDeleteElement) {
       $modalDeleteElement.remove();
@@ -497,7 +486,9 @@ export function validateModalForm(modalForm) {
   onInputValue(clientSurname)
   onInputValue(clientName)
   onInputValue(clientLastName)
-  // функция которая проверяет заполнение текстовых полей
+
+// функция которая проверяет заполнение текстовых полей
+
   const checkRequiredName = (input, massage, name) => {
     if (!input.value) {
       modalError.classList.add('active')
@@ -529,21 +520,18 @@ export function validateModalForm(modalForm) {
   return true
 }
 
-export function validateContact(form) {
 
-  const modalContact = form.querySelector(".modal__contact")
-  const modalContactAdd = form.querySelectorAll(".modal__contact-add")
-  const modalError = form.querySelector(".modal__error")
+export function validateContact(contactType, contactValue) {
+
+  const modalError = document.querySelector(".modal__error")
   const onlyNumbers = /[^0-9]+$/g;
   const onlyEmail = /[^a-zA-Z|@|.]+$/g;
-
 
 
   const onInputValue = input => {
 
     input.addEventListener('input', () => {
       input.style.borderColor = 'var(--grey)';
-
     });
 
     input.oncut = input.oncopy = input.onpast = () => {
@@ -561,43 +549,37 @@ export function validateContact(form) {
     input.style.borderColor = 'var(--red)'
   }
 
-  modalContactAdd.forEach(elem => {
-    const select = elem.querySelector(".modal__contact-select")
-    const input = elem.querySelector(".modal__contact-enter")
-    const contactType = select.dataset.type
-    const contactValue = input.value
 
-    onInputValue(input)
-    // проверка на заполнение полей контактов
-    if (!contactValue) {
-      modalError.classList.add('active')
-      showErrorMassage("Заполните поле контакта", modalError, input)
-      return false
-    }
+  onInputValue(contactValue)
 
-    switch (contactType) {
-      case "Телефон":
-        if (onlyNumbers.test(contactValue)) {
-          modalError.classList.add('active')
-          showErrorMassage("Возможен ввод только цифр", modalError, input)
-          return false
-        } else if (contactValue.length !== 11) {
-          modalError.classList.add('active')
-          showErrorMassage("Номер телефона состоит из 11 цифр", modalError, input)
-          return false
-        }
-        return true
-      case "Email":
-        if (onlyEmail.test(contactValue)) {
-          modalError.classList.add('active')
-          showErrorMassage("Email введент неверно", modalError, input)
-          return false
-        }
-        return true;
-    }
-  })
+  // проверка на заполнение полей контактов
 
-  if (!modalError.classList.contains('active')) return true;
-  if (modalContactAdd.length == 0) return true;
+  if (!contactValue.value) {
+    modalError.classList.add('active')
+    showErrorMassage("Заполните поле контакта", modalError, contactValue)
+    return false
+  }
 
+  switch (contactType.dataset.type) {
+    case "Телефон":
+      if (onlyNumbers.test(contactValue.value)) {
+        modalError.classList.add('active')
+        showErrorMassage("Возможен ввод только цифр", modalError, contactValue)
+        return false
+      } else if (contactValue.value.length !== 11) {
+        modalError.classList.add('active')
+        showErrorMassage("Номер телефона состоит из 11 цифр", modalError, contactValue)
+        return false
+      }
+      return true
+    case "Email":
+      if (onlyEmail.test(contactValue.value)) {
+        modalError.classList.add('active')
+        showErrorMassage("Email введент неверно", modalError, contactValue)
+        return false
+      }
+
+      return true;
+  }
+  return true;
 }

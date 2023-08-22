@@ -136,12 +136,12 @@ $contactICON.append(iconNamber)
 
 // при нажатии на кнопку удалить, удаляем клиента с сервера и таблицы
   $deleteBTN.addEventListener('click', function () {
-    const deleteForm = createDeleteForm()
-    document.querySelector('main').append(deleteForm.$modalDeleteElement)
+
+    createDeleteForm(client)
+    document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
     document.querySelector(".modal__delete-btn").addEventListener('click', function () {
       $clientTR.remove();
       serverDeleteClient(client.id)
-      deleteForm.$modalDeleteElement.remove()
     })
 
   });

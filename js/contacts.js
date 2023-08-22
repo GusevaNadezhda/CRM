@@ -12,10 +12,10 @@ export const createAddContact = function () {
   const modalContactEnter = document.createElement('input');
   const modalBtnSave = document.querySelector(".modal__btn-save");
   const modalContactButton = document.createElement('button');
-  const modalContactTooltip = document.createElement('div');
-  const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
 
-  modalContactTooltip.textContent = "Удалить контакт";
+    const modalContactTooltip = document.createElement('div');
+
+    modalContactTooltip.textContent = "Удалить контакт";
 
   modalContactAdd.classList.add('modal__contact-add');
   modalContactContent.classList.add('modal__contact-content');
@@ -24,7 +24,8 @@ export const createAddContact = function () {
   modalContactButton.classList.add("modal__contact-button");
   modalContactTooltip.classList.add("tooltip");
 
-  modalContactSelect.addEventListener('click', () => modalContactContent.classList.toggle('active'))
+  modalContactSelect.addEventListener('click', () => modalContactContent.classList.toggle('active') )
+
 
   for (let i = 1; i < 6; i++) {
     const modalOption = document.createElement('option')
@@ -38,29 +39,36 @@ export const createAddContact = function () {
       case 'option1':
         modalOption.textContent = 'Телефон'
         modalOption.value = "Телефон"
+
+
         break
 
       case 'option2':
         modalOption.textContent = "Доп.телефон"
         modalOption.value = "Доп.телефон"
+
         break
 
       case 'option3':
         modalOption.textContent = "Email"
         modalOption.value = "Email"
+
         break
 
       case 'option4':
         modalOption.textContent = "Vk"
         modalOption.value = "Vk"
+
         break
 
       case 'option5':
         modalOption.textContent = "Facebook"
         modalOption.value = "Facebook"
+
         break
     }
   }
+
 
   // при изменении значения в селекте, меняем тип данных которые вводим в импут
 
@@ -68,17 +76,25 @@ export const createAddContact = function () {
 
   modalContactSelect.addEventListener('change', function () {
     this.dataset.type = this.value
+
+    // if (this.value == "Доп.телефон" || this.value === "Телефон") modalContactEnter.type = "number"
+    // if (this.value == "Email") modalContactEnter.type = "email"
+    // if (this.value == "Vk" || this.value == "Facebook") modalContactEnter.type = "text"
   })
+
+  const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
 
   // удаление контакта при нажатии на крестик
+    modalContactButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      modalContactAdd.remove();
+      modalContactText.classList.remove('hidden')
+    }
+    )
 
-  modalContactButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    modalContactAdd.remove();
-    modalContactText.classList.remove('hidden')
-  })
 
   // сделаем ограничение на количество контактов(не более 10)
+
 
   if (modalContactAddArr.length > 8) {
     const modalError = document.querySelector(".modal__error")
@@ -92,12 +108,90 @@ export const createAddContact = function () {
   if (modalContactAddArr.length >= 4) {
     document.querySelector(".modal-client").style.top = '70%'
   }
+  // else{
+  //   // document.querySelector(".modal-client").style.top = "50%"
+  // }
 
+  // сохранение данных контакта в виде объекта
+
+    // const contact = new Contact()
+
+
+  //   modalBtnSave.addEventListener('submit', async function(){
+
+  //     modalContactAddArr.forEach(function(elem){
+  //       let select= elem.querySelector('select')
+  // let input= elem.querySelector('input')
+  // const contact = new Contact(select.value, input.value)
+  //       contactsArr.push(contact)
+  //       console.log(elem)
+  //       console.log(select.value)
+  //       console.log(input.value)
+  //     })
+
+  //     let response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
+  //           method: "PATCH",
+  //           body: JSON.stringify({
+  //         contacts:  contactsArr
+  //           }),
+  //           headers: { 'Content-Type': 'aplication/json' },
+  //         })
+
+  //         //  получаем ответ в виде массива от сервера
+  //         let data = await response.json()
+  //         console.log(data)
+  //   })
+
+
+
+
+  //   document.querySelectorAll('.modal__title-id').addEventListener('click', function(){
+  //     modalContactAddArr.forEach(function(elem){
+  //       let select= elem.querySelector('select')
+  // let input= elem.querySelector('input')
+  // const contact = new Contact(select.value, input.value)
+  //       contactsArr.push(contact)
+  //       console.log(elem)
+  //       console.log(select.value)
+  //       console.log(input.value)
+  //     })
+  //   })
+//   const contactsArr = [];
+//   modalContactAddArr.forEach(function(elem){
+
+
+
+//     let select= elem.querySelector('select')
+// let input= elem.querySelector('input')
+// // const contact = new Contact(select.value, input.value)
+//     contactsArr.push({
+//       type:select.value,
+//       value:input.value
+//     })
+//     console.log(elem)
+//     console.log(select.value)
+//     console.log(input.value)
+//     console.log(contact)
+
+
+
+//   })
+//   console.log(contactsArr);
+
+
+
+
+
+  // присвоить каждому котакту тип контакта
+
+
+  // modalContact.append(modalContactAdd)
   modalContactAdd.append(modalContactContent)
   modalContactContent.append(modalContactSelect)
   modalContactAdd.append(modalContactEnter)
   modalContactAdd.append(modalContactButton)
-  modalContactButton.append(modalContactTooltip)
+
+  modalContactButton .append(modalContactTooltip)
   return {
     modalContactAdd,
     modalContactContent,
@@ -109,7 +203,9 @@ export const createAddContact = function () {
 
 // Создадим функцию которая будет добавлять tooltip над контактами
 
-export const contactTooltip = function (type, value) {
+
+export const contactTooltip= function (type, value){
+
   const tooltip = document.createElement('div');
   const tooltipType = document.createElement('span');
   const tooltipValue = document.createElement('a');
@@ -121,20 +217,25 @@ export const contactTooltip = function (type, value) {
   tooltipType.textContent = type + ': ';
   tooltipValue.textContent = value;
 
-  if (type === "Телефон") {
+
+  if(type === "Телефон" ){
+
     tooltipValue.href = `tel:${value.trim()}`;
     tooltipType.style.display = 'none';
     tooltipValue.style.color = 'var(--color-white)';
     tooltipValue.style.textDecoration = 'none';
-  } else if (type === "Email") {
+
+  }else if(type === "Email" ){
     tooltipValue.href = `mailto:${value.trim()}`;
-  } else {
+  }else{
     tooltipValue.href = value.trim()
   }
 
-  tooltip.append(tooltipType, tooltipValue)
+tooltip.append(tooltipType, tooltipValue)
 
-  return tooltip
+return tooltip
+
+
 }
 
 

@@ -256,6 +256,10 @@ cursor: pointer;
   display: none;
 }
 
+.btn-change.loading .btn-change::before {
+  display: none;
+}
+
 .btn-change:focus,
 .btn-change:hover,
 .btn-change:active{
@@ -408,7 +412,7 @@ color: var(--red);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url(/img/Vector\ \(1\).svg);
+  background-image: url(/CRM/img/Vector\ \(1\).svg);
   transition: background-image .5s content .5s;
 }
 
@@ -432,7 +436,9 @@ color: var(--red);
 
 .main__button:focus::before{
   content: "";
-  background-image: url(/img/vector1white.svg);
+
+  background-image: url(/CRM/img/vector1white.svg);
+
 }
 
 .main__button:hover {
@@ -448,7 +454,9 @@ color: var(--red);
 
 .main__button:hover::before{
   content: "";
-  background-image: url(/img/vector1white.svg);
+
+  background-image: url(/CRM/img/vector1white.svg);
+
 }
 
 .main__button:active {
@@ -463,7 +471,7 @@ color: var(--red);
 }
 .main__button:active::before{
   content: "";
-  background-image: url(/img/vector1white.svg);
+  background-image: url(/CRM/img/vector1white.svg);
 }
 
 /* модальное окно */

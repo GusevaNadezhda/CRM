@@ -18,7 +18,8 @@ export const serverGetClients = async ()=> {
 }
 
 //  функция получения данных клиента с сервера
-export const serverGetClient = async (client)=> {
+
+export const serverGetClient = async ()=> {
   const response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
     method: "GET",
   })
@@ -55,7 +56,6 @@ return data
   })
 
   serverResponceMistake(response)
-return response.json()
 }
 
 // функцию удаления клиента с сервера по id
@@ -63,9 +63,10 @@ export const serverDeleteClient = async  (id) =>{
   fetch(SERVER_URL + '/api/clients/' + id, {
       method: 'DELETE',
     });
-  //   let data = await response.json()
-  //   console.log( data)
-  // return data
+
+    let data = await response.json()
+  return data
+
 }
 
 //  функция отправки измененных данных клиента на сервер
