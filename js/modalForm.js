@@ -3,8 +3,6 @@ import { serverAddClient } from "./server.js"
 import { serverChangeClient } from "./server.js"
 import { serverDeleteClient } from "./server.js"
 import { createPreloader } from "./table.js"
-
-
 export const createModalFormClient = function () {
 
   // создание формы модального окна
@@ -127,6 +125,8 @@ export const createModalFormClient = function () {
 
 export const createFormNewClient = function () {
 
+
+
   const $modalNewClientElement = document.createElement('div')
   const $modalNewClientContent = document.createElement('div')
   const $modalNewClientClose = document.createElement('button')
@@ -166,7 +166,6 @@ export const createFormNewClient = function () {
     })
   })
 
-
   $modalNewClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
     validateModalForm(modalForm)
@@ -194,13 +193,17 @@ export const createFormNewClient = function () {
 
   // закрытие формы при нажатии на крестик
   $modalNewClientClose.addEventListener('click', () => $modalNewClientElement.remove())
+
 // закрытие формы при нажатии на область вне модального окна
+
   window.addEventListener('click', (e) => {
     if (e.target == $modalNewClientElement) {
       $modalNewClientElement.remove();
     }
   })
+
 // закрытие формы при нажатии на кнопку отмена
+
   modalNewClientCancel.addEventListener('click', () => $modalNewClientElement.remove())
 
   $modalNewClientElement.append($modalNewClientContent)
@@ -244,7 +247,9 @@ export const createFormEditClient = function (client) {
   $idClientP.textContent = "ID: " + client.id
   modalForm.modalLink.textContent = "Удалить клиента"
 
+
 // заполнение полей ФИО в форме согласно данным клиента
+
   modalInput.forEach(elem => {
     switch (elem.id) {
       case "surname":
@@ -261,7 +266,9 @@ export const createFormEditClient = function (client) {
       elem.classList.add('filled')
     }
   })
+
 // заполнение полей контактов в форме согласно данным клиента
+
   for (const contact of client.contacts) {
     const createContact = createAddContact();
     createAddContact()
@@ -272,6 +279,7 @@ export const createFormEditClient = function (client) {
   }
 
   // при нажатии на кнопку Сохранить отредактированные данные отправляются на сервер
+
   $modalEditClientForm.addEventListener('submit', (e) => {
     e.preventDefault();
     modalBtnSaveEdit.style.backgroundColor = "#8052FF";
@@ -305,6 +313,7 @@ export const createFormEditClient = function (client) {
         } else {
           $modalEditClientForm.classList.remove('no-valid')
         }
+
         // добавляем контакты для отправки на сервер
         editContactsArr.push({
           type: contactType.value,
@@ -312,6 +321,7 @@ export const createFormEditClient = function (client) {
         })
       })
       editClient.contacts = editContactsArr;
+
 // если валидация не пройдена данные на сервер не отправляются, форма остается открытой,
 //  если пройдена то на момент отправки все поля импутов блокируются до успешного ответа от сервера
       if ($modalEditClientForm.classList.contains('no-valid')) {
@@ -340,9 +350,21 @@ export const createFormEditClient = function (client) {
     document.querySelector('main').append(createDeleteForm().$modalDeleteElement)
     document.querySelector(".modal__delete-btn").addEventListener('click', function () {
       document.querySelector("tr").remove();
+
       serverDeleteClient(client.id)
+      const $tbody = document.querySelector('tbody')
+      let clientList = await serverGetClients()
+      $tbody.innerHTML = ''
+      clientList.forEach(elem => {
+        const clientsInTable = new Client(elem.id, elem.surname, elem.name, elem.lastName, elem.createdAt, elem.updatedAt, elem.contacts)
+        const clientSection = getNewClient(clientsInTable)
+        $tbody.append(clientSection)
+      deleteForm.$modalDeleteElement.remove()
+      $modalEditClientElement.remove()
     })
   })
+
+
   // закрытие формы при нажатии на крестик
   $modalEditClientClose.addEventListener('click', () => $modalEditClientElement.remove())
   // закрытие формы при нажатии на область вне модального окна
@@ -393,7 +415,9 @@ export const createDeleteForm = function (Client) {
   $modalDeleteClose.addEventListener('click', () => $modalDeleteElement.remove())
   // отмена модального окна при нажатии на кнопку отмена
   $modalDeleteCencel.addEventListener('click', () => $modalDeleteElement.remove())
+
  // закрытие модального окна при нажатии на область вне модального окна
+
   window.addEventListener('click', (e) => {
     if (e.target == $modalDeleteElement) {
       $modalDeleteElement.remove();
@@ -462,7 +486,9 @@ export function validateModalForm(modalForm) {
   onInputValue(clientSurname)
   onInputValue(clientName)
   onInputValue(clientLastName)
+
 // функция которая проверяет заполнение текстовых полей
+
   const checkRequiredName = (input, massage, name) => {
     if (!input.value) {
       modalError.classList.add('active')
@@ -494,17 +520,18 @@ export function validateModalForm(modalForm) {
   return true
 }
 
+
 export function validateContact(contactType, contactValue) {
 
   const modalError = document.querySelector(".modal__error")
   const onlyNumbers = /[^0-9]+$/g;
   const onlyEmail = /[^a-zA-Z|@|.]+$/g;
 
+
   const onInputValue = input => {
 
     input.addEventListener('input', () => {
       input.style.borderColor = 'var(--grey)';
-
     });
 
     input.oncut = input.oncopy = input.onpast = () => {
@@ -521,6 +548,7 @@ export function validateContact(contactType, contactValue) {
     block.textContent = massage;
     input.style.borderColor = 'var(--red)'
   }
+
 
   onInputValue(contactValue)
 

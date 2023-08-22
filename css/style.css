@@ -23,8 +23,8 @@ img {
   font-family: 'Open Sans';
   src: url('fonts/OpenSans-Bold.eot');
   src: local('Open Sans Bold'), local('OpenSans-Bold'),
-    url(/CRM/fonts/OpenSansBold.woff2) format('woff2'),
-    url(/CRM/fonts/OpenSansBold.woff) format('woff');
+    url(/fonts/OpenSansBold.woff2) format('woff2'),
+    url(/fonts/OpenSansBold.woff) format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -33,8 +33,8 @@ img {
   font-family: 'Open Sans';
   src: url('fonts/OpenSans-Regular.eot');
   src: local('Open Sans Regular'), local('OpenSans-Regular'),
-    url(/CRM/fonts/OpenSansRegular.woff2) format('woff2'),
-    url(/CRM/fonts/OpenSansRegular.woff) format('woff');
+    url(/fonts/OpenSansRegular.woff2) format('woff2'),
+    url(fonts/OpenSansRegular.woff) format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -43,8 +43,8 @@ img {
   font-family: 'Open Sans';
   src: url('fonts/OpenSans-SemiBold.eot');
   src: local('Open Sans SemiBold'), local('OpenSans-SemiBold'),
-    url(/CRM/fonts/OpenSansSemiBold.woff2) format('woff2'),
-    url(/CRM/fonts/OpenSansSemiBold.woff) format('woff');
+    url(/fonts/OpenSansSemiBold.woff2) format('woff2'),
+    url(/fonts/OpenSansSemiBold.woff) format('woff');
   font-weight: 600;
   font-style: normal;
 }
@@ -249,7 +249,11 @@ cursor: pointer;
   width: 16px;
   height: 16px;
   background-repeat: no-repeat;
-  background-image: url(/CRM/img/edit.svg);
+  background-image: url(/img/edit.svg);
+}
+
+.btn-change.loading .btn-change::before {
+  display: none;
 }
 
 .btn-change.loading .btn-change::before {
@@ -277,7 +281,7 @@ color: var(--firm);
   width: 16px;
   height: 16px;
   background-repeat: no-repeat;
-  background-image: url(/CRM/img/cancelred.svg);
+  background-image: url(/img/cancelred.svg);
 }
 
 .btn-delete:focus,
@@ -432,7 +436,9 @@ color: var(--red);
 
 .main__button:focus::before{
   content: "";
+
   background-image: url(/CRM/img/vector1white.svg);
+
 }
 
 .main__button:hover {
@@ -448,7 +454,9 @@ color: var(--red);
 
 .main__button:hover::before{
   content: "";
+
   background-image: url(/CRM/img/vector1white.svg);
+
 }
 
 .main__button:active {
@@ -512,7 +520,7 @@ color: var(--red);
   background-color: transparent;
   padding: 5px;
   cursor: pointer;
-  background-image: url(/CRM/img/Frame\ 339.svg);
+  background-image: url(/img/Frame\ 339.svg);
   background-repeat: no-repeat;
   transition: outline .5s;
 
@@ -687,7 +695,7 @@ color: var(--red);
   width: 16px;
   height: 16px;
   padding-right: 18px;
-  background-image: url(/CRM/img/add_circle_outline.svg);
+  background-image: url(/img/add_circle_outline.svg);
   background-repeat: no-repeat;
   transition: background-image .5s;
 }
@@ -697,7 +705,7 @@ color: var(--red);
 }
 
 .modal__contact-text:active .modal__contact-text::before {
-  background-image: url(/CRM/img/add_circle_active.svg);
+  background-image: url(/img/add_circle_active.svg);
 }
 
 /* .modal__contact-text#grey::before {
@@ -828,7 +836,7 @@ color: var(--red);
   z-index: 1;
   height: 12px;
   width: 12px;
-  background-image: url(/CRM/img/arrow_back_ios.svg);
+  background-image: url(/img/arrow_back_ios.svg);
   transition: transform .3s ease-in-out;
 }
 
@@ -864,24 +872,24 @@ position: relative;
 }
 
 .tel {
-  background-image: url(/CRM/img/phone.svg);
+  background-image: url(/img/phone.svg);
 }
 
 .email {
-  background-image: url(/CRM/img/mail.svg);
+  background-image: url(/img/mail.svg);
 }
 
 .vk {
-  background-image: url(/CRM/img/vk\ \(1\).svg);
+  background-image: url(/img/vk\ \(1\).svg);
 }
 
 .fb {
-  background-image: url(/CRM/img/fb.svg);
+  background-image: url(/img/fb.svg);
 }
 
 .last-icon {
   position: relative;
-  background-image: url(/CRM/img/lasticon.svg);
+  background-image: url(/img/lasticon.svg);
 }
 
 .contacts__icon-number {
@@ -902,7 +910,7 @@ position: relative;
   position: relative;
   width: 10%;
   background: #E7E5EB;
-  background-image: url(/CRM/img/cancel.svg);
+  background-image: url(/img/cancel.svg);
   background-position: center;
   background-repeat: no-repeat;
   border: 1px solid #C8C5D1;
@@ -913,7 +921,7 @@ position: relative;
 .modal__contact-button:focus,
 .modal__contact-button:hover,
 .modal__contact-button:active {
-  background-image: url(/CRM/img/cancelred.svg);
+  background-image: url(/img/cancelred.svg);
   border: 1px solid var(--red);
   outline: none;
   cursor: pointer;

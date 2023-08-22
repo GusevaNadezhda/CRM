@@ -31,18 +31,12 @@ export class Client {
     }
   }
 
- // контакты - необязательное поле, массив контактов
-  // каждый объект в массиве (если он передан) должен содержать непустые свойства type и value
-
-  // get contacts(){
-  //   return createAddContact()
-  // }
-
   get fio() {
     return this.surname + ' ' + this.name + ' ' + this.lastName
   }
 
 }
+
 
 
 
@@ -294,6 +288,7 @@ export class Client {
 
 
 // функция удаления клиента
+
 
 
 

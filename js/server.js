@@ -14,21 +14,17 @@ export const serverGetClients = async ()=> {
 
   //  получаем ответ в виде массива от сервера
   let data = await response.json()
-  console.log( response.status)
   return data
 }
 
 //  функция получения данных клиента с сервера
+
 export const serverGetClient = async ()=> {
   const response = await fetch(SERVER_URL + '/api/clients/' + client.id, {
     method: "GET",
   })
   //  получаем ответ в виде массива от сервера
   const data = await response.json()
-  console.log( data)
-  console.log( data.surname)
-  console.log( data.name)
-  console.log( data.lastName)
 return data
 }
 //  функция получения данных добавления клиента на сервер
@@ -60,7 +56,6 @@ return data
   })
 
   serverResponceMistake(response)
-
 }
 
 // функцию удаления клиента с сервера по id
@@ -68,17 +63,14 @@ export const serverDeleteClient = async  (id) =>{
   fetch(SERVER_URL + '/api/clients/' + id, {
       method: 'DELETE',
     });
+
     let data = await response.json()
-    console.log( data)
   return data
+
 }
 
 //  функция отправки измененных данных клиента на сервер
 export  const serverChangeClient = async (editClient) =>{
-alert('включилась функция отправки на сервер')
-console.log(editClient)
-console.log(editClient.id)
-
   let response = await fetch(SERVER_URL + '/api/clients/' + editClient.id, {
     method: "PATCH",
     body: JSON.stringify({
@@ -114,7 +106,6 @@ export const findClient = async (value) => {
 
  function serverResponceMistake(response){
   const modalError = document.querySelector('.modal__error')
-  console.log(response.status)
 
   if(response.status === 200 || response.status === 201){
     modalError.classList.remove('active-server')

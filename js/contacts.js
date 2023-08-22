@@ -12,6 +12,7 @@ export const createAddContact = function () {
   const modalContactEnter = document.createElement('input');
   const modalBtnSave = document.querySelector(".modal__btn-save");
   const modalContactButton = document.createElement('button');
+
     const modalContactTooltip = document.createElement('div');
 
     modalContactTooltip.textContent = "Удалить контакт";
@@ -24,6 +25,7 @@ export const createAddContact = function () {
   modalContactTooltip.classList.add("tooltip");
 
   modalContactSelect.addEventListener('click', () => modalContactContent.classList.toggle('active') )
+
 
   for (let i = 1; i < 6; i++) {
     const modalOption = document.createElement('option')
@@ -65,7 +67,6 @@ export const createAddContact = function () {
 
         break
     }
-
   }
 
 
@@ -75,8 +76,6 @@ export const createAddContact = function () {
 
   modalContactSelect.addEventListener('change', function () {
     this.dataset.type = this.value
-    console.log(this.value);
-    console.log(this.dataset.type);
 
     // if (this.value == "Доп.телефон" || this.value === "Телефон") modalContactEnter.type = "number"
     // if (this.value == "Email") modalContactEnter.type = "email"
@@ -85,17 +84,14 @@ export const createAddContact = function () {
 
   const modalContactAddArr = document.querySelectorAll(".modal__contact-add")
 
-
-
   // удаление контакта при нажатии на крестик
-
-
     modalContactButton.addEventListener('click', (e) => {
       e.preventDefault();
       modalContactAdd.remove();
       modalContactText.classList.remove('hidden')
     }
     )
+
 
   // сделаем ограничение на количество контактов(не более 10)
 
@@ -107,19 +103,11 @@ export const createAddContact = function () {
     modalContactText.classList.add('hidden')
   }
 
-  if (modalContactAddArr.length >= 4){
+  // если контактов больше 4 уменьшаем top модального окна до 70%, чтоб окно было видно полностью
+
+  if (modalContactAddArr.length >= 4) {
     document.querySelector(".modal-client").style.top = '70%'
   }
-
-
-
-
-
-
-
-
-
-
   // else{
   //   // document.querySelector(".modal-client").style.top = "50%"
   // }
@@ -202,6 +190,7 @@ export const createAddContact = function () {
   modalContactContent.append(modalContactSelect)
   modalContactAdd.append(modalContactEnter)
   modalContactAdd.append(modalContactButton)
+
   modalContactButton .append(modalContactTooltip)
   return {
     modalContactAdd,
@@ -214,7 +203,9 @@ export const createAddContact = function () {
 
 // Создадим функцию которая будет добавлять tooltip над контактами
 
+
 export const contactTooltip= function (type, value){
+
   const tooltip = document.createElement('div');
   const tooltipType = document.createElement('span');
   const tooltipValue = document.createElement('a');
@@ -226,11 +217,14 @@ export const contactTooltip= function (type, value){
   tooltipType.textContent = type + ': ';
   tooltipValue.textContent = value;
 
+
   if(type === "Телефон" ){
+
     tooltipValue.href = `tel:${value.trim()}`;
     tooltipType.style.display = 'none';
     tooltipValue.style.color = 'var(--color-white)';
     tooltipValue.style.textDecoration = 'none';
+
   }else if(type === "Email" ){
     tooltipValue.href = `mailto:${value.trim()}`;
   }else{
@@ -240,6 +234,7 @@ export const contactTooltip= function (type, value){
 tooltip.append(tooltipType, tooltipValue)
 
 return tooltip
+
 
 }
 
