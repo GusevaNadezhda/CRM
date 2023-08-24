@@ -41,6 +41,7 @@
 После запуска сервера API будет доступен по пути `http://localhost:3000`.
 
 Ссылки проекта 
+
 Проект доступен по ссылке - https://gusevanadezhda.github.io./CRM/
 
-Сервер для скачивания https://gusevanadezhda.github/CRM-server/
+Сервер для скачивания https://github.com/GusevaNadezhda/CRM-server
